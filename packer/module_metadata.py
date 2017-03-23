@@ -12,10 +12,11 @@ LICENSE = ""
 EXTRA_FILES = []
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = 4.0
+MIN_RLEC_VERSION = 5.0
 
-FIELDS = ["Module_name", "Module_file", "Architecture", "Version", "Author", "Email",
-          "Description", "Homepage", "License", "Extra_files", "Command_line_args",
-          "Min_redis_version", "SHA256", "Commands"]
+FIELDS = ["module_name", "module_file", "architecture", "version", "author", "email",
+          "description", "homepage", "license", "extra_files", "command_line_args",
+          "min_redis_version", "min_rlec_version", "sha256", "commands"]
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -28,19 +29,20 @@ def sha256_checksum(filename, block_size=65536):
 def create_default_metadata(module, module_path):
     """Creates a default metadata"""
     metadata = {
-        "Module_name" : module.name,
-        "Module_file" : os.path.basename(module_path),
-        "Architecture" : ARCHITECTURE,
-        "Version" : module.version,
-        "Author" : AUTHOR,
-        "Email" : EMAIL,
-        "Description" : DESCRIPTION,
-        "Homepage" : HOMEPAGE,
-        "License" : LICENSE,
-        "Extra_files" : EXTRA_FILES,
-        "Command_line_args" : COMMAND_LINE_ARGS,
-        "Min_redis_version" : MIN_REDIS_VERSION,
-        "SHA256" : sha256_checksum(module_path),
-        "Commands": [cmd.to_dict() for cmd in module.commands]
+        "module_name" : module.name,
+        "module_file" : os.path.basename(module_path),
+        "architecture" : ARCHITECTURE,
+        "version" : module.version,
+        "author" : AUTHOR,
+        "email" : EMAIL,
+        "description" : DESCRIPTION,
+        "homepage" : HOMEPAGE,
+        "license" : LICENSE,
+        "extra_files" : EXTRA_FILES,
+        "command_line_args" : COMMAND_LINE_ARGS,
+        "min_redis_version" : MIN_REDIS_VERSION,
+        "min_rlec_version" : MIN_RLEC_VERSION,
+        "sha256" : sha256_checksum(module_path),
+        "commands": [cmd.to_dict() for cmd in module.commands]
     }
     return metadata

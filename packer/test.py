@@ -59,21 +59,22 @@ class TestModulePacker(unittest.TestCase):
         """Test auto generated metadata from module is as expected."""
         metadata = module_packer.set_defaults(MODULE_FILE_PATH)
 
-        self.assertEqual(metadata["Module_name"], "graph")
-        self.assertEqual(metadata["Module_file"], MODULE_FILE)
-        self.assertEqual(metadata["Architecture"], 64)
-        self.assertEqual(metadata["Version"], 1)
-        self.assertEqual(metadata["Author"], "")
-        self.assertEqual(metadata["Email"], "")
-        self.assertEqual(metadata["Description"], "")
-        self.assertEqual(metadata["Homepage"], "")
-        self.assertEqual(metadata["License"], "")
-        self.assertEqual(metadata["Extra_files"], [])
-        self.assertEqual(metadata["Command_line_args"], "")
-        self.assertEqual(metadata["Min_redis_version"], 4.0)
-        self.assertEqual(metadata["SHA256"], sha256_checksum(MODULE_FILE_PATH))
+        self.assertEqual(metadata["module_name"], "graph")
+        self.assertEqual(metadata["module_file"], MODULE_FILE)
+        self.assertEqual(metadata["architecture"], 64)
+        self.assertEqual(metadata["version"], 1)
+        self.assertEqual(metadata["author"], "")
+        self.assertEqual(metadata["email"], "")
+        self.assertEqual(metadata["description"], "")
+        self.assertEqual(metadata["homepage"], "")
+        self.assertEqual(metadata["license"], "")
+        self.assertEqual(metadata["extra_files"], [])
+        self.assertEqual(metadata["command_line_args"], "")
+        self.assertEqual(metadata["min_redis_version"], 4.0)
+        self.assertEqual(metadata["min_rlec_version"], 5.0)
+        self.assertEqual(metadata["sha256"], sha256_checksum(MODULE_FILE_PATH))
 
-        commands = metadata["Commands"]
+        commands = metadata["commands"]
         # TODO: test to additional unexcpected fields.
         self.validate_module_commands(commands)
 
@@ -91,28 +92,31 @@ class TestModulePacker(unittest.TestCase):
         extra_files = []
         command_line_args = "-output f --level debug"
         min_redis_version = "4.6"
+        min_rlec_version = "5.2"
 
         argv = ['-a', author, '-e', email, '-ar', architecture, '-d', description,
-                '-ho', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version]
+                '-ho', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
+                '-rl', min_rlec_version]
 
         metadata = module_packer.set_defaults(MODULE_FILE_PATH)
         module_packer.cmd_mode(metadata, argv)
 
-        self.assertEqual(metadata["Module_name"], "graph")
-        self.assertEqual(metadata["Module_file"], MODULE_FILE)
-        self.assertEqual(metadata["Architecture"], architecture)
-        self.assertEqual(metadata["Version"], 1)
-        self.assertEqual(metadata["Author"], author)
-        self.assertEqual(metadata["Email"], email)
-        self.assertEqual(metadata["Description"], description)
-        self.assertEqual(metadata["Homepage"], homepage)
-        self.assertEqual(metadata["License"], _license)
-        self.assertEqual(metadata["Extra_files"], extra_files)
-        self.assertEqual(metadata["Command_line_args"], command_line_args)
-        self.assertEqual(metadata["Min_redis_version"], min_redis_version)
-        self.assertEqual(metadata["SHA256"], sha256_checksum(MODULE_FILE_PATH))
+        self.assertEqual(metadata["module_name"], "graph")
+        self.assertEqual(metadata["module_file"], MODULE_FILE)
+        self.assertEqual(metadata["architecture"], architecture)
+        self.assertEqual(metadata["version"], 1)
+        self.assertEqual(metadata["author"], author)
+        self.assertEqual(metadata["email"], email)
+        self.assertEqual(metadata["description"], description)
+        self.assertEqual(metadata["homepage"], homepage)
+        self.assertEqual(metadata["license"], _license)
+        self.assertEqual(metadata["extra_files"], extra_files)
+        self.assertEqual(metadata["command_line_args"], command_line_args)
+        self.assertEqual(metadata["min_redis_version"], min_redis_version)
+        self.assertEqual(metadata["min_rlec_version"], min_rlec_version)
+        self.assertEqual(metadata["sha256"], sha256_checksum(MODULE_FILE_PATH))
 
-        commands = metadata["Commands"]
+        commands = metadata["commands"]
         self.validate_module_commands(commands)
 
     def test_output(self):

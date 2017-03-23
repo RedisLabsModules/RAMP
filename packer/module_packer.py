@@ -34,6 +34,7 @@ def setup_arg_parser():
     arg_parser.add_argument('-ex','--extras', dest='extra_files', default=module_metadata.EXTRA_FILES, help='extra files')
     arg_parser.add_argument('-c','--cmdargs', dest='command_line_args', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
     arg_parser.add_argument('-r', '--redis-min-version', dest='redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
+    arg_parser.add_argument('-rl', '--rlec-min-version', dest='rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
     # TODO: add param (-o) to specify package location.
     return arg_parser
 
@@ -52,39 +53,43 @@ def interactive_mode(metadata):
     print INTRO_MSG
     user_input = raw_input("Architecture:{} ".format(module_metadata.ARCHITECTURE))
     if user_input is not "":
-        metadata["Architecture"] = int(user_input)
+        metadata["architecture"] = int(user_input)
 
     user_input = raw_input("Author: ")
     if user_input is not "":
-        metadata["Author"] = user_input
+        metadata["author"] = user_input
 
     user_input = raw_input("Email: ")
     if user_input is not "":
-        metadata["Email"] = user_input
+        metadata["email"] = user_input
 
     user_input = raw_input("Description:{} ".format(module_metadata.DESCRIPTION))
     if user_input is not "":
-        metadata["Description"] = user_input
+        metadata["description"] = user_input
 
     user_input = raw_input("Homepage:{} ".format(module_metadata.HOMEPAGE))
     if user_input is not "":
-        metadata["Homepage"] = user_input
+        metadata["homepage"] = user_input
 
     user_input = raw_input("License:{} ".format(module_metadata.LICENSE))
     if user_input is not "":
-        metadata["License"] = user_input
+        metadata["license"] = user_input
 
     user_input = raw_input("Extra files:{} ".format(module_metadata.EXTRA_FILES))
     if user_input is not "":
-        metadata["Extra_files"] = user_input
+        metadata["extra_files"] = user_input
 
     user_input = raw_input("Command line args:{} ".format(module_metadata.COMMAND_LINE_ARGS))
     if user_input is not "":
-        metadata["Command_line_args"] = user_input
+        metadata["command_line_args"] = user_input
 
     user_input = raw_input("Min redis version:{} ".format(module_metadata.MIN_REDIS_VERSION))
     if user_input is not "":
-        metadata["Min_redis_version"] = float(user_input)
+        metadata["min_redis_version"] = float(user_input)
+
+    user_input = raw_input("Min rlec version:{} ".format(module_metadata.MIN_RLEC_VERSION))
+    if user_input is not "":
+        metadata["min_rlec_version"] = float(user_input)
 
 def cmd_mode(metadata, argv):
     """
@@ -93,15 +98,16 @@ def cmd_mode(metadata, argv):
     arg_parser = setup_arg_parser()
     args = arg_parser.parse_args(argv)
 
-    metadata["Architecture"] = args.architecture
-    metadata["Author"] = args.author
-    metadata["Email"] = args.email
-    metadata["Description"] = args.description
-    metadata["Homepage"] = args.homepage
-    metadata["License"] = args.license
-    metadata["Extra_files"] = args.extra_files
-    metadata["Command_line_args"] = args.command_line_args
-    metadata["Min_redis_version"] = args.redis_min_version
+    metadata["architecture"] = args.architecture
+    metadata["author"] = args.author
+    metadata["email"] = args.email
+    metadata["description"] = args.description
+    metadata["homepage"] = args.homepage
+    metadata["license"] = args.license
+    metadata["extra_files"] = args.extra_files
+    metadata["command_line_args"] = args.command_line_args
+    metadata["min_redis_version"] = args.redis_min_version
+    metadata["min_rlec_version"] = args.rlec_min_version
 
 def archive(module_path, metadata):
     """
@@ -112,7 +118,7 @@ def archive(module_path, metadata):
 
     archive_file = zipfile.ZipFile('module.zip', 'w', zipfile.ZIP_DEFLATED)
     try:
-        archive_file.write(module_path, metadata["Module_file"])
+        archive_file.write(module_path, metadata["module_file"])
         archive_file.write('module.json')
         print "module.zip generated."
     finally:
