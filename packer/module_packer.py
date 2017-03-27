@@ -98,7 +98,7 @@ def cmd_mode(metadata, argv):
     arg_parser = setup_arg_parser()
     args = arg_parser.parse_args(argv)
 
-    metadata["architecture"] = args.architecture
+    metadata["architecture"] = int(args.architecture)
     metadata["author"] = args.author
     metadata["email"] = args.email
     metadata["description"] = args.description
