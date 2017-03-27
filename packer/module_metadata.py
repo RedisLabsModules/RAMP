@@ -11,8 +11,8 @@ HOMEPAGE = ""
 LICENSE = ""
 EXTRA_FILES = []
 COMMAND_LINE_ARGS = ""
-MIN_REDIS_VERSION = 4.0
-MIN_RLEC_VERSION = 5.0
+MIN_REDIS_VERSION = "4.0"
+MIN_RLEC_VERSION = "5.2"
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "author", "email",
           "description", "homepage", "license", "extra_files", "command_line_args",

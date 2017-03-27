@@ -85,11 +85,11 @@ def interactive_mode(metadata):
 
     user_input = raw_input("Min redis version:{} ".format(module_metadata.MIN_REDIS_VERSION))
     if user_input is not "":
-        metadata["min_redis_version"] = float(user_input)
+        metadata["min_redis_version"] = user_input
 
     user_input = raw_input("Min rlec version:{} ".format(module_metadata.MIN_RLEC_VERSION))
     if user_input is not "":
-        metadata["min_rlec_version"] = float(user_input)
+        metadata["min_rlec_version"] = user_input
 
 def cmd_mode(metadata, argv):
     """
