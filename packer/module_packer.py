@@ -42,9 +42,16 @@ def set_defaults(module_path):
     """
     Creates a module metadata using default values
     """
-    module = discover_modules_commands(module_path)
-    metadata = module_metadata.create_default_metadata(module, module_path)
+    metadata = module_metadata.create_default_metadata(module_path)
     return metadata
+
+def update_metadata_module_info(metadata, module):
+    """
+    Sets metadata with module internal attributes
+    """
+    metadata["module_name"] = module.name
+    metadata["version"] = module.version
+    metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
 
 def interactive_mode(metadata):
     """
@@ -134,7 +141,7 @@ def usage():
 def main(argv):
     if len(argv) is 1:
         usage()
-        return
+        return 1
 
     module_path = argv[1]
     metadata = set_defaults(module_path)
@@ -143,6 +150,10 @@ def main(argv):
         interactive_mode(metadata)
     else:
         cmd_mode(metadata, argv[2:])
+
+    # Load module into redis and discover its commands
+    module = discover_modules_commands(module_path, metadata["command_line_args"])
+    update_metadata_module_info(metadata, module)
 
     archive(module_path, metadata)
     return 0

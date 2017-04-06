@@ -47,14 +47,14 @@ def _get_modules_list(redis_client):
 
     return loaded_modules
 
-def _load_module(redis_client, path_to_module):
+def _load_module(redis_client, path_to_module, module_args):
     """
     Loads given module to redis.
     :redis_client: open connection to redis
     :param path_to_module: where does the module file is located.
     Assuming only a single module is loaded.
     """
-    resp = redis_client.execute_command("MODULE LOAD {}".format(path_to_module))
+    resp = redis_client.execute_command("MODULE LOAD {} {}".format(path_to_module, module_args))
     if resp != OK:
         return None
 
@@ -102,7 +102,7 @@ def _get_redis_command_info(redis_client, command_name):
 
     return ModuleCommand(command_name, command_arity, flags, first_key, last_key, step)
 
-def discover_modules_commands(path_to_module):
+def discover_modules_commands(path_to_module, module_args):
     """
         Retrieves module command(s) info.
         :param path_to_module: where does the module file is located
@@ -110,9 +110,9 @@ def discover_modules_commands(path_to_module):
     """
     with redis() as redis_client:
         core_redis_commands = _get_redis_commands(redis_client)
-        module = _load_module(redis_client, path_to_module)
+        module = _load_module(redis_client, path_to_module, module_args)
         if module is None:
-            raise Exception("Failed to load module {}".format(path_to_module))
+            raise Exception("Failed to load module {} {}".format(path_to_module, module_args))
 
         extended_redis_commands = _get_redis_commands(redis_client)
         module_commands = extended_redis_commands - core_redis_commands

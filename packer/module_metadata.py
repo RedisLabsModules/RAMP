@@ -9,6 +9,9 @@ EMAIL = ""
 DESCRIPTION = ""
 HOMEPAGE = ""
 LICENSE = ""
+MODULE_NAME = ""
+MODULE_VERSION = "1.0"
+MODULE_COMMANDS = []
 EXTRA_FILES = []
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
@@ -26,23 +29,23 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
-def create_default_metadata(module, module_path):
+def create_default_metadata(module_path):
     """Creates a default metadata"""
     metadata = {
-        "module_name" : module.name,
-        "module_file" : os.path.basename(module_path),
-        "architecture" : ARCHITECTURE,
-        "version" : module.version,
-        "author" : AUTHOR,
-        "email" : EMAIL,
-        "description" : DESCRIPTION,
-        "homepage" : HOMEPAGE,
-        "license" : LICENSE,
-        "extra_files" : EXTRA_FILES,
-        "command_line_args" : COMMAND_LINE_ARGS,
-        "min_redis_version" : MIN_REDIS_VERSION,
-        "min_rlec_version" : MIN_RLEC_VERSION,
-        "sha256" : sha256_checksum(module_path),
-        "commands": [cmd.to_dict() for cmd in module.commands]
+        "module_name" : MODULE_NAME,
+        "module_file": os.path.basename(module_path),
+        "architecture": ARCHITECTURE,
+        "version": MODULE_VERSION,
+        "author": AUTHOR,
+        "email": EMAIL,
+        "description": DESCRIPTION,
+        "homepage": HOMEPAGE,
+        "license": LICENSE,
+        "extra_files": EXTRA_FILES,
+        "command_line_args": COMMAND_LINE_ARGS,
+        "min_redis_version": MIN_REDIS_VERSION,
+        "min_rlec_version": MIN_RLEC_VERSION,
+        "sha256": sha256_checksum(module_path),
+        "commands": MODULE_COMMANDS
     }
     return metadata
