@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='RAMP',
+    name='ramp-packer',
     version='1.0',
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
