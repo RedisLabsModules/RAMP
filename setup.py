@@ -7,7 +7,7 @@ setup(
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',
     scripts=['packer/module_packer'],
-    license='AGPL-3.0',
+    license='BSD 2-clause',
     long_description=open('README.txt').read(),
     packages=find_packages(),
     install_requires=['redis']
