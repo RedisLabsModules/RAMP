@@ -5,7 +5,8 @@ import sys
 import json
 import zipfile
 import argparse
-import module_metadata
+
+from packer import module_metadata
 from packer.commands_discovery import discover_modules_commands
 
 INTRO_MSG = """
