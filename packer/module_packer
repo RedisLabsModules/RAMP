@@ -1,10 +1,12 @@
+#!/usr/bin/python
+
 import os
 import sys
 import json
 import zipfile
 import argparse
 import module_metadata
-from commands_discovery import discover_modules_commands
+from packer.commands_discovery import discover_modules_commands
 
 INTRO_MSG = """
  _____       _ _     __        _          _____       _     _         
@@ -25,14 +27,14 @@ def setup_arg_parser():
     Initialize cmd args parser
     """
     arg_parser = argparse.ArgumentParser(description='Create a new module package')
-    arg_parser.add_argument('-a','--author', dest='author', default=module_metadata.AUTHOR, help='module author')
-    arg_parser.add_argument('-e','--email', dest='email', default=module_metadata.EMAIL, help='author\'s email')
-    arg_parser.add_argument('-ar','--architecture', dest='architecture', default=module_metadata.ARCHITECTURE, help='module compiled on 32/64 bits arch')
-    arg_parser.add_argument('-d','--description', dest='description', default=module_metadata.DESCRIPTION, help='short description')
-    arg_parser.add_argument('-ho','--homepage', dest='homepage', default=module_metadata.HOMEPAGE, help='module homepage')
-    arg_parser.add_argument('-l','--license', dest='license', default=module_metadata.LICENSE, help='license')
-    arg_parser.add_argument('-ex','--extras', dest='extra_files', default=module_metadata.EXTRA_FILES, help='extra files')
-    arg_parser.add_argument('-c','--cmdargs', dest='command_line_args', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
+    arg_parser.add_argument('-a', '--author', dest='author', default=module_metadata.AUTHOR, help='module author')
+    arg_parser.add_argument('-e', '--email', dest='email', default=module_metadata.EMAIL, help='author\'s email')
+    arg_parser.add_argument('-ar', '--architecture', dest='architecture', default=module_metadata.ARCHITECTURE, help='module compiled on 32/64 bits arch')
+    arg_parser.add_argument('-d', '--description', dest='description', default=module_metadata.DESCRIPTION, help='short description')
+    arg_parser.add_argument('-ho', '--homepage', dest='homepage', default=module_metadata.HOMEPAGE, help='module homepage')
+    arg_parser.add_argument('-l', '--license', dest='license', default=module_metadata.LICENSE, help='license')
+    arg_parser.add_argument('-ex', '--extras', dest='extra_files', default=module_metadata.EXTRA_FILES, help='extra files')
+    arg_parser.add_argument('-c', '--cmdargs', dest='command_line_args', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
     arg_parser.add_argument('-r', '--redis-min-version', dest='redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
     arg_parser.add_argument('-rl', '--rlec-min-version', dest='rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
     # TODO: add param (-o) to specify package location.
