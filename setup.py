@@ -8,7 +8,7 @@ setup(
     url='https://github.com/redislabs/RAMP',
     scripts=['packer/module_packer'],
     license='BSD 2-clause',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     packages=find_packages(),
     install_requires=['redis']
 )
