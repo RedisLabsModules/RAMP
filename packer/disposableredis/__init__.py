@@ -6,6 +6,10 @@ import time
 import os
 import itertools
 
+# Environment variable pointing to the redis executable
+REDIS_PATH_ENVVAR = 'REDIS_PATH'
+
+
 def get_random_port():
     sock = socket.socket()
     sock.listen(0)
@@ -31,7 +35,7 @@ class DisposableRedis(object):
         self.extra_args = list(itertools.chain(
                 *(('--%s'%k, v) for k, v in extra_args.items())
                ))
-        self.path = path
+        self.path = os.getenv(REDIS_PATH_ENVVAR, path)
 
 
     def __enter__(self):
