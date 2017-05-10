@@ -139,6 +139,7 @@ def archive(module_path, metadata,archive_name='module.zip'):
     """
     Archives both module and module metadata.
     """
+    archive_name = archive_name.format(**metadata)
     with open('module.json', 'w') as outfile:
         json.dump(metadata, outfile, indent=4, sort_keys=True)
 
