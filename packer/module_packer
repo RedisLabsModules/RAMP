@@ -147,7 +147,7 @@ def archive(module_path, metadata,archive_name='module.zip'):
     try:
         archive_file.write(module_path, metadata["module_file"])
         archive_file.write('module.json')
-        print "{} generated.".format(archive_name)
+        print archive_name
     finally:
         archive_file.close()
         os.remove("module.json")

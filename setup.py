@@ -47,7 +47,7 @@ Which contains:
 
 setup(
     name='ramp-packer',
-    version='1.2.2',
+    version='1.2.3',
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',
