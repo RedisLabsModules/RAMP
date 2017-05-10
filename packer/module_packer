@@ -5,6 +5,7 @@ import sys
 import json
 import zipfile
 import argparse
+import pprint
 
 from packer import module_metadata
 from packer.commands_discovery import discover_modules_commands
@@ -28,17 +29,24 @@ def setup_arg_parser():
     Initialize cmd args parser
     """
     arg_parser = argparse.ArgumentParser(description='Create a new module package')
-    arg_parser.add_argument('-a', '--author', dest='author', default=module_metadata.AUTHOR, help='module author')
-    arg_parser.add_argument('-e', '--email', dest='email', default=module_metadata.EMAIL, help='author\'s email')
-    arg_parser.add_argument('-ar', '--architecture', dest='architecture', default=module_metadata.ARCHITECTURE, help='module compiled on 32/64 bits arch')
-    arg_parser.add_argument('-d', '--description', dest='description', default=module_metadata.DESCRIPTION, help='short description')
-    arg_parser.add_argument('-ho', '--homepage', dest='homepage', default=module_metadata.HOMEPAGE, help='module homepage')
-    arg_parser.add_argument('-l', '--license', dest='license', default=module_metadata.LICENSE, help='license')
-    arg_parser.add_argument('-ex', '--extras', dest='extra_files', default=module_metadata.EXTRA_FILES, help='extra files')
-    arg_parser.add_argument('-c', '--cmdargs', dest='command_line_args', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
-    arg_parser.add_argument('-r', '--redis-min-version', dest='redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
-    arg_parser.add_argument('-rl', '--rlec-min-version', dest='rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
-    # TODO: add param (-o) to specify package location.
+    arg_parser.add_argument('module', metavar='MODULE')
+    arg_parser.add_argument('-o', '--output', dest='outfile', default='module.zip', help='Output file name')
+    arg_parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Verbose mode: print the resulting metadata')
+    g1 = arg_parser.add_mutually_exclusive_group()    
+    g1.add_argument('-i', '--interactive', dest='interactive',default=False, action='store_true')
+    g2 = arg_parser.add_mutually_exclusive_group()    
+    g2.add_argument('-a', '--author', dest='author', default=module_metadata.AUTHOR, help='module author')
+    g2.add_argument('-e', '--email', dest='email', default=module_metadata.EMAIL, help='author\'s email')
+    g2.add_argument('-ar', '--architecture', dest='architecture', default=module_metadata.ARCHITECTURE, help='module compiled on i386/x86_64 arch')
+    g2.add_argument('-d', '--description', dest='description', default=module_metadata.DESCRIPTION, help='short description')
+    g2.add_argument('-ho', '--homepage', dest='homepage', default=module_metadata.HOMEPAGE, help='module homepage')
+    g2.add_argument('-l', '--license', dest='license', default=module_metadata.LICENSE, help='license')
+    g2.add_argument('-ex', '--extras', dest='extra_files', default=module_metadata.EXTRA_FILES, help='extra files')
+    g2.add_argument('-c', '--cmdargs', dest='command_line_args', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
+    g2.add_argument('-r', '--redis-min-version', dest='redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
+    g2.add_argument('-rl', '--rlec-min-version', dest='rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
+    g2.add_argument('-O', '--os', dest='os', default=module_metadata.OS, help='Build target OS (Darwin/Linux)')
+
     return arg_parser
 
 def set_defaults(module_path):
@@ -63,7 +71,15 @@ def interactive_mode(metadata):
     print INTRO_MSG
     user_input = raw_input("Architecture:{} ".format(module_metadata.ARCHITECTURE))
     if user_input is not "":
-        metadata["architecture"] = int(user_input)
+        if user_input not in ('i386', 'x86_64'):
+            raise ValueError("Invalid architecture. Allowed values are i386 and x86_64")
+        metadata["architecture"] = user_input
+    
+    user_input = raw_input("Os:{} ".format(module_metadata.OS))
+    if user_input is not "":
+        if user_input.lower() not in ('linux', 'darwin'):
+            raise ValueError("Invalid OS. Allowed values are Darwin and Linux")
+        metadata["os"] = user_input
 
     user_input = raw_input("Author: ")
     if user_input is not "":
@@ -101,14 +117,14 @@ def interactive_mode(metadata):
     if user_input is not "":
         metadata["min_rlec_version"] = user_input
 
-def cmd_mode(metadata, argv):
+def cmd_mode(metadata, args):
     """
     Create module metadata from command line arguments
     """
-    arg_parser = setup_arg_parser()
-    args = arg_parser.parse_args(argv)
+    
 
-    metadata["architecture"] = int(args.architecture)
+    metadata["architecture"] = args.architecture
+    metadata["os"] = args.os
     metadata["author"] = args.author
     metadata["email"] = args.email
     metadata["description"] = args.description
@@ -119,46 +135,48 @@ def cmd_mode(metadata, argv):
     metadata["min_redis_version"] = args.redis_min_version
     metadata["min_rlec_version"] = args.rlec_min_version
 
-def archive(module_path, metadata):
+def archive(module_path, metadata,archive_name='module.zip'):
     """
     Archives both module and module metadata.
     """
     with open('module.json', 'w') as outfile:
         json.dump(metadata, outfile, indent=4, sort_keys=True)
 
-    archive_file = zipfile.ZipFile('module.zip', 'w', zipfile.ZIP_DEFLATED)
+    archive_file = zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED)
     try:
         archive_file.write(module_path, metadata["module_file"])
         archive_file.write('module.json')
-        print "module.zip generated."
+        print "{} generated.".format(archive_name)
     finally:
         archive_file.close()
         os.remove("module.json")
 
-def usage():
-    """
-    Prints usage
-    """
-    print "usage: module_packer.py <PATH_TO_MODULE>"
 
 def main(argv):
-    if len(argv) is 1:
-        usage()
+    arg_parser = setup_arg_parser()
+    if len(argv) == 1:
+        arg_parser.print_help()
         return 1
 
-    module_path = argv[1]
+    args = arg_parser.parse_args()
+    
+    module_path = args.module
     metadata = set_defaults(module_path)
 
-    if len(argv) is 2:
+    if args.interactive:
         interactive_mode(metadata)
     else:
-        cmd_mode(metadata, argv[2:])
+        cmd_mode(metadata, args)
 
     # Load module into redis and discover its commands
     module = discover_modules_commands(module_path, metadata["command_line_args"])
     update_metadata_module_info(metadata, module)
 
-    archive(module_path, metadata)
+
+    if args.verbose:
+        print("Module Metadata:")
+        print(json.dumps(metadata, indent=2))
+    archive(module_path, metadata,archive_name=args.outfile)
     return 0
 
 if __name__ == '__main__':

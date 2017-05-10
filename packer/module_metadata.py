@@ -1,8 +1,9 @@
 import os
 import hashlib
-
+import platform
 # Defaults
-ARCHITECTURE = 64
+ARCHITECTURE = platform.machine()
+OS = platform.system()
 VERSION = "1.0"
 AUTHOR = ""
 EMAIL = ""
@@ -19,7 +20,7 @@ MIN_RLEC_VERSION = "5.2"
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "author", "email",
           "description", "homepage", "license", "extra_files", "command_line_args",
-          "min_redis_version", "min_rlec_version", "sha256", "commands"]
+          "min_redis_version", "min_rlec_version", "sha256", "commands", "os"]
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -34,6 +35,7 @@ def create_default_metadata(module_path):
     metadata = {
         "module_name" : MODULE_NAME,
         "module_file": os.path.basename(module_path),
+        "os": OS,
         "architecture": ARCHITECTURE,
         "version": MODULE_VERSION,
         "author": AUTHOR,
