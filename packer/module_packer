@@ -5,6 +5,7 @@ import sys
 import json
 import zipfile
 import argparse
+import pprint
 
 from packer import module_metadata
 from packer.commands_discovery import discover_modules_commands
@@ -29,7 +30,8 @@ def setup_arg_parser():
     """
     arg_parser = argparse.ArgumentParser(description='Create a new module package')
     arg_parser.add_argument('module', metavar='MODULE')
-    arg_parser.add_argument('-o', '--o', dest='outfile', default='module.zip', help='Output file name')
+    arg_parser.add_argument('-o', '--output', dest='outfile', default='module.zip', help='Output file name')
+    arg_parser.add_argument('-v', '--verbose', action='store_true', default=False, help='Verbose mode: print the resulting metadata')
     g1 = arg_parser.add_mutually_exclusive_group()    
     g1.add_argument('-i', '--interactive', dest='interactive',default=False, action='store_true')
     g2 = arg_parser.add_mutually_exclusive_group()    
@@ -45,7 +47,6 @@ def setup_arg_parser():
     g2.add_argument('-rl', '--rlec-min-version', dest='rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
     g2.add_argument('-O', '--os', dest='os', default=module_metadata.OS, help='Build target OS (Darwin/Linux)')
 
-    # TODO: add param (-o) to specify package location.
     return arg_parser
 
 def set_defaults(module_path):
@@ -150,14 +151,13 @@ def archive(module_path, metadata,archive_name='module.zip'):
         archive_file.close()
         os.remove("module.json")
 
-def usage():
-    """
-    Prints usage
-    """
-    print "usage: module_packer.py [options] <PATH_TO_MODULE>"
 
 def main(argv):
     arg_parser = setup_arg_parser()
+    if len(argv) == 1:
+        arg_parser.print_help()
+        return 1
+
     args = arg_parser.parse_args()
     
     module_path = args.module
@@ -172,6 +172,10 @@ def main(argv):
     module = discover_modules_commands(module_path, metadata["command_line_args"])
     update_metadata_module_info(metadata, module)
 
+
+    if args.verbose:
+        print("Module Metadata:")
+        print(json.dumps(metadata, indent=2))
     archive(module_path, metadata,archive_name=args.outfile)
     return 0
 
