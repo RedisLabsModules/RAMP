@@ -13,6 +13,17 @@ Make sure redis-server is on your PATH
 export PATH=$PATH:<PATH_TO_REDIS>
 ```
 
+# Install
+You can either use pip install or the setup.py script
+
+```sh
+sudo pip install ramp-packer
+```
+
+```sh
+sudo python setup.py install
+```
+
 # Usage
 ## Interactive mode
 
