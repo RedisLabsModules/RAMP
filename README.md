@@ -17,11 +17,11 @@ export PATH=$PATH:<PATH_TO_REDIS>
 You can either use pip install or the setup.py script
 
 ```sh
-sudo pip install ramp-packer
+pip install ramp-packer
 ```
 
 ```sh
-sudo python setup.py install
+python setup.py install
 ```
 
 # Usage
