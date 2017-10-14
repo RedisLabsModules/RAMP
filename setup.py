@@ -17,26 +17,21 @@ export PATH=$PATH:<PATH_TO_REDIS>
 ```
 
 # Usage
-## Interactive mode
-
-```sh
-python module_packer <PATH_TO_RedisModule.so>
-```
 
 ## Command line mode
 
 ```sh
-python module_packer <PATH_TO_RedisModule.so> -a <author> -e <email> -ar <architecture> -d <description> -ho <homepage> -l <license> -ex <extras> -c <cmdargs> -r <redis-min-version>
+ramp <PATH_TO_RedisModule.so> -a <author> -e <email> -ar <architecture> -d <description> -ho <homepage> -l <license> -ex <extras> -c <cmdargs> -r <redis-min-version>
 ```
 
 For Help
 
 ```sh
-python module_packer <PATH_TO_RedisModule.so> -h
+ramp -h
 ```
 
 ## Output
-module_packer generates module.zip
+ramp generates module.zip
 
 Which contains:
 
@@ -46,14 +41,18 @@ Which contains:
 """
 
 setup(
-    name='ramp-packer',
-    version='1.2.3',
+    name='ramp',
+    version='1.3.0',
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',
-    scripts=['packer/module_packer'],
+    py_modules=['ramp'],
     license='BSD 2-clause',
     long_description=LONG_DESC,
     packages=find_packages(),
-    install_requires=['redis']
+    install_requires=['redis', 'pyyaml', 'click>=6.7'],
+    entry_points='''
+        [console_scripts]
+        ramp=ramp:package
+    ''',
 )
