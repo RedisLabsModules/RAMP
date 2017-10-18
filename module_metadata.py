@@ -13,13 +13,13 @@ LICENSE = ""
 MODULE_NAME = ""
 MODULE_VERSION = "1.0"
 MODULE_COMMANDS = []
-EXTRA_FILES = []
+MODULE_CAPABILITIES = []
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
 MIN_RLEC_VERSION = "5.2"
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "author", "email",
-          "description", "homepage", "license", "extra_files", "command_line_args",
+          "description", "homepage", "license", "command_line_args", "capabilities",
           "min_redis_version", "min_rlec_version", "sha256", "commands", "os"]
 
 def sha256_checksum(filename, block_size=65536):
@@ -43,8 +43,8 @@ def create_default_metadata(module_path):
         "description": DESCRIPTION,
         "homepage": HOMEPAGE,
         "license": LICENSE,
-        "extra_files": EXTRA_FILES,
         "command_line_args": COMMAND_LINE_ARGS,
+        "capabilities": MODULE_CAPABILITIES,
         "min_redis_version": MIN_REDIS_VERSION,
         "min_rlec_version": MIN_RLEC_VERSION,
         "sha256": sha256_checksum(module_path),
