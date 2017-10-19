@@ -3,7 +3,7 @@ import sys
 import json
 import zipfile
 import hashlib
-import module_metadata
+from RAMP import module_metadata
 from distutils.version import StrictVersion
 
 MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10

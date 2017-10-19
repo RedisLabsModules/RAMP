@@ -1,6 +1,6 @@
 import os
 import yaml
-import ramp
+from RAMP import packer
 import click
 import hashlib
 from click.testing import CliRunner
@@ -61,7 +61,7 @@ def validate_module_commands(commands):
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
     runner = CliRunner()
-    result = runner.invoke(ramp.package, [MODULE_FILE_PATH])
+    result = runner.invoke(packer.package, [MODULE_FILE_PATH])
     assert result.exit_code == 0
 
     metadata, _ = module_unpacker.unpack('./module.zip')
@@ -101,7 +101,7 @@ def test_bundle_from_cmd():
             '-rl', min_rlec_version, '-ca', ','.join([cap['name'] for cap in MODULE_CAPABILITIES])]
 
     runner = CliRunner()
-    result = runner.invoke(ramp.package, argv)
+    result = runner.invoke(packer.package, argv)
 
     assert result.exit_code == 0
     metadata, _ = module_unpacker.unpack('./module.zip')
@@ -130,7 +130,7 @@ def test_bundle_from_menifest():
     """
 
     runner = CliRunner()
-    result = runner.invoke(ramp.package, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH])
+    result = runner.invoke(packer.package, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH])
 
     assert result.exit_code == 0
     metadata, _ = module_unpacker.unpack('./module.zip')
