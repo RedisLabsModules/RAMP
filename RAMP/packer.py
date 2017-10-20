@@ -4,8 +4,8 @@ import zipfile
 import click
 import yaml
 
-import module_metadata
-from commands_discovery import discover_modules_commands
+import RAMP.module_metadata as module_metadata
+from RAMP.commands_discovery import discover_modules_commands
 
 def set_defaults(module_path):
     """

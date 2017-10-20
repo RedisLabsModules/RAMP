@@ -41,18 +41,18 @@ Which contains:
 """
 
 setup(
-    name='ramp',
-    version='1.3.0',
+    name='ramp-packer',
+    py_modules=['RAMP'],
+    version='1.3.1',
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',
-    py_modules=['ramp'],
     license='BSD 2-clause',
     long_description=LONG_DESC,
     packages=find_packages(),
     install_requires=['redis', 'pyyaml', 'click>=6.7'],
     entry_points='''
         [console_scripts]
-        ramp=ramp:package
+        ramp-packer=RAMP.packer:package
     ''',
 )
