@@ -9,5 +9,6 @@ MODULE_CAPABILITIES = [
     {'name': 'persistence_aof', 'desc': 'module is able to operate in a database when database chooses AOF persistence option'},
     {'name': 'persistence_rdb', 'desc': 'module is able to operate in a database when database chooses SNAPSHOT persistence option'},
     {'name': 'hash_policy', 'desc': 'module is able to operate in a database with a user defined HASH POLICY'},
-    {'name': 'flash', 'desc': 'module is able to operate in a database with Flash memory is enabled or changed over time'}
+    {'name': 'flash', 'desc': 'module is able to operate in a database with Flash memory is enabled or changed over time'},
+    {'name': 'clustering', 'desc': 'module is able to operate in a database that is sharded and shards can be migrated'}
 ]

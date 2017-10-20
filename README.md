@@ -29,7 +29,7 @@ python setup.py install
 ## Manifest mode
 
 ```sh
-ramp <PATH_TO_RedisModule.so> -m <PATH_TO_Manifest.yml>
+ramp-packer <PATH_TO_RedisModule.so> -m <PATH_TO_Manifest.yml>
 ```
 
 manifest.yml should specify your module's attributes, the ones you would specify manualy if you were to use
@@ -38,7 +38,7 @@ the Command line mode, see Full usage options and manifest.yml for a reference.
 ## Command line mode
 
 ```sh
-ramp <PATH_TO_RedisModule.so> -a <author> -e <email> -ar <architecture> -d <description> -ho <homepage> -l <license> -ex <extras> -c <cmdargs> -r <redis-min-version>
+ramp-packer <PATH_TO_RedisModule.so> -a <author> -e <email> -ar <architecture> -d <description> -ho <homepage> -l <license> -ex <extras> -c <cmdargs> -r <redis-min-version>
 ```
 
 ## Full usage options
@@ -67,7 +67,7 @@ Options:
 For Help
 
 ```sh
-ramp  -h
+ramp-packer -h
 ```
 
 ## Module Capabilities
@@ -87,9 +87,10 @@ persistence_aof | module is able to operate in a database when database chooses 
 persistence_rdb | module is able to operate in a database when database chooses SNAPSHOT persistence option|
 hash_policy | module is able to operate in a database with a user defined HASH POLICY|
 flash | module is able to operate in a database with Flash memory is enabled or changed over time|
+clustering | module is able to operate in a database that is sharded and shards can be migrated|
 
 ## Output
-module_packer generates module.zip
+ramp-packer generates module.zip
 
 Which contains:
 
