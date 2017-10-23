@@ -1,3 +1,4 @@
+display_name: ReJSON
 author: Itamar
 email: itamar@redislabs.com
 description: enhance redis with json capabilites
@@ -8,10 +9,8 @@ min_redis_version: "4.0"
 min_rlec_version: "5.2"
 capabilities:
     - types
-    - multi_key
+    - no_multi_key
     - replica_of
     - eviction_expiry
     - failover_migrate
-    - multi_exec
-    - replication
     - flash
