@@ -43,7 +43,7 @@ Which contains:
 setup(
     name='ramp-packer',
     py_modules=['RAMP'],
-    version='1.3.1',
+    version='1.3.2',
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',

@@ -5,6 +5,7 @@ import platform
 ARCHITECTURE = platform.machine()
 OS = platform.system()
 VERSION = "1.0"
+DISPLAY_NAME = ""
 AUTHOR = ""
 EMAIL = ""
 DESCRIPTION = ""
@@ -18,7 +19,7 @@ COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
 MIN_RLEC_VERSION = "5.2"
 
-FIELDS = ["module_name", "module_file", "architecture", "version", "author", "email",
+FIELDS = ["module_name", "module_file", "architecture", "version", "display_name", "author", "email",
           "description", "homepage", "license", "command_line_args", "capabilities",
           "min_redis_version", "min_rlec_version", "sha256", "commands", "os"]
 
@@ -38,6 +39,7 @@ def create_default_metadata(module_path):
         "os": OS,
         "architecture": ARCHITECTURE,
         "version": MODULE_VERSION,
+        "display_name": DISPLAY_NAME,
         "author": AUTHOR,
         "email": EMAIL,
         "description": DESCRIPTION,

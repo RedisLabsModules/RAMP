@@ -60,6 +60,7 @@ def comma_seperated_to_list(ctx, param, value):
 @click.option('--output', '-o', default='module.zip', help='output file name')
 @click.option('--verbose', '-v', is_flag=True, help='verbose mode: print the resulting metadata')
 @click.option('--manifest', '-m', type=click.File('rb'), help='generate package from manifest')
+@click.option('--display-name', '-dn', 'display_name', default=module_metadata.DISPLAY_NAME, help='name for display purposes')
 @click.option('--author', '-a', default=module_metadata.AUTHOR, help='module author')
 @click.option('--email', '-e', default=module_metadata.EMAIL, help='author\'s email')
 @click.option('--architecture', '-ar', default=module_metadata.ARCHITECTURE, help='module compiled on i386/x86_64 arch')
@@ -71,7 +72,7 @@ def comma_seperated_to_list(ctx, param, value):
 @click.option('--rlec-min-version', '-rl', 'rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
 @click.option('--os', '-o', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-ca', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
-def package(module, output, verbose, manifest, author, email,
+def package(module, output, verbose, manifest, display_name, author, email,
             architecture, description, homepage, license, cmdargs,
             redis_min_version, rlec_min_version, os, capabilities):
     module_path = module
@@ -82,6 +83,7 @@ def package(module, output, verbose, manifest, author, email,
     else:
         metadata["architecture"] = architecture
         metadata["os"] = os
+        metadata["display_name"] = display_name
         metadata["author"] = author
         metadata["email"] = email
         metadata["description"] = description
