@@ -50,6 +50,7 @@ Options:
   -o, --output TEXT             output file name
   -v, --verbose                 verbose mode: print the resulting metadata
   -m, --manifest FILENAME       generate package from manifest
+  -dn, --display-name TEXT      name for display purposes
   -a, --author TEXT             module author
   -e, --email TEXT              author's email
   -ar, --architecture TEXT      module compiled on i386/x86_64 arch
