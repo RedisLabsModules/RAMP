@@ -69,12 +69,12 @@ def comma_seperated_to_list(ctx, param, value):
 @click.option('--license', '-l', default=module_metadata.LICENSE, help='license')
 @click.option('--cmdargs', '-c', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
 @click.option('--redis-min-version', '-r', 'redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
-@click.option('--rlec-min-version', '-rl', 'rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
+@click.option('--redis-enterprise-min-version', '-rl', 'redis_enterprise_min_version', default=module_metadata.MIN_REDIS_ENTERPRISE_VERSION, help='redis enterprise minimum version')
 @click.option('--os', '-o', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-ca', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 def package(module, output, verbose, manifest, display_name, author, email,
             architecture, description, homepage, license, cmdargs,
-            redis_min_version, rlec_min_version, os, capabilities):
+            redis_min_version, redis_enterprise_min_version, os, capabilities):
     module_path = module
     metadata = set_defaults(module_path)
 
@@ -91,7 +91,7 @@ def package(module, output, verbose, manifest, display_name, author, email,
         metadata["license"] = license
         metadata["command_line_args"] = cmdargs
         metadata["min_redis_version"] = redis_min_version
-        metadata["min_rlec_version"] = rlec_min_version
+        metadata["min_redis_enterprise_version"] = redis_enterprise_min_version
         metadata["capabilities"] = capabilities
 
     # Load module into redis and discover its commands
