@@ -69,12 +69,12 @@ def comma_seperated_to_list(ctx, param, value):
 @click.option('--license', '-l', default=module_metadata.LICENSE, help='license')
 @click.option('--cmdargs', '-c', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
 @click.option('--redis-min-version', '-r', 'redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
-@click.option('--rlec-min-version', '-rl', 'rlec_min_version', default=module_metadata.MIN_RLEC_VERSION, help='rlec minimum version')
+@click.option('--redis-pack-min-version', '-rl', 'redis_pack_min_version', default=module_metadata.MIN_REDIS_PACK_VERSION, help='redis pack minimum version')
 @click.option('--os', '-o', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-ca', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 def package(module, output, verbose, manifest, display_name, author, email,
             architecture, description, homepage, license, cmdargs,
-            redis_min_version, rlec_min_version, os, capabilities):
+            redis_min_version, redis_pack_min_version, os, capabilities):
     module_path = module
     metadata = set_defaults(module_path)
 
@@ -91,13 +91,13 @@ def package(module, output, verbose, manifest, display_name, author, email,
         metadata["license"] = license
         metadata["command_line_args"] = cmdargs
         metadata["min_redis_version"] = redis_min_version
-        metadata["min_rlec_version"] = rlec_min_version
+        metadata["min_redis_pack_version"] = redis_pack_min_version
         metadata["capabilities"] = capabilities
 
     # Load module into redis and discover its commands
     module = discover_modules_commands(module_path, metadata["command_line_args"])
     metadata["module_name"] = module.name
-    metadata["version"] = module.version
+    metadata["version"] = str(module.version)
     metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
 
     if verbose:

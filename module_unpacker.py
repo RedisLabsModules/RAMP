@@ -71,8 +71,8 @@ def _validate_zip_file(zip_file):
     # Check zip content size.
     for zipinfo in infolist:
         # Size of the compressed/uncompressed data.
-        if zipinfo.compress_size > MAX_MODULE_FILE_SIZE or zipinfo.file_size > MAX_MODULE_FILE_SIZE:
-            raise UnpackerPackageError("module zip file did not pass sanity validation", reason="module zip content is too big")
+        if zipinfo.file_size > MAX_MODULE_FILE_SIZE:
+            raise UnpackerPackageError("module zip file did not pass sanity validation", reason="module file content is too big")
 
     return True
 
@@ -103,11 +103,8 @@ def _validate(metadata, module):
     if metadata["version"] == "":
         raise UnpackerPackageError("module did not pass sanity validation", reason="Missing version")
 
-    if StrictVersion(metadata["min_redis_version"]) < StrictVersion(module_metadata.MIN_REDIS_VERSION):
-        raise UnpackerPackageError("module did not pass sanity validation", reason="Min Redis version is too low")
-
-    if StrictVersion(metadata["min_rlec_version"]) < StrictVersion(module_metadata.MIN_RLEC_VERSION):
-        raise UnpackerPackageError("module did not pass sanity validation", reason="Min RLEC version is too low")
+    if StrictVersion(metadata["min_redis_pack_version"]) < StrictVersion(module_metadata.MIN_REDIS_PACK_VERSION):
+        raise UnpackerPackageError("module did not pass sanity validation", reason="Min redis pack version is too low")
 
     # wrong signature
     # TODO: this check should be deffered to a later stage

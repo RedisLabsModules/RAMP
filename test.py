@@ -6,8 +6,9 @@ import hashlib
 from click.testing import CliRunner
 import module_unpacker
 from module_capabilities import MODULE_CAPABILITIES
+from RAMP.module_metadata import MODULE_VERSION
 
-MODULE_FILE = "libmodule.so"
+MODULE_FILE = "redisgraph.so"
 MENIFEST_FILE = "example.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
@@ -23,16 +24,16 @@ def sha256_checksum(filename, block_size=65536):
 
 
 def validate_module_commands(commands):
-    assert len(commands) == 4
+    assert len(commands) == 3
 
     # Expected commands:
-    graph_remove_edge = {"command_arity": -1,
-                         "command_name": "graph.REMOVEEDGE",
+    graph_explain = {"command_arity": -1,
+                         "command_name": "graph.EXPLAIN",
                          "first_key": 1,
                          "flags": ["write"],
                          "last_key": 1,
                          "step": 1}
-    assert commands[0] == graph_remove_edge
+    assert commands[0] == graph_explain
 
     graph_query = {"command_arity": -1,
                    "command_name": "graph.QUERY",
@@ -42,21 +43,13 @@ def validate_module_commands(commands):
                    "step": 1}
     assert commands[1] == graph_query
 
-    graph_add_edge = {"command_arity": -1,
-                      "command_name": "graph.ADDEDGE",
-                      "first_key": 1,
-                      "flags": ["write"],
-                      "last_key": 1,
-                      "step": 1}
-    assert commands[2] == graph_add_edge
-
     graph_delete = {"command_arity": -1,
                     "command_name": "graph.DELETE",
                     "first_key": 1,
                     "flags": ["write"],
                     "last_key": 1,
                     "step": 1}
-    assert commands[3] == graph_delete
+    assert commands[2] == graph_delete
 
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
@@ -69,7 +62,7 @@ def test_defaults():
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == 'x86_64'
-    assert metadata["version"] == 1.0
+    assert metadata["version"] == MODULE_VERSION
     assert metadata["author"] == ""
     assert metadata["email"] == ""
     assert metadata["description"] == ""
@@ -77,7 +70,7 @@ def test_defaults():
     assert metadata["license"] == ""
     assert metadata["command_line_args"] == ""
     assert metadata["min_redis_version"] == "4.0"
-    assert metadata["min_rlec_version"] == "5.2"
+    assert metadata["min_redis_pack_version"] == "5.2"
     assert metadata["capabilities"] == []
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     validate_module_commands(metadata["commands"])
@@ -94,11 +87,11 @@ def test_bundle_from_cmd():
     _license = "AGPL"
     command_line_args = "\"-output f --level debug\""
     min_redis_version = "4.6"
-    min_rlec_version = "5.2"
+    min_redis_pack_version = "5.2"
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-d', description,
             '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
-            '-rl', min_rlec_version, '-ca', ','.join([cap['name'] for cap in MODULE_CAPABILITIES])]
+            '-rl', min_redis_pack_version, '-ca', ','.join([cap['name'] for cap in MODULE_CAPABILITIES])]
 
     runner = CliRunner()
     result = runner.invoke(packer.package, argv)
@@ -109,7 +102,7 @@ def test_bundle_from_cmd():
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
-    assert metadata["version"] == 1.0
+    assert metadata["version"] == MODULE_VERSION
     assert metadata["author"] == author
     assert metadata["email"] == email
     assert metadata["description"] == description
@@ -117,7 +110,7 @@ def test_bundle_from_cmd():
     assert metadata["license"] == _license
     assert metadata["command_line_args"] == command_line_args
     assert metadata["min_redis_version"] == min_redis_version
-    assert metadata["min_rlec_version"] == min_rlec_version
+    assert metadata["min_redis_pack_version"] == min_redis_pack_version
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
 
@@ -138,7 +131,7 @@ def test_bundle_from_menifest():
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
-    assert metadata["version"] == 1.0
+    assert metadata["version"] == MODULE_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
 
     with open(MENIFEST_FILE_PATH, 'r') as f:

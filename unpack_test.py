@@ -6,7 +6,7 @@ import module_unpacker
 import module_metadata
 from commands_discovery import discover_modules_commands
 
-MODULE_FILE = "libmodule.so"
+MODULE_FILE = "redisgraph.so"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 print "MODULE_FILE_PATH %s" % MODULE_FILE_PATH
 BUNDLE_ZIP_FILE = "module.zip"
