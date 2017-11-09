@@ -17,7 +17,7 @@ MODULE_COMMANDS = []
 MODULE_CAPABILITIES = []
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
-MIN_REDIS_PACK_VERSION = "5.2"
+MIN_REDIS_PACK_VERSION = "5.0"
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "display_name", "author", "email",
           "description", "homepage", "license", "command_line_args", "capabilities",

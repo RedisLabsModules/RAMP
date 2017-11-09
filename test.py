@@ -70,7 +70,7 @@ def test_defaults():
     assert metadata["license"] == ""
     assert metadata["command_line_args"] == ""
     assert metadata["min_redis_version"] == "4.0"
-    assert metadata["min_redis_pack_version"] == "5.2"
+    assert metadata["min_redis_pack_version"] == "5.0"
     assert metadata["capabilities"] == []
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     validate_module_commands(metadata["commands"])
@@ -87,7 +87,7 @@ def test_bundle_from_cmd():
     _license = "AGPL"
     command_line_args = "\"-output f --level debug\""
     min_redis_version = "4.6"
-    min_redis_pack_version = "5.2"
+    min_redis_pack_version = "5.0"
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-d', description,
             '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
