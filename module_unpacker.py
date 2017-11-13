@@ -102,7 +102,7 @@ def _validate(metadata, module):
         raise UnpackerPackageError("module did not pass sanity validation", reason="Architecture must 64 bits")
 
     # Missing version
-    if not semantic_version.validate(metadata["version"]):
+    if not semantic_version.validate(metadata["semantic_version"]):
         raise UnpackerPackageError("module did not pass sanity validation", reason="Invalid semantic version")
 
     if StrictVersion(metadata["min_redis_pack_version"]) < StrictVersion(module_metadata.MIN_REDIS_PACK_VERSION):

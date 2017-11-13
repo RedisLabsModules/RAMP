@@ -50,7 +50,7 @@ setup(
     license='BSD 2-clause',
     long_description=LONG_DESC,
     packages=find_packages(),
-    install_requires=['redis', 'pyyaml', 'click>=6.7'],
+    install_requires=['redis', 'pyyaml', 'click>=6.7', 'semantic_version>=2.6.0'],
     entry_points='''
         [console_scripts]
         ramp-packer=RAMP.packer:package

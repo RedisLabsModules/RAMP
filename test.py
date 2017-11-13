@@ -1,18 +1,19 @@
 import os
 import yaml
-from RAMP import packer
+from RAMP import packer, module_metadata
 import click
 import hashlib
 from click.testing import CliRunner
 import module_unpacker
 from module_capabilities import MODULE_CAPABILITIES
-from RAMP.module_metadata import MODULE_VERSION
 
 MODULE_FILE = "redisgraph.so"
+MODULE_VERSION = 30201
+MODULE_SEMANTIC_VERSION = "3.2.1"
 MENIFEST_FILE = "example.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
-BUNDLE_ZIP_FILE = "module.zip"
+BUNDLE_ZIP_FILE = "test_module.zip"
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -54,23 +55,26 @@ def validate_module_commands(commands):
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
     runner = CliRunner()
-    result = runner.invoke(packer.package, [MODULE_FILE_PATH])
+    result = runner.invoke(packer.package, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
     assert result.exit_code == 0
 
-    metadata, _ = module_unpacker.unpack('./module.zip')
+    metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == 'x86_64'
     assert metadata["version"] == MODULE_VERSION
-    assert metadata["author"] == ""
-    assert metadata["email"] == ""
-    assert metadata["description"] == ""
-    assert metadata["homepage"] == ""
-    assert metadata["license"] == ""
-    assert metadata["command_line_args"] == ""
-    assert metadata["min_redis_version"] == "4.0"
-    assert metadata["min_redis_pack_version"] == "5.0"
-    assert metadata["capabilities"] == []
+    assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
+    assert metadata["display_name"] == module_metadata.DISPLAY_NAME
+    assert metadata["author"] == module_metadata.AUTHOR
+    assert metadata["email"] == module_metadata.EMAIL
+    assert metadata["description"] == module_metadata.DESCRIPTION
+    assert metadata["homepage"] == module_metadata.HOMEPAGE
+    assert metadata["license"] == module_metadata.LICENSE
+    assert metadata["command_line_args"] == module_metadata.COMMAND_LINE_ARGS
+    assert metadata["min_redis_version"] == module_metadata.MIN_REDIS_VERSION
+    assert metadata["min_redis_pack_version"] == module_metadata.MIN_REDIS_PACK_VERSION
+    assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
+    assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     validate_module_commands(metadata["commands"])
 
@@ -87,21 +91,24 @@ def test_bundle_from_cmd():
     command_line_args = "\"-output f --level debug\""
     min_redis_version = "4.6"
     min_redis_pack_version = "5.0"
+    display_name = "test_module"
 
-    argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-d', description,
+    argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description, '-d', display_name,
             '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
-            '-rl', min_redis_pack_version, '-ca', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE]
+            '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE]
 
     runner = CliRunner()
     result = runner.invoke(packer.package, argv)
 
     assert result.exit_code == 0
-    metadata, _ = module_unpacker.unpack('./module.zip')
+    metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
 
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
+    assert metadata["display_name"] == display_name
     assert metadata["version"] == MODULE_VERSION
+    assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["author"] == author
     assert metadata["email"] == email
     assert metadata["description"] == description
@@ -122,15 +129,16 @@ def test_bundle_from_menifest():
     """
 
     runner = CliRunner()
-    result = runner.invoke(packer.package, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH])
+    result = runner.invoke(packer.package, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
 
     assert result.exit_code == 0
-    metadata, _ = module_unpacker.unpack('./module.zip')
+    metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
 
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
-    assert metadata["version"] == '1.2.3'
+    assert metadata["version"] == MODULE_VERSION
+    assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
