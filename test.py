@@ -58,7 +58,6 @@ def test_defaults():
     assert result.exit_code == 0
 
     metadata, _ = module_unpacker.unpack('./module.zip')
-
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == 'x86_64'
@@ -81,7 +80,7 @@ def test_bundle_from_cmd():
     """
 
     author = "redislabs"
-    email = "r@redislabs.com"
+    email = "roi@redislabs.com"
     description = "desc some module"
     homepage = "http://github.com/redismodules/module"
     _license = "AGPL"
@@ -91,7 +90,7 @@ def test_bundle_from_cmd():
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-d', description,
             '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
-            '-rl', min_redis_pack_version, '-ca', ','.join([cap['name'] for cap in MODULE_CAPABILITIES])]
+            '-rl', min_redis_pack_version, '-ca', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE]
 
     runner = CliRunner()
     result = runner.invoke(packer.package, argv)
@@ -131,7 +130,7 @@ def test_bundle_from_menifest():
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
-    assert metadata["version"] == MODULE_VERSION
+    assert metadata["version"] == '1.2.3'
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
 
     with open(MENIFEST_FILE_PATH, 'r') as f:

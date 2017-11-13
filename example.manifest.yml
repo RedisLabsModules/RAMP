@@ -6,6 +6,7 @@ homepage: rejson.io
 license: BSD
 command_line_args: ""
 min_redis_version: "4.0"
+version: "1.2.3"
 min_redis_pack_version: "5.0"
 capabilities:
     - types
