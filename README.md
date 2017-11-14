@@ -44,25 +44,26 @@ ramp-packer <PATH_TO_RedisModule.so> -a <author> -e <email> -ar <architecture> -
 ## Full usage options
 
 ```
-Usage: ramp [OPTIONS] MODULE
+Usage: ramp-packer [OPTIONS] MODULE
 
 Options:
-  -o, --output TEXT                   output file name
-  -v, --verbose                       verbose mode: print the resulting metadata
-  -m, --manifest FILENAME             generate package from manifest
-  -dn, --display-name TEXT            name for display purposes
-  -a, --author TEXT                   module author
-  -e, --email TEXT                    author's email
-  -ar, --architecture TEXT            module compiled on i386/x86_64 arch
-  -d, --description TEXT              short description
-  -h, --homepage TEXT                 module homepage
-  -l, --license TEXT                  license
-  -c, --cmdargs TEXT                  module command line arguments
-  -r, --redis-min-version TEXT        redis minimum version
-  -rl, --redis-pack-min-version TEXT  redis pack minimum version
-  -o, --os TEXT                       build target OS (Darwin/Linux)
-  -ca, --capabilities TEXT            comma seperated list of module capabilities
-  --help                              Show this message and exit.
+  -o, --output TEXT               output file name
+  -v, --verbose                   verbose mode: print the resulting metadata
+  -m, --manifest FILENAME         generate package from manifest
+  -d, --display-name TEXT         name for display purposes
+  -a, --author TEXT               module author
+  -e, --email TEXT                author's email
+  -A, --architecture TEXT         module compiled on i386/x86_64 arch
+  -D, --description TEXT          short description
+  -h, --homepage TEXT             module homepage
+  -l, --license TEXT              license
+  -c, --cmdargs TEXT              module command line arguments
+  -r, --redis-min-version TEXT    redis minimum version
+  -R, --redis-pack-min-version TEXT
+                                  redis pack minimum version
+  -O, --os TEXT                   build target OS (Darwin/Linux)
+  -C, --capabilities TEXT         comma seperated list of module capabilities
+  --help                          Show this message and exit.
 ```
 
 For Help

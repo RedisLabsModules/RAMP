@@ -1,2 +1,3 @@
 redis
 click
+semantic_version

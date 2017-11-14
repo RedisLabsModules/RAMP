@@ -3,6 +3,8 @@ import sys
 import json
 import zipfile
 import hashlib
+import semantic_version
+
 from RAMP import module_metadata
 from distutils.version import StrictVersion
 
@@ -100,8 +102,8 @@ def _validate(metadata, module):
         raise UnpackerPackageError("module did not pass sanity validation", reason="Architecture must 64 bits")
 
     # Missing version
-    if metadata["version"] == "":
-        raise UnpackerPackageError("module did not pass sanity validation", reason="Missing version")
+    if not semantic_version.validate(metadata["semantic_version"]):
+        raise UnpackerPackageError("module did not pass sanity validation", reason="Invalid semantic version")
 
     if StrictVersion(metadata["min_redis_pack_version"]) < StrictVersion(module_metadata.MIN_REDIS_PACK_VERSION):
         raise UnpackerPackageError("module did not pass sanity validation", reason="Min redis pack version is too low")
