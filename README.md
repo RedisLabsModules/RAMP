@@ -1,4 +1,5 @@
 # RAMP
+
 Redis Automatic Module Packaging
 
 Similar to `npm init`, this packer bundles Redis Modules for later distribution.
@@ -6,14 +7,16 @@ Similar to `npm init`, this packer bundles Redis Modules for later distribution.
 It gathers information from modules e.g.
 module's name, command list, version and additional metadata.
 
-# Prerequisites
+## Prerequisites
+
 Make sure redis-server is on your PATH
 
 ```sh
 export PATH=$PATH:<PATH_TO_REDIS>
 ```
 
-# Install
+## Install
+
 You can either use pip install or the setup.py script
 
 ```sh
@@ -24,12 +27,12 @@ pip install ramp-packer
 python setup.py install
 ```
 
-# Usage
+## Usage
 
 ## Manifest mode
 
 ```sh
-ramp-packer <PATH_TO_RedisModule.so> -m <PATH_TO_Manifest.yml>
+ramp pack <PATH_TO_RedisModule.so> -m <PATH_TO_Manifest.yml>
 ```
 
 manifest.yml should specify your module's attributes, the ones you would specify manualy if you were to use
@@ -38,13 +41,28 @@ the Command line mode, see Full usage options and manifest.yml for a reference.
 ## Command line mode
 
 ```sh
-ramp-packer <PATH_TO_RedisModule.so> -a <author> -e <email> -ar <architecture> -d <description> -ho <homepage> -l <license> -ex <extras> -c <cmdargs> -r <redis-min-version>
+ramp pack <PATH_TO_RedisModule.so> -a <author> -e <email> -A <architecture> -d <description> -h <homepage> -l <license> -c <cmdargs> -r <redis-min-version>
 ```
 
 ## Full usage options
 
+```sh
+Usage: ramp [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  pack
+  unpack
+  validate
+  version
 ```
-Usage: ramp-packer [OPTIONS] MODULE
+
+## Packing
+
+```sh
+Usage: ramp pack [OPTIONS] MODULE
 
 Options:
   -o, --output TEXT               output file name
@@ -52,7 +70,7 @@ Options:
   -m, --manifest FILENAME         generate package from manifest
   -d, --display-name TEXT         name for display purposes
   -a, --author TEXT               module author
-  -e, --email TEXT                author's email
+  -e, --email TEXT                authors email
   -A, --architecture TEXT         module compiled on i386/x86_64 arch
   -D, --description TEXT          short description
   -h, --homepage TEXT             module homepage
@@ -64,12 +82,6 @@ Options:
   -O, --os TEXT                   build target OS (Darwin/Linux)
   -C, --capabilities TEXT         comma seperated list of module capabilities
   --help                          Show this message and exit.
-```
-
-For Help
-
-```sh
-ramp-packer -h
 ```
 
 ## Module Capabilities
@@ -92,7 +104,8 @@ flash | module is able to operate in a database with Flash memory is enabled or 
 clustering | module is able to operate in a database that is sharded and shards can be migrated|
 
 ## Output
-ramp-packer generates module.zip
+
+ramp pack generates module.zip
 
 Which contains:
 

@@ -1,3 +1,4 @@
 redis
 click
 semantic_version
+PyYAML

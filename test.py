@@ -1,6 +1,6 @@
 import os
 import yaml
-from RAMP import packer, module_metadata
+from RAMP import ramp, packer, module_metadata
 import click
 import hashlib
 from click.testing import CliRunner
@@ -8,7 +8,7 @@ import module_unpacker
 from module_capabilities import MODULE_CAPABILITIES
 
 MODULE_FILE = "redisgraph.so"
-MODULE_VERSION = 30201
+MODULE_VERSION = 30201.0
 MODULE_SEMANTIC_VERSION = "3.2.1"
 MENIFEST_FILE = "example.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
@@ -55,7 +55,7 @@ def validate_module_commands(commands):
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
     runner = CliRunner()
-    result = runner.invoke(packer.package, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
     assert result.exit_code == 0
 
     metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -98,7 +98,7 @@ def test_bundle_from_cmd():
             '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE]
 
     runner = CliRunner()
-    result = runner.invoke(packer.package, argv)
+    result = runner.invoke(ramp.pack, argv)
 
     assert result.exit_code == 0
     metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -129,7 +129,7 @@ def test_bundle_from_menifest():
     """
 
     runner = CliRunner()
-    result = runner.invoke(packer.package, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
 
     assert result.exit_code == 0
     metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
