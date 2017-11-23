@@ -5,7 +5,7 @@ import zipfile
 import hashlib
 import semantic_version
 
-from RAMP import module_metadata
+import module_metadata
 from distutils.version import StrictVersion
 
 MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10
@@ -19,7 +19,10 @@ class UnpackerPackageError(Exception):
         self.reason = reason
 
     def __str__(self):
-        return "{}, reason: {}".format(super(UnpackerPackageError, self).__str__(), self.reason)
+        if self.reason:
+            return "{}, reason: {}".format(super(UnpackerPackageError, self).__str__(), self.reason)
+        else:
+            return "{}".format(super(UnpackerPackageError, self).__str__())
 
 def _sha256_checksum(module_file):
     """Computes sha256 for given file"""
@@ -40,7 +43,7 @@ def unpack(bundle):
     # Extract.
     try:
         with zipfile.ZipFile(bundle) as zf:
-            # _validate_zip_file throws
+            # validate_zip_file throws
             # we want this exception to propagate
             _validate_zip_file(zf)
 
@@ -53,12 +56,23 @@ def unpack(bundle):
 
             # _validate throws incase of an error,
             # we want this exception to propagate
-            _validate(metadata, module)
+            _validate_metadata(metadata, module)
 
     except zipfile.BadZipfile:
         raise UnpackerPackageError("Failed to extract bundle")
 
     return (metadata, module)
+
+def validate_bundle(bundle):
+    """
+    Checks to see if given bundle is valid.
+    Return (True, None) if so, (False, Exception) otherwise.
+    """
+    try:
+        unpack(bundle)
+        return (True, None)
+    except Exception as e:
+        return (False, e)
 
 def _validate_zip_file(zip_file):
     """
@@ -78,7 +92,7 @@ def _validate_zip_file(zip_file):
 
     return True
 
-def _validate(metadata, module):
+def _validate_metadata(metadata, module):
     """
     Checks metadata isn't missing any required fields
     metadata - dictionary

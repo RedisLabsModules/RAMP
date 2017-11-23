@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from RAMP.version import VERSION
 
 LONG_DESC = """
 # RAMP
@@ -43,7 +44,7 @@ Which contains:
 setup(
     name='ramp-packer',
     py_modules=['RAMP'],
-    version='1.3.7',
+    version=str(VERSION),
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',
@@ -53,6 +54,6 @@ setup(
     install_requires=['redis', 'pyyaml', 'click>=6.7', 'semantic_version>=2.6.0'],
     entry_points='''
         [console_scripts]
-        ramp-packer=RAMP.packer:package
+        ramp=RAMP.ramp:ramp
     ''',
 )
