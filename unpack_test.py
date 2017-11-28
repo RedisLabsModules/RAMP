@@ -1,14 +1,13 @@
 import os
 import hashlib
-import unittest
-import module_packer
-import module_unpacker
-import module_metadata
-from commands_discovery import discover_modules_commands
+import click
+from click.testing import CliRunner
+
+from module_capabilities import MODULE_CAPABILITIES
+from RAMP import ramp, packer, unpacker, module_metadata, commands_discovery
 
 MODULE_FILE = "redisgraph.so"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
-print "MODULE_FILE_PATH %s" % MODULE_FILE_PATH
 BUNDLE_ZIP_FILE = "module.zip"
 
 def sha256_checksum(filename, block_size=65536):
@@ -19,45 +18,28 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
-class TestModuleUnpacker(unittest.TestCase):
-    def test_bad_bundle(self):
-        """
-        test malformed bundle is detected
-        """
-        path_to_bundle = os.path.join(os.getcwd(), BUNDLE_ZIP_FILE)
+def test_bad_bundle():
+    """
+    test malformed bundle is detected
+    """
+    pass
 
-        module = discover_modules_commands(MODULE_FILE_PATH)
-        metadata = module_metadata.create_default_metadata(module, MODULE_FILE_PATH)
+def test_valid_bundle():
+    """
+    test bundle extraction
+    """
+    module_path = os.path.join(os.getcwd(), MODULE_FILE)
+    path_to_bundle = os.path.join(os.getcwd(), BUNDLE_ZIP_FILE)
+    path_to_metadata = os.path.join(os.getcwd(), "module.json")
+    module = commands_discovery.discover_modules_commands(module_path, "")
+    metadata = module_metadata.create_default_metadata(module_path)
+    metadata['module_name'] = 'module_name'
 
-        fields = ["Module_name", "Architecture", "Version", "SHA256"]
-        for field in fields:
-            tmp = metadata[field]
-            metadata[field] = ""
-            module_packer.archive(MODULE_FILE_PATH, metadata)
-            self.assertIsNone(module_unpacker.unpack(path_to_bundle))
-            metadata[field] = tmp
-            os.remove(path_to_bundle)
-
-    def test_valid_bundle(self):
-        """
-        test bundle extraction
-        """
-        module_path = os.path.join(os.getcwd(), MODULE_FILE)
-        path_to_bundle = os.path.join(os.getcwd(), BUNDLE_ZIP_FILE)
-        path_to_metadata = os.path.join(os.getcwd(), "module.json")
-        module = discover_modules_commands(module_path)
-        metadata = module_metadata.create_default_metadata(module, module_path)
-
-        module_packer.archive(module_path, metadata)
-        metadata, path_to_module = module_unpacker.unpack(path_to_bundle)
-        self.assertIsNotNone(metadata)
-
-        self.assertTrue(os.path.isfile(path_to_module))
-        self.assertTrue(os.path.isfile(path_to_metadata))
-
-        os.remove(path_to_bundle)
-        os.remove(path_to_metadata)
-        os.remove(module_path)
+    packer.archive(module_path, metadata)
+    metadata, binary = unpacker.unpack(path_to_bundle)
+    assert metadata is not None
+    assert binary is not None
 
 if __name__ == '__main__':
-    unittest.main()
+    test_bad_bundle()
+    test_valid_bundle()

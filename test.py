@@ -1,11 +1,11 @@
 import os
 import yaml
-from RAMP import ramp, packer, module_metadata
 import click
 import hashlib
 from click.testing import CliRunner
-import module_unpacker
+
 from module_capabilities import MODULE_CAPABILITIES
+from RAMP import ramp, packer, unpacker, module_metadata
 
 MODULE_FILE = "redisgraph.so"
 MODULE_VERSION = 30201.0
@@ -58,7 +58,7 @@ def test_defaults():
     result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
     assert result.exit_code == 0
 
-    metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
+    metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == 'x86_64'
@@ -101,7 +101,7 @@ def test_bundle_from_cmd():
     result = runner.invoke(ramp.pack, argv)
 
     assert result.exit_code == 0
-    metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
+    metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
@@ -132,7 +132,7 @@ def test_bundle_from_menifest():
     result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
 
     assert result.exit_code == 0
-    metadata, _ = module_unpacker.unpack(BUNDLE_ZIP_FILE)
+    metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
