@@ -28,10 +28,8 @@ def test_valid_bundle():
     """
     test bundle extraction
     """
-    module_path = os.path.join(os.getcwd(), MODULE_FILE)
+    module_path = os.path.join(os.getcwd(), MODULE_FILE_PATH)
     path_to_bundle = os.path.join(os.getcwd(), BUNDLE_ZIP_FILE)
-    path_to_metadata = os.path.join(os.getcwd(), "module.json")
-    module = commands_discovery.discover_modules_commands(module_path, "")
     metadata = module_metadata.create_default_metadata(module_path)
     metadata['module_name'] = 'module_name'
 

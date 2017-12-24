@@ -28,29 +28,28 @@ def validate_module_commands(commands):
     assert len(commands) == 3
 
     # Expected commands:
-    graph_explain = {"command_arity": -1,
+    expected_command = []
+    expected_command.append({"command_arity": -1,
                          "command_name": "graph.EXPLAIN",
                          "first_key": 1,
                          "flags": ["write"],
                          "last_key": 1,
-                         "step": 1}
-    assert commands[0] == graph_explain
-
-    graph_query = {"command_arity": -1,
+                         "step": 1})
+    expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
                    "first_key": 1,
                    "flags": ["write"],
                    "last_key": 1,
-                   "step": 1}
-    assert commands[1] == graph_query
+                   "step": 1})
 
-    graph_delete = {"command_arity": -1,
+    expected_command.append({"command_arity": -1,
                     "command_name": "graph.DELETE",
                     "first_key": 1,
                     "flags": ["write"],
                     "last_key": 1,
-                    "step": 1}
-    assert commands[2] == graph_delete
+                    "step": 1})
+
+    assert sorted(expected_command, key=lambda c: c['command_name']) == sorted(commands, key=lambda c: c['command_name'])
 
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
@@ -153,4 +152,4 @@ if __name__ == '__main__':
     test_defaults()
     test_bundle_from_menifest()
     test_bundle_from_cmd()
-    print "PASS"
+    print("PASS")

@@ -1,5 +1,4 @@
-from disposableredis import DisposableRedis
-import json
+from RAMP.disposableredis import DisposableRedis
 
 OK = "OK"
 
