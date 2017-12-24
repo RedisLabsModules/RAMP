@@ -35,13 +35,14 @@ def manifest_mode(metadata, manifest):
     """
     try:
         data = yaml.load(manifest)
-        for key, val in data.iteritems():
+        for key, val in data.items():
             if key in metadata:
                 metadata[key] = val
             else:
-                print'{} unknow attribute'.format(key)
+                print('{} unknow attribute'.format(key))
     except yaml.YAMLError as exc:
-        print exc
+        print(exc)
+
 
 def archive(module_path, metadata, archive_name='module.zip'):
     """
@@ -55,7 +56,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
     try:
         archive_file.write(module_path, metadata["module_file"])
         archive_file.write('module.json')
-        print archive_name
+        print(archive_name)
     finally:
         archive_file.close()
         os.remove("module.json")
@@ -90,8 +91,8 @@ def package(module, output, verbose, manifest, display_name, author,
     metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
 
     if verbose:
-        print "Module Metadata:"
-        print json.dumps(metadata, indent=2)
+        print("Module Metadata:")
+        print(json.dumps(metadata, indent=2))
 
     archive(module_path, metadata, archive_name=output)
     return 0

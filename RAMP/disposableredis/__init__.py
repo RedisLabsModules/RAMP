@@ -75,4 +75,4 @@ class DisposableRedis(object):
         :rtype: redis.StrictRedis
         """
 
-        return redis.StrictRedis(port=self.port)
+        return redis.StrictRedis(port=self.port, decode_responses=True)

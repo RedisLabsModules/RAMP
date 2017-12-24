@@ -4,7 +4,7 @@ import click
 
 from RAMP.packer import package
 from RAMP.unpacker import validate_bundle, unpack as unpack_bundle
-from version import VERSION
+from RAMP.version import VERSION
 import RAMP.module_metadata as module_metadata
 
 def comma_seperated_to_list(ctx, param, value):
@@ -23,7 +23,7 @@ def ramp():
 
 @ramp.command()
 def version():
-    print 'RAMP packer v={}'.format(str(VERSION))
+    print('RAMP packer v={}'.format(str(VERSION)))
     return 0
 
 @ramp.command()
@@ -31,10 +31,10 @@ def version():
 def validate(bundle):
     valid, e = validate_bundle(bundle)
     if valid:
-        print "package is valid"
+        print("package is valid")
         return 0
     else:
-        print "package is invalid, reason: %s" % e
+        print("package is invalid, reason: %s" % e)
     return 1
 
 @ramp.command()
@@ -46,12 +46,12 @@ def unpack(bundle):
 
     with open(module_metadata_file_name, 'w') as outfile:
         json.dump(metadata, outfile)
-        print module_metadata_file_name
+        print(module_metadata_file_name)
 
     with open(module_file_name, 'w') as outfile:
         for line in module.readlines():
             outfile.write(line)
-        print module_file_name
+        print(module_file_name)
 
     return 0
 
@@ -73,8 +73,8 @@ def unpack(bundle):
 @click.option('--os', '-O', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 def pack(module, output, verbose, manifest, display_name, author,
-            email, architecture, description, homepage, license, cmdargs,
-            redis_min_version, redis_pack_min_version, os, capabilities):
+         email, architecture, description, homepage, license, cmdargs,
+         redis_min_version, redis_pack_min_version, os, capabilities):
     return package(module, output, verbose, manifest, display_name, author,
-            email, architecture, description, homepage, license, cmdargs,
-            redis_min_version, redis_pack_min_version, os, capabilities)
+                   email, architecture, description, homepage, license, cmdargs,
+                   redis_min_version, redis_pack_min_version, os, capabilities)

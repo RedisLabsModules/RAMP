@@ -5,7 +5,7 @@ import zipfile
 import hashlib
 import semantic_version
 
-import module_metadata
+from RAMP import module_metadata
 from distutils.version import StrictVersion
 
 MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10
@@ -49,7 +49,7 @@ def unpack(bundle):
 
             try:
                 metadata = json.load(zf.open('module.json'))
-            except IOError, ValueError:
+            except (IOError, ValueError):
                 raise UnpackerPackageError("Failed to read module.json")
 
             module = zf.open(metadata["module_file"])
