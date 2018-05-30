@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import json
 import click
@@ -79,3 +81,6 @@ def pack(module, output, verbose, manifest, display_name, author,
     return package(module, output, verbose, manifest, display_name, author,
                    email, architecture, description, homepage, license, cmdargs,
                    redis_min_version, redis_pack_min_version, config_command, os, capabilities)
+
+if __name__ == '__main__':
+    ramp()
