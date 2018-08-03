@@ -75,12 +75,14 @@ def unpack(bundle):
 @click.option('--config-command', '-cc', default=module_metadata.CONFIG_COMMAND, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
+@click.option('--print-only', '-P', help="Print package path, but don't generate file")
 def pack(module, output, verbose, manifest, display_name, author,
          email, architecture, description, homepage, license, cmdargs,
          redis_min_version, redis_pack_min_version, config_command, os, capabilities):
     return package(module, output, verbose, manifest, display_name, author,
                    email, architecture, description, homepage, license, cmdargs,
-                   redis_min_version, redis_pack_min_version, config_command, os, capabilities)
+                   redis_min_version, redis_pack_min_version, config_command, os, capabilities,
+                   print_only)
 
 if __name__ == '__main__':
     ramp()
