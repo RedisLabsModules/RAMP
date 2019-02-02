@@ -19,11 +19,12 @@ COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.0"
 RAMP_FORMAT_VERSION = 1
+CONFIG_COMMAND = ""
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "semantic_version",
           "display_name", "author", "email", "description", "homepage", "license",
           "command_line_args", "capabilities", "min_redis_version", "min_redis_pack_version",
-          "sha256", "commands", "os", "ramp_format_version"]
+          "sha256", "commands", "os", "ramp_format_version", "config_command"]
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -54,6 +55,7 @@ def create_default_metadata(module_path):
         "min_redis_pack_version": MIN_REDIS_PACK_VERSION,
         "sha256": sha256_checksum(module_path),
         "commands": MODULE_COMMANDS,
-        "ramp_format_version": RAMP_FORMAT_VERSION
+        "ramp_format_version": RAMP_FORMAT_VERSION,
+        "config_command": CONFIG_COMMAND
     }
     return metadata

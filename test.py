@@ -14,6 +14,7 @@ MENIFEST_FILE = "example.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
 BUNDLE_ZIP_FILE = "test_module.zip"
+CONFIG_COMMAND = "MODULE.CONFIG"
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -72,6 +73,7 @@ def test_defaults():
     assert metadata["command_line_args"] == module_metadata.COMMAND_LINE_ARGS
     assert metadata["min_redis_version"] == module_metadata.MIN_REDIS_VERSION
     assert metadata["min_redis_pack_version"] == module_metadata.MIN_REDIS_PACK_VERSION
+    assert metadata["config_command"] == module_metadata.CONFIG_COMMAND
     assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
@@ -94,7 +96,7 @@ def test_bundle_from_cmd():
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description, '-d', display_name,
             '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
-            '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE]
+            '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND]
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
@@ -116,6 +118,7 @@ def test_bundle_from_cmd():
     assert metadata["command_line_args"] == command_line_args
     assert metadata["min_redis_version"] == min_redis_version
     assert metadata["min_redis_pack_version"] == min_redis_pack_version
+    assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
 
@@ -139,6 +142,7 @@ def test_bundle_from_menifest():
     assert metadata["version"] == MODULE_VERSION
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
+    assert metadata["config_command"] == CONFIG_COMMAND
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)

@@ -79,6 +79,8 @@ Options:
   -r, --redis-min-version TEXT    redis minimum version
   -R, --redis-pack-min-version TEXT
                                   redis pack minimum version
+  -cc, --config-command TEXT      command to configure module at run time
+
   -O, --os TEXT                   build target OS (Darwin/Linux)
   -C, --capabilities TEXT         comma seperated list of module capabilities
   --help                          Show this message and exit.
