@@ -8,8 +8,8 @@ from module_capabilities import MODULE_CAPABILITIES
 from RAMP import ramp, packer, unpacker, module_metadata
 
 MODULE_FILE = "redisgraph.so"
-MODULE_VERSION = 30201.0
-MODULE_SEMANTIC_VERSION = "3.2.1"
+MODULE_VERSION = 10012
+MODULE_SEMANTIC_VERSION = "1.0.12"
 MENIFEST_FILE = "example.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
@@ -26,27 +26,35 @@ def sha256_checksum(filename, block_size=65536):
 
 
 def validate_module_commands(commands):
-    assert len(commands) == 3
+    assert len(commands) == 4
 
     # Expected commands:
     expected_command = []
     expected_command.append({"command_arity": -1,
                          "command_name": "graph.EXPLAIN",
                          "first_key": 1,
-                         "flags": ["write"],
+                         "flags": ["write","noscript"],
                          "last_key": 1,
                          "step": 1})
+
+    expected_command.append({"command_arity": -1,
+                    "command_name": "graph.BULK",
+                    "first_key": 1,
+                    "flags": ["write","denyoom","noscript"],
+                    "last_key": 1,
+                    "step": 1})
+
     expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
                    "first_key": 1,
-                   "flags": ["write"],
+                   "flags": ["write","denyoom","noscript"],
                    "last_key": 1,
                    "step": 1})
 
     expected_command.append({"command_arity": -1,
                     "command_name": "graph.DELETE",
                     "first_key": 1,
-                    "flags": ["write"],
+                    "flags": ["write","noscript"],
                     "last_key": 1,
                     "step": 1})
 
