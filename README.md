@@ -103,6 +103,8 @@ persistence_aof | module is able to operate in a database when database chooses 
 persistence_rdb | module is able to operate in a database when database chooses SNAPSHOT persistence option|
 hash_policy | module is able to operate in a database with a user defined HASH POLICY|
 flash | module is able to operate in a database with Flash memory is enabled or changed over time|
+crdb | module is able to operate in a database with crdt for the default redis data types|    
+
 clustering | module is able to operate in a database that is sharded and shards can be migrated|
 
 ## Output
