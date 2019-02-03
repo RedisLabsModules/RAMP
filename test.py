@@ -8,12 +8,13 @@ from module_capabilities import MODULE_CAPABILITIES
 from RAMP import ramp, packer, unpacker, module_metadata
 
 MODULE_FILE = "redisgraph.so"
-MODULE_VERSION = 30201.0
-MODULE_SEMANTIC_VERSION = "3.2.1"
+MODULE_VERSION = 10012
+MODULE_SEMANTIC_VERSION = "1.0.12"
 MENIFEST_FILE = "example.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
 BUNDLE_ZIP_FILE = "test_module.zip"
+CONFIG_COMMAND = "MODULE.CONFIG"
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -25,27 +26,35 @@ def sha256_checksum(filename, block_size=65536):
 
 
 def validate_module_commands(commands):
-    assert len(commands) == 3
+    assert len(commands) == 4
 
     # Expected commands:
     expected_command = []
     expected_command.append({"command_arity": -1,
                          "command_name": "graph.EXPLAIN",
                          "first_key": 1,
-                         "flags": ["write"],
+                         "flags": ["write","noscript"],
                          "last_key": 1,
                          "step": 1})
+
+    expected_command.append({"command_arity": -1,
+                    "command_name": "graph.BULK",
+                    "first_key": 1,
+                    "flags": ["write","denyoom","noscript"],
+                    "last_key": 1,
+                    "step": 1})
+
     expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
                    "first_key": 1,
-                   "flags": ["write"],
+                   "flags": ["write","denyoom","noscript"],
                    "last_key": 1,
                    "step": 1})
 
     expected_command.append({"command_arity": -1,
                     "command_name": "graph.DELETE",
                     "first_key": 1,
-                    "flags": ["write"],
+                    "flags": ["write","noscript"],
                     "last_key": 1,
                     "step": 1})
 
@@ -72,6 +81,7 @@ def test_defaults():
     assert metadata["command_line_args"] == module_metadata.COMMAND_LINE_ARGS
     assert metadata["min_redis_version"] == module_metadata.MIN_REDIS_VERSION
     assert metadata["min_redis_pack_version"] == module_metadata.MIN_REDIS_PACK_VERSION
+    assert metadata["config_command"] == module_metadata.CONFIG_COMMAND
     assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
@@ -94,7 +104,7 @@ def test_bundle_from_cmd():
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description, '-d', display_name,
             '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
-            '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE]
+            '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND]
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
@@ -116,6 +126,7 @@ def test_bundle_from_cmd():
     assert metadata["command_line_args"] == command_line_args
     assert metadata["min_redis_version"] == min_redis_version
     assert metadata["min_redis_pack_version"] == min_redis_pack_version
+    assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
 
@@ -139,6 +150,7 @@ def test_bundle_from_menifest():
     assert metadata["version"] == MODULE_VERSION
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
+    assert metadata["config_command"] == CONFIG_COMMAND
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)

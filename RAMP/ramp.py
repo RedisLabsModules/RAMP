@@ -70,11 +70,12 @@ def unpack(bundle):
 @click.option('--cmdargs', '-c', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
 @click.option('--redis-min-version', '-r', 'redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
 @click.option('--redis-pack-min-version', '-R', 'redis_pack_min_version', default=module_metadata.MIN_REDIS_PACK_VERSION, help='redis pack minimum version')
+@click.option('--config-command', '-cc', default=module_metadata.CONFIG_COMMAND, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 def pack(module, output, verbose, manifest, display_name, author,
          email, architecture, description, homepage, license, cmdargs,
-         redis_min_version, redis_pack_min_version, os, capabilities):
+         redis_min_version, redis_pack_min_version, config_command, os, capabilities):
     return package(module, output, verbose, manifest, display_name, author,
                    email, architecture, description, homepage, license, cmdargs,
-                   redis_min_version, redis_pack_min_version, os, capabilities)
+                   redis_min_version, redis_pack_min_version, config_command, os, capabilities)

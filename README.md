@@ -79,6 +79,8 @@ Options:
   -r, --redis-min-version TEXT    redis minimum version
   -R, --redis-pack-min-version TEXT
                                   redis pack minimum version
+  -cc, --config-command TEXT      command to configure module at run time
+
   -O, --os TEXT                   build target OS (Darwin/Linux)
   -C, --capabilities TEXT         comma seperated list of module capabilities
   --help                          Show this message and exit.
@@ -111,3 +113,24 @@ Which contains:
 
     1. RedisModule.so - original module
     2. Module.json - module's metadata
+
+## Test
+Make sure redis-server is on your PATH
+
+```sh
+export PATH=$PATH:<PATH_TO_REDIS>
+```
+
+Install RAMP
+```sh
+python setup.py install
+```
+
+Compile RedisGraph for your OS v1.0.12 (https://github.com/RedisLabsModules/RedisGraph/tree/v1.0.12)
+
+Copy `redisgraph.so` in `test_module` directory in the root of this project.
+
+Run tests
+```sh
+python test.py
+```
