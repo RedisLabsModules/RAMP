@@ -113,3 +113,24 @@ Which contains:
 
     1. RedisModule.so - original module
     2. Module.json - module's metadata
+
+## Test
+Make sure redis-server is on your PATH
+
+```sh
+export PATH=$PATH:<PATH_TO_REDIS>
+```
+
+Install RAMP
+```sh
+python setup.py install
+```
+
+Compile RedisGraph for your OS v1.0.12 (https://github.com/RedisLabsModules/RedisGraph/tree/v1.0.12)
+
+Copy `redisgraph.so` in `test_module` directory in the root of this project.
+
+Run tests
+```sh
+python test.py
+```
