@@ -1,3 +1,4 @@
+import os.path
 from RAMP.disposableredis import DisposableRedis
 
 OK = "OK"
@@ -53,7 +54,8 @@ def _load_module(redis_client, path_to_module, module_args):
     :param path_to_module: where does the module file is located.
     Assuming only a single module is loaded.
     """
-    resp = redis_client.execute_command("MODULE LOAD {} {}".format(path_to_module, module_args))
+    resp = redis_client.execute_command("MODULE LOAD {} {}".format(
+        os.path.abspath(path_to_module), module_args))
     if resp != OK:
         return None
 
