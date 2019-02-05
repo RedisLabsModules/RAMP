@@ -78,7 +78,8 @@ def unpack(bundle):
 @click.option('--print-only', '-P', is_flag=True, help="Print package path, but don't generate file")
 def pack(module, output, verbose, manifest, display_name, author,
          email, architecture, description, homepage, license, cmdargs,
-         redis_min_version, redis_pack_min_version, config_command, os, capabilities):
+         redis_min_version, redis_pack_min_version, config_command, os, capabilities,
+         print_only):
     return package(module, output, verbose, manifest, display_name, author,
                    email, architecture, description, homepage, license, cmdargs,
                    redis_min_version, redis_pack_min_version, config_command, os, capabilities,

@@ -93,7 +93,7 @@ def package(module, output, verbose, manifest, display_name, author,
     metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
 
     if print_only:
-        print output
+        print output.format(**metadata)
         return 0
 
     if verbose:
