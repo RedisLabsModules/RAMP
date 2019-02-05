@@ -64,7 +64,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
 def package(module, output, verbose, manifest, display_name, author,
             email, architecture, description, homepage, license, cmdargs,
             redis_min_version, redis_pack_min_version, config_command, os, capabilities,
-            print_only):
+            print_filename_only):
     module_path = module
     metadata = set_defaults(module_path)
 
@@ -92,7 +92,9 @@ def package(module, output, verbose, manifest, display_name, author,
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))
     metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
 
-    if print_only:
+    if print_filename_only:
+        # For scripts, it might be helpful to know the formatted filename
+        # ahead of time, so that it can manipulate it later on.
         print output.format(**metadata)
         return 0
 
