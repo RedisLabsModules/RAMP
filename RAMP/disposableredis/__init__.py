@@ -5,6 +5,7 @@ import redis
 import time
 import os
 import itertools
+import sys
 
 # Environment variable pointing to the redis executable
 REDIS_PATH_ENVVAR = 'REDIS_PATH'
@@ -52,7 +53,8 @@ class DisposableRedis(object):
             args,
             #cwd=os.getcwd(),
             stdin=subprocess.PIPE,
-            stdout=open(os.devnull, 'w')
+            stdout=sys.stdout,
+            env=os.environ.copy()
         )
 
         while True:
