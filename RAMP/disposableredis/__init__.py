@@ -49,8 +49,6 @@ class DisposableRedis(object):
                 '--dir', tempfile.gettempdir(),
                 '--save', ''] + self.extra_args
 
-        print 'env : ' + str(os.environ)
-
         self.process = subprocess.Popen(
             args,
             #cwd=os.getcwd(),
