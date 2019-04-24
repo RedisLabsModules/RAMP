@@ -4,7 +4,7 @@ import platform
 # Defaults
 ARCHITECTURE = platform.machine()
 OS = platform.system()
-OS_LIST = ["ubuntu14.04", "ubuntu16.04", "ubuntu18.04", "rhel7"]
+OS_LIST = ["ubuntu14.04", "rhel7"]
 DISPLAY_NAME = ""
 AUTHOR = ""
 EMAIL = ""
