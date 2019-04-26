@@ -4,6 +4,7 @@ import platform
 # Defaults
 ARCHITECTURE = platform.machine()
 OS = platform.system()
+OS_LIST = ["ubuntu14.04", "rhel7"]
 DISPLAY_NAME = ""
 AUTHOR = ""
 EMAIL = ""
@@ -24,7 +25,7 @@ CONFIG_COMMAND = ""
 FIELDS = ["module_name", "module_file", "architecture", "version", "semantic_version",
           "display_name", "author", "email", "description", "homepage", "license",
           "command_line_args", "capabilities", "min_redis_version", "min_redis_pack_version",
-          "sha256", "commands", "os", "ramp_format_version", "config_command"]
+          "sha256", "commands", "os", "os_list", "ramp_format_version", "config_command"]
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -40,6 +41,7 @@ def create_default_metadata(module_path):
         "module_name" : MODULE_NAME,
         "module_file": os.path.basename(module_path),
         "os": OS,
+        "os_list": OS_LIST,
         "architecture": ARCHITECTURE,
         "version": MODULE_VERSION,
         "semantic_version": MODULE_SEMANTIC_VERSION,
