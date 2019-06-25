@@ -85,6 +85,8 @@ def test_defaults():
     assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
+    assert metadata["os_list"] == module_metadata.OS_LIST
+
     validate_module_commands(metadata["commands"])
 
 def test_bundle_from_cmd():
@@ -130,6 +132,7 @@ def test_bundle_from_cmd():
     assert metadata["min_redis_pack_version"] == min_redis_pack_version
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
+    assert metadata["os_list"] == os_list
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
 
     commands = metadata["commands"]
@@ -153,6 +156,7 @@ def test_bundle_from_menifest():
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["config_command"] == CONFIG_COMMAND
+    assert metadata["os_list"] == module_metadata.OS_LIST
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)
