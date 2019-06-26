@@ -104,11 +104,14 @@ def test_bundle_from_cmd():
     min_redis_pack_version = "5.0"
     display_name = "test_module"
     module_name = "module_test"
-    os_list = ["ubuntu14.04","rhel7"]
+    os_list = ["ubuntu14.04"]
 
-    argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description, '-d', display_name, '-n', module_name,
-            '-h', homepage, '-l', _license, '-c', command_line_args, '-r', min_redis_version,
-            '-R', min_redis_pack_version, '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]), '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND]
+    argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description,
+            '-ol', os_list, '-d', display_name, '-n', module_name,
+            '-h', homepage, '-l', _license, '-c', command_line_args,
+            '-r', min_redis_version, '-R', min_redis_pack_version,
+            '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
+            '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND]
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
