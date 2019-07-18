@@ -64,7 +64,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
 def package(module, output, verbose, manifest, display_name, module_name, author,
             email, architecture, description, homepage, license, cmdargs,
             redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-            print_filename_only):
+            print_filename_only, exclude_commands):
     module_path = module
     metadata = set_defaults(module_path)
 
@@ -85,13 +85,14 @@ def package(module, output, verbose, manifest, display_name, module_name, author
         metadata["min_redis_pack_version"] = redis_pack_min_version
         metadata["capabilities"] = capabilities
         metadata["config_command"] = config_command
+        metadata["exclude_commands"] = exclude_commands
 
     # Load module into redis and discover its commands
     module = discover_modules_commands(module_path, metadata["command_line_args"])
     metadata["module_name"] = module.name
     metadata["version"] = module.version
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))
-    metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
+    metadata["commands"] = [cmd.to_dict() for cmd in module.commands if cmd.command_name not in metadata["exclude_commands"]]
 
     if module_name:
         metadata["module_name"] = module_name
