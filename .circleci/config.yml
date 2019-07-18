@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/redis:5.0.5 
+      - image: circleci/redis:5.0.5-strech 
 
     working_directory: ~/repo
 
