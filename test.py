@@ -38,13 +38,6 @@ def validate_module_commands(commands):
                          "step": 1})
 
     expected_command.append({"command_arity": -1,
-                    "command_name": "graph.BULK",
-                    "first_key": 1,
-                    "flags": ["write","denyoom","noscript"],
-                    "last_key": 1,
-                    "step": 1})
-
-    expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
                    "first_key": 1,
                    "flags": ["write","denyoom","noscript"],
