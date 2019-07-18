@@ -6,13 +6,15 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/redis:5.0.5-stretch 
+      - image: circleci/redis:5.0.5 
 
     working_directory: ~/repo
 
     steps:
       - checkout
 
+      - run: sudo apt-get install python
+            
       # Download and cache dependencies
       - restore_cache:
           keys:
