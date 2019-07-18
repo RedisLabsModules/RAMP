@@ -13,7 +13,13 @@ jobs:
     steps:
       - checkout
 
-      - run: apt-get update && apt-get install -y python2.7 python-pip
+      - run: apt-get update && apt-get install -y python2.7 python-pip wget unzip
+      
+      - run:
+          name: get redisgraph
+          command: |
+             wget https://s3.amazonaws.com/redismodules/redisgraph/redisgraph.Linux-x86_64.1.0.12.zip
+             unzip redisgraph.Linux-x86_64.1.2.0.zip -d test_module
             
       # Download and cache dependencies
       - restore_cache:
