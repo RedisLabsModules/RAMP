@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
 
-      - run: apt-get update & apt-get install -y python2.7
+      - run: apt-get update && apt-get install -y python2.7
             
       # Download and cache dependencies
       - restore_cache:
