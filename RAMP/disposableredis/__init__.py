@@ -53,8 +53,9 @@ class DisposableRedis(object):
             args,
             #cwd=os.getcwd(),
             stdin=subprocess.PIPE,
-            stdout=sys.stdout,
-            env=os.environ.copy()
+            stdout=open(os.devnull, 'w')
+#             stdout=sys.stdout,
+#             env=os.environ.copy()
         )
 
         while True:
