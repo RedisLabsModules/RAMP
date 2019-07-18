@@ -26,7 +26,7 @@ def sha256_checksum(filename, block_size=65536):
 
 
 def validate_module_commands(commands):
-    assert len(commands) == 4
+    assert len(commands) == 3
 
     # Expected commands:
     expected_command = []
@@ -36,13 +36,6 @@ def validate_module_commands(commands):
                          "flags": ["write","noscript"],
                          "last_key": 1,
                          "step": 1})
-
-    expected_command.append({"command_arity": -1,
-                    "command_name": "graph.BULK",
-                    "first_key": 1,
-                    "flags": ["write","denyoom","noscript"],
-                    "last_key": 1,
-                    "step": 1})
 
     expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
@@ -63,7 +56,7 @@ def validate_module_commands(commands):
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
     runner = CliRunner()
-    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE, '-E', 'graph.BULK'])
     assert result.exit_code == 0
 
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -111,11 +104,12 @@ def test_bundle_from_cmd():
             '-h', homepage, '-l', _license, '-c', command_line_args,
             '-r', min_redis_version, '-R', min_redis_pack_version,
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
-            '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND]
+            '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
+            '-E', 'graph.BULK']
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
-
+    
     assert result.exit_code == 0
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 

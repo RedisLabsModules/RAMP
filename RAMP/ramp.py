@@ -78,14 +78,15 @@ def unpack(bundle):
 @click.option('--os_list', '-ol', default=module_metadata.OS_LIST, help='list of supported os')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 @click.option('--print-filename-only', '-P', is_flag=True, help="Print package path, but don't generate file")
+@click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
 def pack(module, output, verbose, manifest, display_name, module_name, author,
          email, architecture, description, homepage, license, cmdargs,
          redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-         print_filename_only):
+         print_filename_only, exclude_commands):
     return package(module, output, verbose, manifest, display_name, module_name, author,
                    email, architecture, description, homepage, license, cmdargs,
                    redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-                   print_filename_only)
+                   print_filename_only, exclude_commands)
 
 if __name__ == '__main__':
     ramp()

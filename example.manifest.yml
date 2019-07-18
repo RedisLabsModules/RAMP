@@ -18,3 +18,5 @@ capabilities:
     - eviction_expiry
     - failover_migrate
     - flash
+exclude_commands:
+    - graph.BULK
