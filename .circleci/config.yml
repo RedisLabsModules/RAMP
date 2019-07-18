@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt-get install python
+      - run: apt-get install python
             
       # Download and cache dependencies
       - restore_cache:
