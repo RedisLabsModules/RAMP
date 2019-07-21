@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
 
-      - run: apt-get update && apt-get install -y python2.7 python-pip wget unzip
+      - run: apt-get update && apt-get install -y python2.7 python-pip wget unzip git
       
       - run:
           name: get redisgraph
