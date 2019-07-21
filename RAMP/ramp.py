@@ -18,6 +18,15 @@ def comma_seperated_to_list(ctx, param, value):
     else:
         items = value.split(',')
         return list(set(items))
+    
+def jsons_str_tuple_to_jsons_tuple(ctx, param, value):
+    """
+    Converts json str into python map
+    """
+    if value is None:
+        return {}
+    else:
+        return [json.loads(a) for  a in value]
 
 @click.group()
 def ramp():
@@ -79,14 +88,15 @@ def unpack(bundle):
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 @click.option('--print-filename-only', '-P', is_flag=True, help="Print package path, but don't generate file")
 @click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
+@click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple)
 def pack(module, output, verbose, manifest, display_name, module_name, author,
          email, architecture, description, homepage, license, cmdargs,
          redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-         print_filename_only, exclude_commands):
+         print_filename_only, exclude_commands, overide_command):
     return package(module, output, verbose, manifest, display_name, module_name, author,
                    email, architecture, description, homepage, license, cmdargs,
                    redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-                   print_filename_only, exclude_commands)
+                   print_filename_only, exclude_commands, overide_command)
 
 if __name__ == '__main__':
     ramp()
