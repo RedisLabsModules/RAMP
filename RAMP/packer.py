@@ -6,6 +6,7 @@ import semantic_version
 
 import RAMP.module_metadata as module_metadata
 from RAMP.commands_discovery import discover_modules_commands
+from subprocess import Popen, PIPE
 
 def version_to_semantic_version(version):
     """
@@ -96,6 +97,13 @@ def package(module, output, verbose, manifest, display_name, module_name, author
 
     if module_name:
         metadata["module_name"] = module_name
+        
+    p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    git_sha, err = p.communicate()
+    if err != '':
+        print("could not extract git sha %s" % err)
+    else:
+        metadata["git_sha"] = git_sha.strip()
 
     if print_filename_only:
         # For scripts, it might be helpful to know the formatted filename
