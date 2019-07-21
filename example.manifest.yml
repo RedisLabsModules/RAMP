@@ -20,3 +20,4 @@ capabilities:
     - flash
 exclude_commands:
     - graph.BULK
+overide_command: [{"command_name": "graph.EXPLAIN"}]

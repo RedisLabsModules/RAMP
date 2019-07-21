@@ -41,12 +41,7 @@ def validate_module_commands(commands):
 
     # Expected commands:
     expected_command = []
-    expected_command.append({"command_arity": -1,
-                         "command_name": "graph.EXPLAIN",
-                         "first_key": 1,
-                         "flags": ["write","noscript"],
-                         "last_key": 1,
-                         "step": 1})
+    expected_command.append({"command_name": "graph.EXPLAIN"})
 
     expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
@@ -67,7 +62,9 @@ def validate_module_commands(commands):
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
     runner = CliRunner()
-    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE, '-E', 'graph.BULK'])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE,
+                                       '-E', 'graph.BULK',
+                                       '--overide-command', '{"command_name": "graph.EXPLAIN"}'])
     assert result.exit_code == 0
 
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -120,7 +117,8 @@ def test_bundle_from_cmd():
             '-r', min_redis_version, '-R', min_redis_pack_version,
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
             '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
-            '-E', 'graph.BULK']
+            '-E', 'graph.BULK',
+            '--overide-command', '{"command_name": "graph.EXPLAIN"}']
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
