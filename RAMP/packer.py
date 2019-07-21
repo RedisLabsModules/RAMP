@@ -98,12 +98,15 @@ def package(module, output, verbose, manifest, display_name, module_name, author
     if module_name:
         metadata["module_name"] = module_name
         
-    p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
-    git_sha, err = p.communicate()
-    if err != '':
+    try:
+        p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        git_sha, err = p.communicate()
+        if err != '':
+            print("could not extract git sha %s" % err)
+        else:
+            metadata["git_sha"] = git_sha.strip()
+    except Exception:
         print("could not extract git sha %s" % err)
-    else:
-        metadata["git_sha"] = git_sha.strip()
 
     if print_filename_only:
         # For scripts, it might be helpful to know the formatted filename
