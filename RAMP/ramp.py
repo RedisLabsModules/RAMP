@@ -88,7 +88,7 @@ def unpack(bundle):
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 @click.option('--print-filename-only', '-P', is_flag=True, help="Print package path, but don't generate file")
 @click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
-@click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple)
+@click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and overide it on the module json file')
 def pack(module, output, verbose, manifest, display_name, module_name, author,
          email, architecture, description, homepage, license, cmdargs,
          redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
