@@ -22,7 +22,7 @@ MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.0"
 RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
-OVERIDE_COMMAND = ()
+OVERIDE_COMMAND = []
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "semantic_version",
           "display_name", "author", "email", "description", "homepage", "license",

@@ -24,7 +24,7 @@ def jsons_str_tuple_to_jsons_tuple(ctx, param, value):
     Converts json str into python map
     """
     if value is None:
-        return {}
+        return []
     else:
         return [json.loads(a) for  a in value]
 

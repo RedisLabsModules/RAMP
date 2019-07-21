@@ -156,8 +156,6 @@ def test_bundle_from_menifest():
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)
         for key in manifest:
-            if key == 'overide_command':
-                continue
             assert metadata[key] == manifest[key]
 
     commands = metadata["commands"]
