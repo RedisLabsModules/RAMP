@@ -24,25 +24,24 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
+def get_git_sha():
+    try:
+        p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        git_sha, err = p.communicate()
+        if err != '':
+            return None
+        else:
+            return git_sha.strip()
+    except Exception:
+        return None
+
 
 def validate_module_commands(commands):
-    assert len(commands) == 4
+    assert len(commands) == 3
 
     # Expected commands:
     expected_command = []
-    expected_command.append({"command_arity": -1,
-                         "command_name": "graph.EXPLAIN",
-                         "first_key": 1,
-                         "flags": ["write","noscript"],
-                         "last_key": 1,
-                         "step": 1})
-
-    expected_command.append({"command_arity": -1,
-                    "command_name": "graph.BULK",
-                    "first_key": 1,
-                    "flags": ["write","denyoom","noscript"],
-                    "last_key": 1,
-                    "step": 1})
+    expected_command.append({"command_name": "graph.EXPLAIN"})
 
     expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
@@ -63,7 +62,9 @@ def validate_module_commands(commands):
 def test_defaults():
     """Test auto generated metadata from module is as expected."""
     runner = CliRunner()
-    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE,
+                                       '-E', 'graph.BULK',
+                                       '--overide-command', '{"command_name": "graph.EXPLAIN"}'])
     assert result.exit_code == 0
 
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -86,6 +87,10 @@ def test_defaults():
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["os_list"] == module_metadata.OS_LIST
+    
+    git_sha = get_git_sha()
+    if git_sha is not None:
+        assert metadata["git_sha"] == git_sha
 
     validate_module_commands(metadata["commands"])
 
@@ -111,11 +116,13 @@ def test_bundle_from_cmd():
             '-h', homepage, '-l', _license, '-c', command_line_args,
             '-r', min_redis_version, '-R', min_redis_pack_version,
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
-            '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND]
+            '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
+            '-E', 'graph.BULK',
+            '--overide-command', '{"command_name": "graph.EXPLAIN"}']
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
-
+    
     assert result.exit_code == 0
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 
@@ -137,6 +144,10 @@ def test_bundle_from_cmd():
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["os_list"] == os_list
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
+    
+    git_sha = get_git_sha()
+    if git_sha is not None:
+        assert metadata["git_sha"] == git_sha
 
     commands = metadata["commands"]
     validate_module_commands(commands)
@@ -160,6 +171,10 @@ def test_bundle_from_menifest():
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["os_list"] == module_metadata.OS_LIST
+    
+    git_sha = get_git_sha()
+    if git_sha is not None:
+        assert metadata["git_sha"] == git_sha
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)

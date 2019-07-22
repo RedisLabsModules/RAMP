@@ -6,6 +6,7 @@ import semantic_version
 
 import RAMP.module_metadata as module_metadata
 from RAMP.commands_discovery import discover_modules_commands
+from subprocess import Popen, PIPE
 
 def version_to_semantic_version(version):
     """
@@ -64,7 +65,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
 def package(module, output, verbose, manifest, display_name, module_name, author,
             email, architecture, description, homepage, license, cmdargs,
             redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-            print_filename_only):
+            print_filename_only, exclude_commands, overide_command):
     module_path = module
     metadata = set_defaults(module_path)
 
@@ -85,16 +86,41 @@ def package(module, output, verbose, manifest, display_name, module_name, author
         metadata["min_redis_pack_version"] = redis_pack_min_version
         metadata["capabilities"] = capabilities
         metadata["config_command"] = config_command
+        metadata["exclude_commands"] = exclude_commands
+        metadata["overide_command"] = overide_command
 
     # Load module into redis and discover its commands
     module = discover_modules_commands(module_path, metadata["command_line_args"])
     metadata["module_name"] = module.name
     metadata["version"] = module.version
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))
-    metadata["commands"] = [cmd.to_dict() for cmd in module.commands]
+    metadata["commands"] = [cmd.to_dict() for cmd in module.commands if cmd.command_name not in metadata["exclude_commands"]]
+    
+    # overide requested commands data
+    for overide in metadata["overide_command"]:
+        if 'command_name' not in overide:
+            print("error: the given overide json does not contains command name: %s" % str(overide))
+            continue
+        overide_index = [i for i in range(len(metadata["commands"])) if metadata["commands"][i]['command_name'] == overide['command_name']]
+        if len(overide_index) != 1:
+            print("error: the given overide command appears more then once")
+            continue
+        if verbose:
+            print 'overiding %s with %s' % (str(metadata["commands"][overide_index[0]]), str(overide)) 
+        metadata["commands"][overide_index[0]] = overide
 
     if module_name:
         metadata["module_name"] = module_name
+        
+    try:
+        p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        git_sha, err = p.communicate()
+        if err != '':
+            print("could not extract git sha %s" % err)
+        else:
+            metadata["git_sha"] = git_sha.strip()
+    except Exception:
+        print("could not extract git sha %s" % err)
 
     if print_filename_only:
         # For scripts, it might be helpful to know the formatted filename

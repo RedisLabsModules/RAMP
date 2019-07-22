@@ -15,12 +15,14 @@ MODULE_NAME = ""
 MODULE_VERSION = 1
 MODULE_SEMANTIC_VERSION = '0.0.1'
 MODULE_COMMANDS = []
+EXCLUDE_COMMANDS = []
 MODULE_CAPABILITIES = []
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.0"
 RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
+OVERIDE_COMMAND = []
 
 FIELDS = ["module_name", "module_file", "architecture", "version", "semantic_version",
           "display_name", "author", "email", "description", "homepage", "license",
@@ -58,6 +60,8 @@ def create_default_metadata(module_path):
         "sha256": sha256_checksum(module_path),
         "commands": MODULE_COMMANDS,
         "ramp_format_version": RAMP_FORMAT_VERSION,
-        "config_command": CONFIG_COMMAND
+        "config_command": CONFIG_COMMAND,
+        "exclude_commands": EXCLUDE_COMMANDS,
+        "overide_command": OVERIDE_COMMAND
     }
     return metadata
