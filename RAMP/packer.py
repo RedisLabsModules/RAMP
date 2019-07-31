@@ -106,7 +106,7 @@ def package(module, output, verbose, manifest, display_name, module_name, author
             print("error: the given overide command appears more then once")
             continue
         if verbose:
-            print 'overiding %s with %s' % (str(metadata["commands"][overide_index[0]]), str(overide)) 
+            print('overiding %s with %s' % (str(metadata["commands"][overide_index[0]]), str(overide)))
         metadata["commands"][overide_index[0]] = overide
 
     if module_name:
@@ -125,7 +125,7 @@ def package(module, output, verbose, manifest, display_name, module_name, author
     if print_filename_only:
         # For scripts, it might be helpful to know the formatted filename
         # ahead of time, so that it can manipulate it later on.
-        print output.format(**metadata)
+        print(output.format(**metadata))
         return 0
 
     if verbose:
