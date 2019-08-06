@@ -4,9 +4,6 @@ email: itamar@redislabs.com
 description: enhance redis with json capabilites
 homepage: rejson.io
 license: BSD
-os_list:
-  - "ubuntu14.04"
-  - "rhel7"
 command_line_args: ""
 min_redis_version: "4.0"
 min_redis_pack_version: "5.0"

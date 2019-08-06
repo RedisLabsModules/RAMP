@@ -84,18 +84,17 @@ def unpack(bundle):
 @click.option('--redis-pack-min-version', '-R', 'redis_pack_min_version', default=module_metadata.MIN_REDIS_PACK_VERSION, help='redis pack minimum version')
 @click.option('--config-command', '-cc', default=module_metadata.CONFIG_COMMAND, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
-@click.option('--os_list', '-ol', default=module_metadata.OS_LIST, help='list of supported os')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
 @click.option('--print-filename-only', '-P', is_flag=True, help="Print package path, but don't generate file")
 @click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
 @click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and overide it on the module json file')
 def pack(module, output, verbose, manifest, display_name, module_name, author,
          email, architecture, description, homepage, license, cmdargs,
-         redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
+         redis_min_version, redis_pack_min_version, config_command, os, capabilities,
          print_filename_only, exclude_commands, overide_command):
     return package(module, output, verbose, manifest, display_name, module_name, author,
                    email, architecture, description, homepage, license, cmdargs,
-                   redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
+                   redis_min_version, redis_pack_min_version, config_command, os, capabilities,
                    print_filename_only, exclude_commands, overide_command)
 
 if __name__ == '__main__':

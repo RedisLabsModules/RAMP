@@ -1,6 +1,3 @@
-# project specific
-test_module.zip
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

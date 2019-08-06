@@ -88,7 +88,6 @@ Options:
   -cc, --config-command TEXT      command to configure module at run time
 
   -O, --os TEXT                   build target OS (Darwin/Linux)
-  -ol --os_list TEXT              list of upward compatible supported OS, e.g. ["ubuntu14.04", "rhel7"]
   -C, --capabilities TEXT         comma seperated list of module capabilities
   --help                          Show this message and exit.
 ```

@@ -64,7 +64,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
 
 def package(module, output, verbose, manifest, display_name, module_name, author,
             email, architecture, description, homepage, license, cmdargs,
-            redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
+            redis_min_version, redis_pack_min_version, config_command, os, capabilities,
             print_filename_only, exclude_commands, overide_command):
     module_path = module
     metadata = set_defaults(module_path)
@@ -74,7 +74,6 @@ def package(module, output, verbose, manifest, display_name, module_name, author
     else:
         metadata["architecture"] = architecture
         metadata["os"] = os
-        metadata["os_list"] = os_list
         metadata["display_name"] = display_name
         metadata["author"] = author
         metadata["email"] = email
