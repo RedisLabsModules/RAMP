@@ -86,7 +86,6 @@ def test_defaults():
     assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
-    assert metadata["os_list"] == module_metadata.OS_LIST
     
     git_sha = get_git_sha()
     if git_sha is not None:
@@ -109,10 +108,9 @@ def test_bundle_from_cmd():
     min_redis_pack_version = "5.0"
     display_name = "test_module"
     module_name = "module_test"
-    os_list = ["ubuntu14.04"]
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description,
-            '-ol', os_list, '-d', display_name, '-n', module_name,
+            '-d', display_name, '-n', module_name,
             '-h', homepage, '-l', _license, '-c', command_line_args,
             '-r', min_redis_version, '-R', min_redis_pack_version,
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
@@ -142,7 +140,6 @@ def test_bundle_from_cmd():
     assert metadata["min_redis_pack_version"] == min_redis_pack_version
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
-    assert metadata["os_list"] == os_list
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
     
     git_sha = get_git_sha()
@@ -170,7 +167,6 @@ def test_bundle_from_menifest():
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["config_command"] == CONFIG_COMMAND
-    assert metadata["os_list"] == module_metadata.OS_LIST
     
     git_sha = get_git_sha()
     if git_sha is not None:
