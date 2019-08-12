@@ -64,29 +64,30 @@ def archive(module_path, metadata, archive_name='module.zip'):
 
 def package(module, output, verbose, manifest, display_name, module_name, author,
             email, architecture, description, homepage, license, cmdargs,
-            redis_min_version, redis_pack_min_version, config_command, os, capabilities,
+            redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
             print_filename_only, exclude_commands, overide_command):
     module_path = module
     metadata = set_defaults(module_path)
 
     if manifest:
         manifest_mode(metadata, manifest)
-    else:
-        metadata["architecture"] = architecture
-        metadata["os"] = os
-        metadata["display_name"] = display_name
-        metadata["author"] = author
-        metadata["email"] = email
-        metadata["description"] = description
-        metadata["homepage"] = homepage
-        metadata["license"] = license
-        metadata["command_line_args"] = cmdargs
-        metadata["min_redis_version"] = redis_min_version
-        metadata["min_redis_pack_version"] = redis_pack_min_version
-        metadata["capabilities"] = capabilities
-        metadata["config_command"] = config_command
-        metadata["exclude_commands"] = exclude_commands
-        metadata["overide_command"] = overide_command
+
+    if architecture: metadata["architecture"] = architecture
+    if os: metadata["os"] = os
+    if os_list: metadata["os_list"] = os_list
+    if display_name: metadata["display_name"] = display_name
+    if author: metadata["author"] = author
+    if email: metadata["email"] = email
+    if description: metadata["description"] = description
+    if homepage: metadata["homepage"] = homepage
+    if license: metadata["license"] = license
+    if cmdargs: metadata["command_line_args"] = cmdargs
+    if redis_min_version: metadata["min_redis_version"] = redis_min_version
+    if redis_pack_min_version: metadata["min_redis_pack_version"] = redis_pack_min_version
+    if capabilities: metadata["capabilities"] = capabilities
+    if config_command: metadata["config_command"] = config_command
+    if exclude_commands: metadata["exclude_commands"] = exclude_commands
+    if overide_command: metadata["overide_command"] = overide_command
 
     # Load module into redis and discover its commands
     module = discover_modules_commands(module_path, metadata["command_line_args"])
