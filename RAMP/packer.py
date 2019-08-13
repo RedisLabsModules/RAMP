@@ -66,15 +66,21 @@ def archive(module_path, metadata, archive_name='module.zip'):
 
 def package(module, **args):
     module_path = module
+
+    nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'output'], 1)
+    for k in nonkeys:
+        exec('{}=args["{}"]'.format(k, k))
+
+    # start with default values (lowest priority)
     metadata = set_defaults(module_path)
 
-    manifest = args['manifest']
+    # fill in keys from manifest file
     if manifest:
         init_from_manifest(metadata, manifest)
 
-    nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'output', 'override_command'], 1)
+    # fill in keys from arguments
     for key, value in args.iteritems():
-        if key in nonkeys or key not in module_metadata.FIELDS:
+        if key in nonkeys:
             continue
         if value is None or value == []:
             continue
@@ -86,19 +92,27 @@ def package(module, **args):
     metadata["version"] = module.version
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))
     metadata["commands"] = [cmd.to_dict() for cmd in module.commands if cmd.command_name not in metadata["exclude_commands"]]
-    
-    # overide requested commands data
-    for overide in metadata["overide_command"]:
-        if 'command_name' not in overide:
-            print("error: the given overide json does not contains command name: %s" % str(overide))
+
+    # fill in keys from arguments once more (highest prioriry)
+    for key, value in args.iteritems():
+        if key in nonkeys:
             continue
-        overide_index = [i for i in range(len(metadata["commands"])) if metadata["commands"][i]['command_name'] == overide['command_name']]
-        if len(overide_index) != 1:
-            print("error: the given overide command appears more then once")
+        if value is None or value == []:
+            continue
+        metadata[key] = value
+
+    # override requested commands data
+    for override in metadata["overide_command"]:
+        if 'command_name' not in override:
+            print("error: the given override json does not contains command name: %s" % str(override))
+            continue
+        override_index = [i for i in range(len(metadata["commands"])) if metadata["commands"][i]['command_name'] == override['command_name']]
+        if len(override_index) != 1:
+            print("error: the given override command appears more then once")
             continue
         if verbose:
-            print('overiding %s with %s' % (str(metadata["commands"][overide_index[0]]), str(overide)))
-        metadata["commands"][overide_index[0]] = overide
+            print('overiding %s with %s' % (str(metadata["commands"][override_index[0]]), str(override)))
+        metadata["commands"][override_index[0]] = override
 
     module_name = args['module_name']
     if module_name:
@@ -114,8 +128,13 @@ def package(module, **args):
     except Exception:
         print("could not extract git sha {}".format(err))
 
-    output = args['output']
-    if args['print_filename_only']:
+    # cleanup metadata from utility keys
+    fields = dict.fromkeys(module_metadata.FIELDS, 1)
+    for key in metadata.keys():
+        if not key in fields:
+            metadata.pop(key)
+
+    if print_filename_only:
         # For scripts, it might be helpful to know the formatted filename
         # ahead of time, so that it can manipulate it later on.
         print(output.format(**metadata))

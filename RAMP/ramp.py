@@ -5,9 +5,6 @@ import sys
 import json
 import click
 
-# sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../readies"))
-# import paella
-
 from RAMP.packer import package
 from RAMP.unpacker import validate_bundle, unpack as unpack_bundle
 from RAMP.version import VERSION
@@ -73,11 +70,9 @@ def unpack(bundle):
 
 @ramp.command()
 @click.argument('module')
-@click.option('--output', '-o', help='output file name')
-@click.option('--verbose', '-v', is_flag=True, default=None, help='verbose mode: print the resulting metadata')
 @click.option('--manifest', '-m', type=click.File('rb'), help='generate package from manifest')
-@click.option('--display-name', '-d', 'display_name', default=None, help='name for display purposes')
-@click.option('--module-name', '-n', 'module_name', default=None, help='module name')
+@click.option('--display-name', '-d', default=None, help='name for display purposes')
+@click.option('--module-name', '-n', default=None, help='module name')
 @click.option('--author', '-a', default=None, help='module author')
 @click.option('--email', '-e', default=None, help='author\'s email')
 @click.option('--architecture', '-A', default=None, help='module compiled on i386/x86_64 arch')
@@ -85,14 +80,17 @@ def unpack(bundle):
 @click.option('--homepage', '-h', default=None, help='module homepage')
 @click.option('--license', '-l', default=None, help='license')
 @click.option('--cmdargs', '-c', 'command_line_args', default=None, help='module command line arguments')
-@click.option('--redis-min-version', '-r', default=None, help='redis minimum version')
-@click.option('--redis-pack-min-version', '-R', default=None, help='redis pack minimum version')
+@click.option('--redis-min-version', '-r', 'min_redis_version', default=None, help='redis minimum version')
+@click.option('--redis-pack-min-version', '-R', 'min_redis_pack_version', default=None, help='redis pack minimum version')
 @click.option('--config-command', '-cc', default=None, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=None, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
-@click.option('--print-filename-only', '-P', is_flag=True, default=None, help="Print package path, but don't generate file")
 @click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
 @click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and overide it on the module json file')
+
+@click.option('--output', '-o', default='module.zip', help='output file name')
+@click.option('--print-filename-only', '-P', is_flag=True, default=False, help="Print package path, but don't generate file")
+@click.option('--verbose', '-v', is_flag=True, default=False, help='verbose mode: print the resulting metadata')
 def pack(module, *args, **kwargs):
     return package(module, **kwargs)
 
