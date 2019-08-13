@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import json
 import click
+
+# sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../readies"))
+# import paella
 
 from RAMP.packer import package
 from RAMP.unpacker import validate_bundle, unpack as unpack_bundle
@@ -29,6 +33,7 @@ def jsons_str_tuple_to_jsons_tuple(ctx, param, value):
         return [json.loads(a) for  a in value]
 
 @click.group()
+@click.version_option(version=VERSION)
 def ramp():
     pass
 
@@ -52,7 +57,7 @@ def validate(bundle):
 @click.argument('bundle')
 def unpack(bundle):
     metadata, module = unpack_bundle(bundle)
-    module_metadata_file_name = os.path.join(os.getcwd(), metadata['module_name']+'.json')
+    module_metadata_file_name = os.path.join(os.getcwd(), metadata['module_name'] + '.json')
     module_file_name = os.path.join(os.getcwd(), metadata['module_file'])
 
     with open(module_metadata_file_name, 'w') as outfile:
@@ -68,35 +73,28 @@ def unpack(bundle):
 
 @ramp.command()
 @click.argument('module')
-@click.option('--output', '-o', default='module.zip', help='output file name')
-@click.option('--verbose', '-v', is_flag=True, help='verbose mode: print the resulting metadata')
+@click.option('--output', '-o', help='output file name')
+@click.option('--verbose', '-v', is_flag=True, default=None, help='verbose mode: print the resulting metadata')
 @click.option('--manifest', '-m', type=click.File('rb'), help='generate package from manifest')
-@click.option('--display-name', '-d', 'display_name', default=module_metadata.DISPLAY_NAME, help='name for display purposes')
-@click.option('--module-name', '-n', 'module_name', help='module name')
-@click.option('--author', '-a', default=module_metadata.AUTHOR, help='module author')
-@click.option('--email', '-e', default=module_metadata.EMAIL, help='author\'s email')
-@click.option('--architecture', '-A', default=module_metadata.ARCHITECTURE, help='module compiled on i386/x86_64 arch')
-@click.option('--description', '-D', default=module_metadata.DESCRIPTION, help='short description')
-@click.option('--homepage', '-h', default=module_metadata.HOMEPAGE, help='module homepage')
-@click.option('--license', '-l', default=module_metadata.LICENSE, help='license')
-@click.option('--cmdargs', '-c', default=module_metadata.COMMAND_LINE_ARGS, help='module command line arguments')
-@click.option('--redis-min-version', '-r', 'redis_min_version', default=module_metadata.MIN_REDIS_VERSION, help='redis minimum version')
-@click.option('--redis-pack-min-version', '-R', 'redis_pack_min_version', default=module_metadata.MIN_REDIS_PACK_VERSION, help='redis pack minimum version')
-@click.option('--config-command', '-cc', default=module_metadata.CONFIG_COMMAND, help='command used to configure module args at runtime')
-@click.option('--os', '-O', default=module_metadata.OS, help='build target OS (Darwin/Linux)')
-@click.option('--os-list', callback=comma_seperated_to_list, help='build target OS (Darwin/Linux)')
+@click.option('--display-name', '-d', 'display_name', default=None, help='name for display purposes')
+@click.option('--module-name', '-n', 'module_name', default=None, help='module name')
+@click.option('--author', '-a', default=None, help='module author')
+@click.option('--email', '-e', default=None, help='author\'s email')
+@click.option('--architecture', '-A', default=None, help='module compiled on i386/x86_64 arch')
+@click.option('--description', '-D', default=None, help='short description')
+@click.option('--homepage', '-h', default=None, help='module homepage')
+@click.option('--license', '-l', default=None, help='license')
+@click.option('--cmdargs', '-c', 'command_line_args', default=None, help='module command line arguments')
+@click.option('--redis-min-version', '-r', default=None, help='redis minimum version')
+@click.option('--redis-pack-min-version', '-R', default=None, help='redis pack minimum version')
+@click.option('--config-command', '-cc', default=None, help='command used to configure module args at runtime')
+@click.option('--os', '-O', default=None, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
-@click.option('--print-filename-only', '-P', is_flag=True, help="Print package path, but don't generate file")
+@click.option('--print-filename-only', '-P', is_flag=True, default=None, help="Print package path, but don't generate file")
 @click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
 @click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and overide it on the module json file')
-def pack(module, output, verbose, manifest, display_name, module_name, author,
-         email, architecture, description, homepage, license, cmdargs,
-         redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-         print_filename_only, exclude_commands, overide_command):
-    return package(module, output, verbose, manifest, display_name, module_name, author,
-                   email, architecture, description, homepage, license, cmdargs,
-                   redis_min_version, redis_pack_min_version, config_command, os, os_list, capabilities,
-                   print_filename_only, exclude_commands, overide_command)
+def pack(module, *args, **kwargs):
+    return package(module, **kwargs)
 
 if __name__ == '__main__':
     ramp()
