@@ -1,6 +1,7 @@
 import os
 import hashlib
 import platform
+
 # Defaults
 ARCHITECTURE = platform.machine()
 OS = platform.system()
@@ -23,10 +24,31 @@ RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
 OVERIDE_COMMAND = []
 
-FIELDS = ["module_name", "module_file", "architecture", "version", "semantic_version",
-          "display_name", "author", "email", "description", "homepage", "license",
-          "command_line_args", "capabilities", "min_redis_version", "min_redis_pack_version",
-          "sha256", "commands", "os", "ramp_format_version", "config_command"]
+FIELDS = [
+    "architecture",
+    "author",
+    "capabilities",
+    "command_line_args",
+    "commands",
+    "config_command",
+    "description",
+    "display_name",
+    "email",
+    "exclude_commands",
+    "git_sha",
+    "homepage",
+    "license",
+    "min_redis_pack_version",
+    "min_redis_version",
+    "module_file",
+    "module_name",
+    "os",
+    "overide_command",
+    "ramp_format_version",
+    "semantic_version",
+    "sha256",
+    "version",
+]
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
