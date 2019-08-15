@@ -68,8 +68,10 @@ def package(module, **args):
     module_path = module
 
     nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'output'], 1)
-    for k in nonkeys:
-        exec('{}=args["{}"]'.format(k, k))
+    manifest = args['manifest']
+    verbose = args['verbose']
+    print_filename_only = args['print_filename_only']
+    output = args['output']
 
     # start with default values (lowest priority)
     metadata = set_defaults(module_path)
@@ -79,9 +81,10 @@ def package(module, **args):
         init_from_manifest(metadata, manifest)
 
     # fill in keys from arguments
-    for key, value in args.iteritems():
+    for key in args.keys():
         if key in nonkeys:
             continue
+        value = args[key]
         if value is None or value == []:
             continue
         metadata[key] = value
@@ -94,9 +97,10 @@ def package(module, **args):
     metadata["commands"] = [cmd.to_dict() for cmd in module.commands if cmd.command_name not in metadata["exclude_commands"]]
 
     # fill in keys from arguments once more (highest prioriry)
-    for key, value in args.iteritems():
+    for key in args.keys():
         if key in nonkeys:
             continue
+        value = args[key]
         if value is None or value == []:
             continue
         metadata[key] = value
@@ -124,7 +128,7 @@ def package(module, **args):
         if p.returncode != 0:
             print("could not extract git sha {}".format(err))
         else:
-            metadata["git_sha"] = git_sha.strip()
+            metadata["git_sha"] = str(git_sha.strip())
     except Exception:
         print("could not extract git sha {}".format(err))
 
