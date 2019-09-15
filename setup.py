@@ -48,7 +48,7 @@ setup(
     description='Packs for Redis modules into a distributable format',
     author='RedisLabs',
     url='https://github.com/redislabs/RAMP',
-    download_url='https://github.com/RedisLabs/RAMP/archive/1.9.0.tar.gz',
+    download_url='https://github.com/RedisLabs/RAMP/archive/{}.tar.gz'.format(VERSION),
     license='BSD 2-clause',
     long_description=LONG_DESC,
     packages=find_packages(),
