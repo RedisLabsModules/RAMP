@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
 import os
-import sys
 import json
 import click
 
 from RAMP.packer import package
-from RAMP.unpacker import validate_bundle, unpack as unpack_bundle
+from RAMP.unpacker import unpack as unpack_bundle
 from RAMP.version import VERSION
-import RAMP.module_metadata as module_metadata
 
 def comma_seperated_to_list(ctx, param, value):
     """
@@ -42,13 +40,13 @@ def version():
 @ramp.command()
 @click.argument('bundle')
 def validate(bundle):
-    valid, e = validate_bundle(bundle)
-    if valid:
+    try:
+        unpack(bundle)
         print("package is valid")
         return 0
-    else:
+    except Exception as e:
         print("package is invalid, reason: %s" % e)
-    return 1
+        return 1
 
 @ramp.command()
 @click.argument('bundle')

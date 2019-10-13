@@ -1,6 +1,7 @@
 import os
 import hashlib
 import platform
+from typing import List, Dict  # noqa: F401
 
 # Defaults
 ARCHITECTURE = platform.machine()
@@ -12,17 +13,17 @@ DESCRIPTION = ""
 HOMEPAGE = ""
 LICENSE = ""
 MODULE_NAME = ""
-MODULE_VERSION = 1
+MODULE_VERSION = "1.0"
 MODULE_SEMANTIC_VERSION = '0.0.1'
-MODULE_COMMANDS = []
-EXCLUDE_COMMANDS = []
-MODULE_CAPABILITIES = []
+MODULE_COMMANDS = []  # type: List[Dict[str, str]]
+EXCLUDE_COMMANDS = []  # type: List[str]
+MODULE_CAPABILITIES = []  # type: List[Dict[str, str]]
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
-MIN_REDIS_PACK_VERSION = "5.0"
+MIN_REDIS_PACK_VERSION = "5.2"
 RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
-OVERIDE_COMMAND = []
+OVERIDE_COMMAND = []  # type: List[Dict[str, str]]
 
 FIELDS = [
     "architecture",
@@ -50,6 +51,7 @@ FIELDS = [
     "version",
 ]
 
+
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
     sha256 = hashlib.sha256()
@@ -58,10 +60,11 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
+
 def create_default_metadata(module_path):
     """Creates a default metadata"""
     metadata = {
-        "module_name" : MODULE_NAME,
+        "module_name": MODULE_NAME,
         "module_file": os.path.basename(module_path),
         "os": OS,
         "architecture": ARCHITECTURE,
