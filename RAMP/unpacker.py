@@ -1,11 +1,9 @@
-import json
+import ujson as json
+import re
 from zipfile import ZipFile, BadZipfile
-import semantic_version
 from typing import Dict, Any, IO, Tuple, Optional  # noqa: F401
 
-from RAMP import module_metadata
-from distutils.version import StrictVersion
-
+INVALID_METADATA = "module metadata invalid"
 MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10
 
 
@@ -29,33 +27,25 @@ class UnpackerPackageError(Exception):
 def unpack(bundle):
     # type: (IO[bytes]) -> Tuple[Dict[str, Any], IO[bytes]]
     """
-    Unpacks a bundled module, performs sanity validation
-    on bundle.
-    :return:
-    :rtype: tuple
+    Unpacks a bundled module, performs sanity validation on bundle.
     both the module metadata and the actual module are returned
+    :rtype: tuple
     """
-
-    # Extract.
     try:
         with ZipFile(bundle) as zf:
-            # validate_zip_file throws
-            # we want this exception to propagate
             _validate_zip_file(zf)
-
-            try:
-                metadata = json.load(zf.open('module.json'))
-            except (IOError, ValueError):
-                raise UnpackerPackageError("Failed to read module.json")
-
+            metadata = json.load(zf.open('module.json'))
             module = zf.open(metadata["module_file"])
-
-            # _validate throws in case of an error,
-            # we want this exception to propagate
             _validate_metadata(metadata)
 
     except BadZipfile:
-        raise UnpackerPackageError("Failed to extract bundle")
+        raise UnpackerPackageError(message="Failed to extract bundle")
+
+    except (IOError, ValueError):
+        raise UnpackerPackageError("Failed to read module.json")
+
+    except UnpackerPackageError:  # re-raise exceptions raised by validator-methods
+        raise
 
     return metadata, module
 
@@ -69,53 +59,62 @@ def _validate_zip_file(zip_file):
     infolist = zip_file.infolist()
     # We're expecting exactly two files.
     if len(infolist) != 2:
-        raise UnpackerPackageError(message="module zip file did not pass sanity validation",
-                                   reason="module zip file should contains exactly two file")
+        raise UnpackerPackageError(message="module zip file content invalid",
+                                   reason="module zip file should contains exactly two file",
+                                   error_code="invalid_number_of_files")
 
     # Check zip content size.
     for zip_info in infolist:
         # Size of the compressed/uncompressed data.
         if zip_info.file_size > MAX_MODULE_FILE_SIZE:
             raise UnpackerPackageError(message="module zip file did not pass sanity validation",
-                                       reason="module file content is too big")
+                                       reason="module file content is too big",
+                                       error_code="module_size_too_big",
+                                       error_details={'module_size': zip_info.compress_size,
+                                                      'max_size': MAX_MODULE_FILE_SIZE})
 
 
 def _validate_metadata(metadata):
     # type: (Dict[str, Any]) -> None
     """
     Checks metadata isn't missing any required fields
-    metadata - dictionary
-    module - path to module file
+    :param metadata: dictionary
+    :raises: UnpackerPackageError
     """
 
-    for field in module_metadata.FIELDS:
-        if field not in metadata:
-            raise UnpackerPackageError(message="module did not pass sanity validation",
-                                       reason="Missing mandatory field [{}]".format(field))
+    if not metadata["module_name"]:
+        raise UnpackerPackageError(message=INVALID_METADATA,
+                                   reason="Empty module name",
+                                   error_code="module_name_missing")
 
-    # Empty module name
-    if metadata["module_name"] == "":
-        raise UnpackerPackageError(message="module did not pass sanity validation",
-                                   reason="Empty module name")
+    if not metadata["module_file"]:
+        raise UnpackerPackageError(message=INVALID_METADATA,
+                                   reason="Empty module file name",
+                                   error_code="module_file_missing")
 
-    # Empty module file name
-    if metadata["module_file"] == "":
-        raise UnpackerPackageError(message="module did not pass sanity validation",
-                                   reason="Empty module file name")
+    if metadata["architecture"] != 'x86_64':
+        raise UnpackerPackageError(message=INVALID_METADATA,
+                                   reason="Architecture must be 64 bits",
+                                   error_code="module_architecture_not_supported",
+                                   error_details={'expected': 'x86_64'})
 
-    # Architecture must 64 bits
-    if metadata["architecture"] != "x86_64":
-        raise UnpackerPackageError(message="module did not pass sanity validation",
-                                   reason="Architecture must 64 bits")
+    if not metadata["version"]:
+        raise UnpackerPackageError(message=INVALID_METADATA,
+                                   reason="Missing version",
+                                   error_code="module_version_missing")
 
-    # Missing version
-    if not semantic_version.validate(metadata["semantic_version"]):
-        raise UnpackerPackageError(message="module did not pass sanity validation",
-                                   reason="Invalid semantic version")
+    try:
+        metadata["version"] = int(float(metadata["version"]))
+    except (ValueError, TypeError):
+        raise UnpackerPackageError(message=INVALID_METADATA,
+                                   reason="Module version should be an integer",
+                                   error_code="module_version_not_integer")
 
-    if StrictVersion(metadata["min_redis_pack_version"]) < StrictVersion(module_metadata.MIN_REDIS_PACK_VERSION):
-        raise UnpackerPackageError(message="module did not pass sanity validation",
-                                   reason="Min redis pack version is too low")
+    if "os_list" in metadata:
+        try:
+            metadata["os_list"] = [_os_version_parser(os) for os in metadata["os_list"]]
+        except UnpackerPackageError:
+            raise
 
     # wrong signature
     # TODO: this check should be deferred to a later stage
@@ -125,3 +124,23 @@ def _validate_metadata(metadata):
     # [If needed, use module_metadata.sha256_checksum]
     #     raise UnpackerPackageError(message="module did not pass sanity validation",
     #                                reason="Wrong signature")
+
+
+def _os_version_parser(os_version):
+    # type: (str) -> Dict[str, str]
+    """
+    Parses an OS version string from the RAMP file to the same format as in the distro package
+    :param os_version: a string in the format of the RAMP file, e.g. 'ubuntu18.04'
+    :return: dictionary with the keys 'name' and 'version', for the OS name and OS version.
+    """
+    try:
+        name_matcher = re.search(r'[a-zA-Z_]+', os_version)
+        version_matcher = re.search(r'(\d+)(\.\d+)?(\.\d+)?', os_version)
+        assert name_matcher and version_matcher
+        name = name_matcher.group(0)
+        version = version_matcher.group(0)
+    except (ValueError, TypeError, AssertionError):
+        raise UnpackerPackageError(message=INVALID_METADATA,
+                                   reason="Can't parse OS '{}'".format(os_version),
+                                   error_code="module_os_list_invalid")
+    return {'name': name, 'version': version}
