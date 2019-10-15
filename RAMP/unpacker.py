@@ -14,17 +14,16 @@ class UnpackerPackageError(Exception):
     Represents an error within the unpacking process
     """
 
-    def __init__(self, message, reason=None):
-        # type: (str, Optional[str]) -> None
+    def __init__(self, message, reason=None, error_code=None, error_details=None):
+        # type: (str, Optional[str], Optional[str], Dict[str, Any]) -> None
         super(UnpackerPackageError, self).__init__(message)
         self.reason = reason
+        self.error_code = error_code
+        self.error_details = error_details
 
     def __str__(self):
         # type: () -> str
-        if self.reason:
-            return "{}, reason: {}".format(super(UnpackerPackageError, self).__str__(), self.reason)
-        else:
-            return "{}".format(super(UnpackerPackageError, self).__str__())
+        return "{}, reason: {}".format(super(UnpackerPackageError, self).__str__(), self.reason)
 
 
 def unpack(bundle):
