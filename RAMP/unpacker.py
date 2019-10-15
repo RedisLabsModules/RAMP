@@ -4,7 +4,7 @@ from zipfile import ZipFile, BadZipfile
 from typing import Dict, Any, IO, Tuple, Optional  # noqa: F401
 
 INVALID_METADATA = "module metadata invalid"
-MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10
+DEFAULT_MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10
 
 
 class UnpackerPackageError(Exception):
@@ -24,8 +24,8 @@ class UnpackerPackageError(Exception):
         return "{}, reason: {}".format(super(UnpackerPackageError, self).__str__(), self.reason)
 
 
-def unpack(bundle):
-    # type: (IO[bytes]) -> Tuple[Dict[str, Any], IO[bytes]]
+def unpack(bundle, max_bundle_size_mb=None):
+    # type: (IO[bytes], Optional[int]) -> Tuple[Dict[str, Any], IO[bytes]]
     """
     Unpacks a bundled module, performs sanity validation on bundle.
     both the module metadata and the actual module are returned
@@ -33,7 +33,7 @@ def unpack(bundle):
     """
     try:
         with ZipFile(bundle) as zf:
-            _validate_zip_file(zf)
+            _validate_zip_file(zf, max_bundle_size_mb)
             metadata = json.load(zf.open('module.json'))
             module = zf.open(metadata["module_file"])
             _validate_metadata(metadata)
@@ -50,8 +50,8 @@ def unpack(bundle):
     return metadata, module
 
 
-def _validate_zip_file(zip_file):
-    # type: (ZipFile) -> None
+def _validate_zip_file(zip_file, max_bundle_size_mb):
+    # type: (ZipFile, Optional[int]) -> None
     """
     Checks if all entries within the zip file don't
     exceed a certain threshold.
@@ -63,15 +63,17 @@ def _validate_zip_file(zip_file):
                                    reason="module zip file should contains exactly two file",
                                    error_code="invalid_number_of_files")
 
+    file_size_limit_bytes = max_bundle_size_mb * 1024 * 1024 if max_bundle_size_mb else DEFAULT_MAX_MODULE_FILE_SIZE
+
     # Check zip content size.
     for zip_info in infolist:
         # Size of the compressed/uncompressed data.
-        if zip_info.file_size > MAX_MODULE_FILE_SIZE:
+        if zip_info.file_size > file_size_limit_bytes:
             raise UnpackerPackageError(message="module zip file did not pass sanity validation",
                                        reason="module file content is too big",
                                        error_code="module_size_too_big",
                                        error_details={'module_size': zip_info.compress_size,
-                                                      'max_size': MAX_MODULE_FILE_SIZE})
+                                                      'max_size': file_size_limit_bytes})
 
 
 def _validate_metadata(metadata):
