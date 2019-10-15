@@ -61,7 +61,7 @@ def unpack(bundle):
 
 
 def _validate_zip_file(zip_file):
-    # type: (ZipFile) -> True
+    # type: (ZipFile) -> None
     """
     Checks if all entries within the zip file don't
     exceed a certain threshold.
@@ -79,11 +79,9 @@ def _validate_zip_file(zip_file):
             raise UnpackerPackageError(message="module zip file did not pass sanity validation",
                                        reason="module file content is too big")
 
-    return True
-
 
 def _validate_metadata(metadata):
-    # type: (Dict[str, Any]) -> bool
+    # type: (Dict[str, Any]) -> None
     """
     Checks metadata isn't missing any required fields
     metadata - dictionary
@@ -127,5 +125,3 @@ def _validate_metadata(metadata):
     # [If needed, use module_metadata.sha256_checksum]
     #     raise UnpackerPackageError(message="module did not pass sanity validation",
     #                                reason="Wrong signature")
-
-    return True
