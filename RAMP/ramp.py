@@ -5,7 +5,7 @@ import json
 import click
 
 from RAMP.packer import package
-from RAMP.unpacker import validate_bundle, unpack as unpack_bundle
+from RAMP.unpacker import unpack as unpack_bundle
 from RAMP.version import VERSION
 
 
@@ -45,13 +45,13 @@ def version():
 @ramp.command()
 @click.argument('bundle')
 def validate(bundle):
-    valid, e = validate_bundle(bundle)
-    if valid:
+    try:
+        unpack(bundle)
         print("package is valid")
         return 0
-    else:
-        print("package is invalid, reason: %s" % e)
-    return 1
+    except Exception as e:
+        print("package is invalid, reason: {}".format(e))
+        return 1
 
 
 @ramp.command()

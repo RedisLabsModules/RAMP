@@ -1,6 +1,5 @@
 import json
 from zipfile import ZipFile, BadZipfile
-import hashlib
 import semantic_version
 from typing import Dict, Any, IO, Tuple, Optional  # noqa: F401
 
@@ -26,15 +25,6 @@ class UnpackerPackageError(Exception):
             return "{}, reason: {}".format(super(UnpackerPackageError, self).__str__(), self.reason)
         else:
             return "{}".format(super(UnpackerPackageError, self).__str__())
-
-
-def _sha256_checksum(module_file):
-    # type: (IO[bytes]) -> str
-    """Computes sha256 for given file"""
-
-    sha256 = hashlib.sha256()
-    sha256.update(module_file.read())
-    return sha256.hexdigest()
 
 
 def unpack(bundle):
@@ -63,25 +53,12 @@ def unpack(bundle):
 
             # _validate throws in case of an error,
             # we want this exception to propagate
-            _validate_metadata(metadata, module)
+            _validate_metadata(metadata)
 
     except BadZipfile:
         raise UnpackerPackageError("Failed to extract bundle")
 
     return metadata, module
-
-
-def validate_bundle(bundle):
-    # type: (IO[bytes]) -> Tuple[bool, Optional[Exception]]
-    """
-    Checks to see if given bundle is valid.
-    Return (True, None) if so, (False, Exception) otherwise.
-    """
-    try:
-        unpack(bundle)
-        return True, None
-    except Exception as e:
-        return False, e
 
 
 def _validate_zip_file(zip_file):
@@ -106,8 +83,8 @@ def _validate_zip_file(zip_file):
     return True
 
 
-def _validate_metadata(metadata, module):
-    # type: (Dict[str, Any], IO[bytes]) -> bool
+def _validate_metadata(metadata):
+    # type: (Dict[str, Any]) -> bool
     """
     Checks metadata isn't missing any required fields
     metadata - dictionary
@@ -145,9 +122,10 @@ def _validate_metadata(metadata, module):
 
     # wrong signature
     # TODO: this check should be deferred to a later stage
-    # As _sha256_checksum will read entire module file
+    # As sha256_checksum will read entire module file
     # And we're unable to seek it back to its starting point.
-    # if _sha256_checksum(module) != metadata["sha256"]:
+    # if sha256_checksum(module) != metadata["sha256"]:
+    # [If needed, use module_metadata.sha256_checksum]
     #     raise UnpackerPackageError(message="module did not pass sanity validation",
     #                                reason="Wrong signature")
 
