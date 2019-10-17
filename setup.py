@@ -52,7 +52,7 @@ setup(
     license='BSD 2-clause',
     long_description=LONG_DESC,
     packages=find_packages(),
-    install_requires=['redis<=2.10.6', 'pyyaml', 'click>=6.7', 'semantic_version==2.6.0'],
+    install_requires=['redis<=2.10.6', 'pyyaml', 'click>=6.7', 'semantic_version==2.6.0', 'ujson', 'typing'],
     entry_points='''
         [console_scripts]
         ramp=RAMP.ramp:ramp
