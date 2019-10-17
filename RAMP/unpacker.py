@@ -1,4 +1,4 @@
-import ujson as json
+import json
 import re
 from zipfile import ZipFile, BadZipfile
 from typing import Dict, Any, IO, Tuple, Optional  # noqa: F401
