@@ -1,3 +1,4 @@
+typing
 ujson
 redis >=2.10.5, <=2.10.6
 click >=6.7
