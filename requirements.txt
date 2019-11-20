@@ -1,5 +1,5 @@
 redis
-click >=6.7
 semantic_version
+click >=6.7
 PyYAML
 typing
