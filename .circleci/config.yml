@@ -1,8 +1,5 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
 version: 2
+
 jobs:
   build:
     docker:
@@ -12,9 +9,11 @@ jobs:
 
     steps:
       - checkout
-
-      - run: apt-get update && apt-get install -y python2.7 python-pip wget unzip git
-      
+      - run: 
+          name: installations
+          command: |
+            apt-get -qq update
+            apt-get install -y python2.7 python-pip wget unzip git
       - run:
           name: get redisgraph
           command: |
@@ -22,11 +21,11 @@ jobs:
              unzip redisgraph.Linux-x86_64.1.0.12.zip -d test_module
              
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+#      - restore_cache:
+#          keys:
+#          - v1-dependencies-{{ checksum "requirements.txt" }}
+#          # fallback to using the latest cache if no exact match is found
+#          - v1-dependencies-
 
       - run:
           name: install dependencies
@@ -37,10 +36,10 @@ jobs:
             pip install -r requirements.txt
             pip install codecov
 
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+#      - save_cache:
+#          paths:
+#            - ./venv
+#          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
           name: run tests
@@ -58,6 +57,11 @@ workflows:
   commit:
     jobs:
       - build
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/ 
   nightly:
     triggers:
       - schedule:
