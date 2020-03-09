@@ -18,3 +18,4 @@ capabilities:
 exclude_commands:
     - graph.BULK
 overide_command: [{"command_name": "graph.EXPLAIN"}]
+dependencies: [{"url": "https://s3.amazonaws.com/module/dep1.zip", "sha256": "38aaa5ed7a7f0b5c1e3fed37468d0a960d4a26653c6c937244d170414728e2b5"}, {"url": "https://s3.amazonaws.com/module/dep2.zip", "sha256": "0a960d4a26653c6c937244d170414728e2b538aaa5ed7a7f0b5c1e3fed37468d"}]

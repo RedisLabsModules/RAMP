@@ -122,6 +122,15 @@ def package(module, **args):
     if module_name:
         metadata["module_name"] = module_name
 
+    # validate dependencies
+    for dep in metadata["dependencies"]:
+        if len(dep) != 2:
+            raise Exception("error: a dependency should specify both URI and SHA256")
+        if "url" not in dep:
+            raise Exception("error: dependency missing url")
+        if "sha256" not in dep:
+            raise Exception("error: dependency missing sha256")
+
     try:
         p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
         git_sha, err = p.communicate()
