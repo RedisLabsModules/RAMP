@@ -18,6 +18,7 @@ MODULE_SEMANTIC_VERSION = '0.0.1'
 MODULE_COMMANDS = []  # type: List[Dict[str, str]]
 EXCLUDE_COMMANDS = []  # type: List[str]
 MODULE_CAPABILITIES = []  # type: List[Dict[str, str]]
+MODULE_DEPENDENCIES = []  # type: List[Dict[str, str]]
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.2"
@@ -32,6 +33,7 @@ FIELDS = [
     "command_line_args",
     "commands",
     "config_command",
+    "dependencies",
     "description",
     "display_name",
     "email",
@@ -80,6 +82,7 @@ def create_default_metadata(module_path):
         "license": LICENSE,
         "command_line_args": COMMAND_LINE_ARGS,
         "capabilities": MODULE_CAPABILITIES,
+        "dependencies": MODULE_DEPENDENCIES,
         "min_redis_version": MIN_REDIS_VERSION,
         "min_redis_pack_version": MIN_REDIS_PACK_VERSION,
         "sha256": sha256_checksum(module_path),
