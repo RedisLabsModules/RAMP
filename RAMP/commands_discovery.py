@@ -1,6 +1,5 @@
 import os.path
 from RAMP.disposableredis import DisposableRedis
-from common import eprint
 
 OK = "OK"
 
