@@ -5,6 +5,8 @@ import yaml
 import semantic_version
 import tempfile
 from subprocess import Popen, PIPE
+from common import eprint
+
 
 import RAMP.module_metadata as module_metadata
 from RAMP.commands_discovery import discover_modules_commands
@@ -41,9 +43,9 @@ def init_from_manifest(metadata, manifest):
             if key in metadata:
                 metadata[key] = val
             else:
-                print('{} unknow attribute'.format(key))
+                eprint('{} unknown attribute'.format(key))
     except yaml.YAMLError as exc:
-        print(exc)
+        eprint(exc)
 
 
 def archive(module_path, metadata, archive_name='module.zip'):
@@ -108,11 +110,11 @@ def package(module, **args):
     # override requested commands data
     for override in metadata["overide_command"]:
         if 'command_name' not in override:
-            print("error: the given override json does not contains command name: %s" % str(override))
+            eprint("error: the given override json does not contains command name: %s" % str(override))
             continue
         override_index = [i for i in range(len(metadata["commands"])) if metadata["commands"][i]['command_name'] == override['command_name']]
         if len(override_index) != 1:
-            print("error: the given override command appears more then once")
+            eprint("error: the given override command appears more then once")
             continue
         if verbose:
             print('overiding %s with %s' % (str(metadata["commands"][override_index[0]]), str(override)))
@@ -135,11 +137,11 @@ def package(module, **args):
         p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
         git_sha, err = p.communicate()
         if p.returncode != 0:
-            print("could not extract git sha {}".format(err))
+            eprint("could not extract git sha {}".format(err))
         else:
             metadata["git_sha"] = str(git_sha.strip())
     except Exception:
-        print("could not extract git sha {}".format(err))
+        eprint("could not extract git sha {}".format(err))
 
     # cleanup metadata from utility keys
     fields = dict.fromkeys(module_metadata.FIELDS, 1)

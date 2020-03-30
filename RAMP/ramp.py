@@ -3,6 +3,8 @@
 import os
 import json
 import click
+from common import eprint
+
 
 from RAMP.packer import package
 from RAMP.unpacker import unpack as unpack_bundle
@@ -50,7 +52,7 @@ def validate(bundle):
         print("package is valid")
         return 0
     except Exception as e:
-        print("package is invalid, reason: {}".format(e))
+        eprint("package is invalid, reason: {}".format(e))
         return 1
 
 
