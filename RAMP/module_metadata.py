@@ -2,8 +2,6 @@ import os
 import hashlib
 import platform
 from typing import List, Dict, Any  # noqa: F401
-from common import eprint
-
 
 # Defaults
 ARCHITECTURE = platform.machine()
