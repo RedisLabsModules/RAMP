@@ -5,7 +5,7 @@ import yaml
 import semantic_version
 import tempfile
 from subprocess import Popen, PIPE
-from __init__ import eprint
+from common import eprint
 
 
 import RAMP.module_metadata as module_metadata

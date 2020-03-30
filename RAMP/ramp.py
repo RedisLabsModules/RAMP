@@ -3,7 +3,7 @@
 import os
 import json
 import click
-from __init__ import eprint
+from common import eprint
 
 
 from RAMP.packer import package
