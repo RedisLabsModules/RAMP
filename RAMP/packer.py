@@ -5,11 +5,7 @@ import yaml
 import semantic_version
 import tempfile
 from subprocess import Popen, PIPE
-<<<<<<< HEAD
 from common import eprint
-=======
-from __init__ import eprint
->>>>>>> print errors to stderr
 
 
 import RAMP.module_metadata as module_metadata
