@@ -2,6 +2,8 @@ import json
 import re
 from zipfile import ZipFile, BadZipfile
 from typing import Dict, Any, IO, Tuple, Optional  # noqa: F401
+from .common import *
+
 
 INVALID_METADATA = "module metadata invalid"
 DEFAULT_MAX_MODULE_FILE_SIZE = 1024 * 1024 * 10

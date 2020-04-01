@@ -3,8 +3,7 @@
 import os
 import json
 import click
-from common import eprint
-
+from .common import *
 
 from RAMP.packer import package
 from RAMP.unpacker import unpack as unpack_bundle
