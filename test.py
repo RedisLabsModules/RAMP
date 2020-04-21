@@ -164,11 +164,11 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 
     assert metadata["module_name"] == "graph"
-    assert metadata["module_file"] == manifest_file
+    assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
     assert metadata["version"] == MODULE_VERSION
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
-    assert metadata["sha256"] == sha256_checksum(manifest_file_path)
+    assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["config_command"] == CONFIG_COMMAND
     
     git_sha = get_git_sha()
@@ -178,7 +178,10 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)
         for key in manifest:
-            assert metadata[key] == manifest[key]
+            if key == 'dependencies':
+                assert metadata[key] == unpacker.normalize_dependencies(manifest[key])
+            else:
+                assert metadata[key] == manifest[key]
 
     commands = metadata["commands"]
     validate_module_commands(commands)
