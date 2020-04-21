@@ -11,8 +11,10 @@ MODULE_FILE = "redisgraph.so"
 MODULE_VERSION = 10012
 MODULE_SEMANTIC_VERSION = "1.0.12"
 MENIFEST_FILE = "example.manifest.yml"
+MENIFEST2_FILE = "example2.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
+MENIFEST2_FILE_PATH = os.path.join(os.getcwd(), MENIFEST2_FILE)
 BUNDLE_ZIP_FILE = "test_module.zip"
 CONFIG_COMMAND = "MODULE.CONFIG"
 
@@ -149,23 +151,23 @@ def test_bundle_from_cmd():
     commands = metadata["commands"]
     validate_module_commands(commands)
 
-def test_bundle_from_menifest():
+def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     """
     Test metadata generated from menifest file is as expected.
     """
 
     runner = CliRunner()
-    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', manifest_file_path, '-o', BUNDLE_ZIP_FILE])
 
     assert result.exit_code == 0
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 
     assert metadata["module_name"] == "graph"
-    assert metadata["module_file"] == MODULE_FILE
+    assert metadata["module_file"] == manifest_file
     assert metadata["architecture"] == "x86_64"
     assert metadata["version"] == MODULE_VERSION
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
-    assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
+    assert metadata["sha256"] == sha256_checksum(manifest_file_path)
     assert metadata["config_command"] == CONFIG_COMMAND
     
     git_sha = get_git_sha()
@@ -179,6 +181,12 @@ def test_bundle_from_menifest():
 
     commands = metadata["commands"]
     validate_module_commands(commands)
+
+def test_bundle_from_menifest():
+    _test_bundle_from_menifest(MENIFEST_FILE, MENIFEST_FILE_PATH)
+
+def test_bundle_from_menifest2():
+    _test_bundle_from_menifest(MENIFEST2_FILE, MENIFEST2_FILE_PATH)
 
 if __name__ == '__main__':
     test_defaults()
