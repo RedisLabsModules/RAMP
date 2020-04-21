@@ -19,6 +19,6 @@ def normalize_dependencies(deps):
                 if key not in dep:
                     raise Exception("error: dependency missing {}".format(key))
             deps_dict[dep["name"]] = { k:v for k, v in dep.items() if k != "name" }
-            return deps_dict
+        return deps_dict
     else:
         raise Exception("error: invalid dependencies format")
