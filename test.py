@@ -7,6 +7,7 @@ from click.testing import CliRunner
 from module_capabilities import MODULE_CAPABILITIES
 from RAMP import ramp, packer, unpacker, module_metadata
 
+
 MODULE_FILE = "redisgraph.so"
 MODULE_VERSION = 10012
 MODULE_SEMANTIC_VERSION = "1.0.12"

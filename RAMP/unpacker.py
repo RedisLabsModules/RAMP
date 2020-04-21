@@ -120,6 +120,9 @@ def _validate_metadata(metadata):
         except UnpackerPackageError:
             raise
 
+    if "dependencies" in metadata:
+        metadata["dependencies"] = normalize_dependencies(metadata["dependencies"])
+
     # wrong signature
     # TODO: this check should be deferred to a later stage
     # As sha256_checksum will read entire module file
