@@ -7,12 +7,15 @@ from click.testing import CliRunner
 from module_capabilities import MODULE_CAPABILITIES
 from RAMP import ramp, packer, unpacker, module_metadata
 
+
 MODULE_FILE = "redisgraph.so"
 MODULE_VERSION = 10012
 MODULE_SEMANTIC_VERSION = "1.0.12"
 MENIFEST_FILE = "example.manifest.yml"
+MENIFEST2_FILE = "example2.manifest.yml"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 MENIFEST_FILE_PATH = os.path.join(os.getcwd(), MENIFEST_FILE)
+MENIFEST2_FILE_PATH = os.path.join(os.getcwd(), MENIFEST2_FILE)
 BUNDLE_ZIP_FILE = "test_module.zip"
 CONFIG_COMMAND = "MODULE.CONFIG"
 
@@ -149,13 +152,13 @@ def test_bundle_from_cmd():
     commands = metadata["commands"]
     validate_module_commands(commands)
 
-def test_bundle_from_menifest():
+def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     """
     Test metadata generated from menifest file is as expected.
     """
 
     runner = CliRunner()
-    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', MENIFEST_FILE_PATH, '-o', BUNDLE_ZIP_FILE])
+    result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', manifest_file_path, '-o', BUNDLE_ZIP_FILE])
 
     assert result.exit_code == 0
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -175,10 +178,19 @@ def test_bundle_from_menifest():
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)
         for key in manifest:
-            assert metadata[key] == manifest[key]
+            if key == 'dependencies':
+                assert metadata[key] == unpacker.normalize_dependencies(manifest[key])
+            else:
+                assert metadata[key] == manifest[key]
 
     commands = metadata["commands"]
     validate_module_commands(commands)
+
+def test_bundle_from_menifest():
+    _test_bundle_from_menifest(MENIFEST_FILE, MENIFEST_FILE_PATH)
+
+def test_bundle_from_menifest2():
+    _test_bundle_from_menifest(MENIFEST2_FILE, MENIFEST2_FILE_PATH)
 
 if __name__ == '__main__':
     test_defaults()

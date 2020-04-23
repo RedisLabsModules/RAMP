@@ -124,11 +124,8 @@ def package(module, **args):
     if module_name:
         metadata["module_name"] = module_name
 
-    # validate dependencies
-    for dep in metadata["dependencies"]:
-        for key in ["name", "url", "sha256"]:
-            if key not in dep:
-                raise Exception("error: dependency missing {}".format(key))
+    # validate and normalize dependencies
+    metadata["dependencies"] = normalize_dependencies(metadata["dependencies"])
 
     try:
         p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
