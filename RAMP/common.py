@@ -13,12 +13,13 @@ def normalize_dependencies(deps):
                 if key not in dep:
                     raise Exception("error: dependency {} missing {}".format(dep_name, key))
     elif isinstance(deps, list):
-        deps_dict = {}
-        for dep in deps:
+        deps_list = deps
+        deps = {}
+        for dep in deps_list:
             for key in ["name", "url", "sha256"]:
                 if key not in dep:
                     raise Exception("error: dependency missing {}".format(key))
-            deps_dict[dep["name"]] = { k:v for k, v in dep.items() if k != "name" }
-        return deps_dict
+            deps[dep["name"]] = { k:v for k, v in dep.items() if k != "name" }
     else:
         raise Exception("error: invalid dependencies format")
+    return deps
