@@ -5,7 +5,6 @@ import os
 
 try:
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../readies"))
-    sys.path.insert(0, "/w/rafi_1/readies")
     import paella
 except:
     pass
