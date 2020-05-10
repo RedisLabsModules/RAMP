@@ -69,10 +69,11 @@ def archive(module_path, metadata, archive_name='module.zip'):
 def package(module, **args):
     module_path = module
 
-    nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'output'], 1)
+    nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'packname_file', 'output'], 1)
     manifest = args['manifest']
     verbose = args['verbose']
     print_filename_only = args['print_filename_only']
+    packname_file = args['packname_file']
     output = args['output']
 
     # start with default values (lowest priority)
@@ -143,10 +144,16 @@ def package(module, **args):
         if not key in fields:
             metadata.pop(key)
 
+    packname = output.format(**metadata)
+    if packname_file:
+        with open(packname_file, 'w') as file:
+            file.write(packname)
+
     if print_filename_only:
         # For scripts, it might be helpful to know the formatted filename
         # ahead of time, so that it can manipulate it later on.
-        print(output.format(**metadata))
+        if not packname_file:
+            print(packname)
         return 0
 
     if args['verbose']:
