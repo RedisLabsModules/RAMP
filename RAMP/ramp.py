@@ -3,12 +3,12 @@
 import os
 import json
 import click
-from .common import *
 
 from RAMP import config
 from RAMP.packer import package
 from RAMP.unpacker import unpack as unpack_bundle
 from RAMP.version import VERSION
+from .common import *
 
 
 def comma_seperated_to_list(ctx, param, value):
@@ -101,8 +101,7 @@ def unpack(bundle):
 @click.option('--verbose', '-v', is_flag=True, default=False, help='verbose mode: print the resulting metadata')
 @click.option('--debug', is_flag=True, default=False, help='Print interaction with Redis. Implies --verbose.')
 def pack(module, *args, **kwargs):
-    config.debug = kwargs['debug']
-    config.verbose = kwargs['verbose'] or config.debug
+    config.set(kwargs)
     return package(module, **kwargs)
 
 
