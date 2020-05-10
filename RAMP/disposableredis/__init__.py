@@ -7,6 +7,8 @@ import os
 import itertools
 import sys
 
+from ..common import *
+
 # Environment variable pointing to the redis executable
 REDIS_PATH_ENVVAR = 'REDIS_PATH'
 
@@ -21,7 +23,7 @@ def get_random_port():
 
 
 class DisposableRedis(object):
-    def __init__(self, port=None, path='redis-server', **extra_args):
+    def __init__(self, port=None, path='redis-server', verbose=False, **extra_args):
         """
         :param port: port number to start the redis server on. Specify none to automatically generate
         :type port: int|None
@@ -29,6 +31,7 @@ class DisposableRedis(object):
         """
 
         self._port = port
+        self.verbose = verbose
 
         # this will hold the actual port the redis is listening on. It's equal to `_port` unless `_port` is None
         # in that case `port` is randomly generated
@@ -49,12 +52,18 @@ class DisposableRedis(object):
                 '--dir', tempfile.gettempdir(),
                 '--save', ''] + self.extra_args
 
+        if self.verbose:
+            out = sys.stdout
+            err = sys.stderr
+        else:
+            out  = open(os.devnull, 'w')
+            err = subprocess.STDOUT
         self.process = subprocess.Popen(
             args,
             #cwd=os.getcwd(),
             stdin=subprocess.PIPE,
-            stdout=open(os.devnull, 'w')
-#             stdout=sys.stdout,
+            stdout=out,
+            stderr=err
 #             env=os.environ.copy()
         )
 

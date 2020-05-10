@@ -5,11 +5,12 @@ import yaml
 import semantic_version
 import tempfile
 from subprocess import Popen, PIPE
-from .common import *
 
-
+from RAMP import config
 import RAMP.module_metadata as module_metadata
 from RAMP.commands_discovery import discover_modules_commands
+from .common import *
+
 
 def version_to_semantic_version(version):
     """
@@ -71,7 +72,6 @@ def package(module, **args):
 
     nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'packname_file', 'output'], 1)
     manifest = args['manifest']
-    verbose = args['verbose']
     print_filename_only = args['print_filename_only']
     packname_file = args['packname_file']
     output = args['output']
@@ -117,7 +117,7 @@ def package(module, **args):
         if len(override_index) != 1:
             eprint("error: the given override command appears more then once")
             continue
-        if verbose:
+        if config.verbose:
             print('overiding %s with %s' % (str(metadata["commands"][override_index[0]]), str(override)))
         metadata["commands"][override_index[0]] = override
 
@@ -156,7 +156,7 @@ def package(module, **args):
             print(packname)
         return 0
 
-    if args['verbose']:
+    if config.verbose:
         print("Module Metadata:")
         print(json.dumps(metadata, indent=2))
 

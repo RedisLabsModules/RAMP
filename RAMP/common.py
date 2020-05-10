@@ -1,7 +1,14 @@
 
 from __future__ import print_function
 import sys
+import os
 
+try:
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../readies"))
+    sys.path.insert(0, "/w/rafi_1/readies")
+    import paella
+except:
+    pass
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
