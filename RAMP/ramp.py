@@ -3,11 +3,12 @@
 import os
 import json
 import click
-from .common import *
 
+from RAMP import config
 from RAMP.packer import package
 from RAMP.unpacker import unpack as unpack_bundle
 from RAMP.version import VERSION
+from .common import *
 
 
 def comma_seperated_to_list(ctx, param, value):
@@ -96,8 +97,11 @@ def unpack(bundle):
 @click.option('--dependencies', callback=jsons_str_tuple_to_jsons_tuple, help='list of module dependencies: <name, uri, sha256>')
 @click.option('--output', '-o', default='module.zip', help='output file name')
 @click.option('--print-filename-only', '-P', is_flag=True, default=False, help="Print package path, but don't generate file")
+@click.option('--packname-file', default=None, help="Write package name to the file")
 @click.option('--verbose', '-v', is_flag=True, default=False, help='verbose mode: print the resulting metadata')
+@click.option('--debug', is_flag=True, default=False, help='Print interaction with Redis. Implies --verbose.')
 def pack(module, *args, **kwargs):
+    config.set(kwargs)
     return package(module, **kwargs)
 
 

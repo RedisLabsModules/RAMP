@@ -1,5 +1,7 @@
 import os.path
+
 from RAMP.disposableredis import DisposableRedis
+from RAMP import config
 from .common import *
 
 OK = "OK"
@@ -26,7 +28,7 @@ class ModuleCommand(object):
         return self.__dict__
 
 def redis():
-    redis_client = DisposableRedis()
+    redis_client = DisposableRedis(verbose=config.debug)
     return redis_client
 
 def _get_modules_list(redis_client):
