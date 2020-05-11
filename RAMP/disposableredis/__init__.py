@@ -53,8 +53,8 @@ class DisposableRedis(object):
                 '--save', ''] + self.extra_args
 
         if self.verbose:
-            out = sys.stdout
-            err = sys.stderr
+            out = subprocess.STDOUT
+            err = subprocess.STDERR
         else:
             out  = open(os.devnull, 'w')
             err = subprocess.STDOUT

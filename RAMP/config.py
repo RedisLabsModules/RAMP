@@ -6,8 +6,10 @@ def set(args=None):
     global verbose, debug
     if args is None:
         return
-    debug = args['debug']
-    verbose = args['verbose'] or debug
+    if 'debug' in args:
+        debug = args['debug']
+    if 'verbose' in args:
+        verbose = args['verbose'] or debug
 
 def dump():
     print("verbose: ", verbose)
