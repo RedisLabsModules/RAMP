@@ -140,7 +140,7 @@ def package(module, **args):
 
     # cleanup metadata from utility keys
     fields = dict.fromkeys(module_metadata.FIELDS, 1)
-    for key in metadata.keys():
+    for key in list(metadata.keys()):
         if not key in fields:
             metadata.pop(key)
 
