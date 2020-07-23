@@ -95,6 +95,7 @@ def unpack(bundle):
 @click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
 @click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and overide it on the module json file')
 @click.option('--dependencies', callback=jsons_str_tuple_to_jsons_tuple, help='list of module dependencies: <name, uri, sha256>')
+@click.option('--optional-dependencies', callback=jsons_str_tuple_to_jsons_tuple, help='list of module optional dependencies: <name, uri, sha256>')
 @click.option('--output', '-o', default='module.zip', help='output file name')
 @click.option('--print-filename-only', '-P', is_flag=True, default=False, help="Print package path, but don't generate file")
 @click.option('--packname-file', default=None, help="Write package name to the file")
