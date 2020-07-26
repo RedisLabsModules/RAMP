@@ -178,7 +178,7 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     with open(MENIFEST_FILE_PATH, 'r') as f:
         manifest = yaml.load(f)
         for key in manifest:
-            if key == 'dependencies' or key == 'optional-dependencies':
+            if key == 'dependencies' or key == 'supported-dependencies':
                 assert metadata[key] == unpacker.normalize_dependencies(manifest[key])
             else:
                 assert metadata[key] == manifest[key]
