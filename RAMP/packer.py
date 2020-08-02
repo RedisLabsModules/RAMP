@@ -127,7 +127,7 @@ def package(module, **args):
 
     # validate and normalize dependencies
     metadata["dependencies"] = normalize_dependencies(metadata["dependencies"])
-    metadata["supported-dependencies"] = normalize_dependencies(metadata["supported-dependencies"])
+    metadata["optional-dependencies"] = normalize_dependencies(metadata["optional-dependencies"])
 
     try:
         p = Popen('git rev-parse HEAD'.split(' '), stdin=PIPE, stdout=PIPE, stderr=PIPE)
