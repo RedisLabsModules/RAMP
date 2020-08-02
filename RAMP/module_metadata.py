@@ -21,6 +21,7 @@ MODULE_COMMANDS = []  # type: List[Dict[str, str]]
 EXCLUDE_COMMANDS = []  # type: List[str]
 MODULE_CAPABILITIES = []  # type: List[Dict[str, str]]
 MODULE_DEPENDENCIES = []  # type: Dict[str, Dict[str, str]]
+MODULE_OPTIONAL_DEPENDENCIES = []  # type: Dict[str, Dict[str, str]]
 COMMAND_LINE_ARGS = ""
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.2"
@@ -36,6 +37,7 @@ FIELDS = [
     "commands",
     "config_command",
     "dependencies",
+    "optional-dependencies",
     "description",
     "display_name",
     "email",
@@ -85,6 +87,7 @@ def create_default_metadata(module_path):
         "command_line_args": COMMAND_LINE_ARGS,
         "capabilities": MODULE_CAPABILITIES,
         "dependencies": MODULE_DEPENDENCIES,
+        "optional-dependencies": MODULE_OPTIONAL_DEPENDENCIES,
         "min_redis_version": MIN_REDIS_VERSION,
         "min_redis_pack_version": MIN_REDIS_PACK_VERSION,
         "sha256": sha256_checksum(module_path),
