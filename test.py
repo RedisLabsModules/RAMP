@@ -40,7 +40,7 @@ def get_git_sha():
 
 
 def validate_module_commands(commands):
-    assert len(commands) == 3
+    assert len(commands) == 4
 
     # Expected commands:
     expected_command = []
@@ -60,6 +60,8 @@ def validate_module_commands(commands):
                     "last_key": 1,
                     "step": 1})
 
+    expected_command.append({"command_name": "test"})
+
     assert sorted(expected_command, key=lambda c: c['command_name']) == sorted(commands, key=lambda c: c['command_name'])
 
 def test_defaults():
@@ -67,7 +69,8 @@ def test_defaults():
     runner = CliRunner()
     result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-o', BUNDLE_ZIP_FILE,
                                        '-E', 'graph.BULK',
-                                       '--overide-command', '{"command_name": "graph.EXPLAIN"}'])
+                                       '--overide-command', '{"command_name": "graph.EXPLAIN"}',
+                                       '--add-command', '{"command_name": "test"}'])
     assert result.exit_code == 0
 
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
@@ -119,7 +122,8 @@ def test_bundle_from_cmd():
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
             '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
             '-E', 'graph.BULK',
-            '--overide-command', '{"command_name": "graph.EXPLAIN"}']
+            '--overide-command', '{"command_name": "graph.EXPLAIN"}',
+            '--add-command', '{"command_name": "test"}']
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)

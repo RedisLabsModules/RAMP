@@ -18,6 +18,7 @@ capabilities:
 exclude_commands:
     - graph.BULK
 overide_command: [{"command_name": "graph.EXPLAIN"}]
+add_command: [{"command_name": "test"}]
 dependencies:
     deps1:
         url: https://s3.amazonaws.com/module/dep1.zip

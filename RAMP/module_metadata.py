@@ -28,6 +28,7 @@ MIN_REDIS_PACK_VERSION = "5.2"
 RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
 OVERIDE_COMMAND = []  # type: List[Dict[str, str]]
+ADD_COMMAND = []  # type: List[Dict[str, str]]
 
 FIELDS = [
     "architecture",
@@ -51,6 +52,7 @@ FIELDS = [
     "module_name",
     "os",
     "overide_command",
+    "add_command",
     "ramp_format_version",
     "semantic_version",
     "sha256",
@@ -95,5 +97,6 @@ def create_default_metadata(module_path):
         "ramp_format_version": RAMP_FORMAT_VERSION,
         "config_command": CONFIG_COMMAND,
         "exclude_commands": EXCLUDE_COMMANDS,
-        "overide_command": OVERIDE_COMMAND
+        "overide_command": OVERIDE_COMMAND,
+        "add_command": ADD_COMMAND
     }
