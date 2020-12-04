@@ -121,6 +121,15 @@ def package(module, **args):
             print('overiding %s with %s' % (str(metadata["commands"][override_index[0]]), str(override)))
         metadata["commands"][override_index[0]] = override
 
+    for add in metadata["add_command"]:
+        if 'command_name' not in add:
+            eprint("error: the given add command json does not contains command name: %s" % str(add))
+            continue
+        if config.verbose:
+            print('adding command %s' % (str(add)))
+        metadata["commands"].append(add)
+
+
     module_name = args['module_name']
     if module_name:
         metadata["module_name"] = module_name
