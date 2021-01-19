@@ -23,6 +23,7 @@ MODULE_CAPABILITIES = []  # type: List[Dict[str, str]]
 MODULE_DEPENDENCIES = []  # type: Dict[str, Dict[str, str]]
 MODULE_OPTIONAL_DEPENDENCIES = []  # type: Dict[str, Dict[str, str]]
 COMMAND_LINE_ARGS = ""
+RUN_COMMAND_LINE_ARGS = None
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.2"
 RAMP_FORMAT_VERSION = 1
@@ -35,6 +36,7 @@ FIELDS = [
     "author",
     "capabilities",
     "command_line_args",
+    "run_command_line_args",
     "commands",
     "config_command",
     "dependencies",
@@ -87,6 +89,7 @@ def create_default_metadata(module_path):
         "homepage": HOMEPAGE,
         "license": LICENSE,
         "command_line_args": COMMAND_LINE_ARGS,
+        "run_command_line_args": RUN_COMMAND_LINE_ARGS,
         "capabilities": MODULE_CAPABILITIES,
         "dependencies": MODULE_DEPENDENCIES,
         "optional-dependencies": MODULE_OPTIONAL_DEPENDENCIES,
