@@ -93,7 +93,8 @@ def package(module, **args):
         metadata[key] = value
 
     # Load module into redis and discover its commands
-    module = discover_modules_commands(module_path, metadata["command_line_args"])
+    cmd_line_args = metadata.pop('run_command_line_args', None)
+    module = discover_modules_commands(module_path, cmd_line_args if cmd_line_args else metadata["command_line_args"])
     metadata["module_name"] = module.name
     metadata["version"] = module.version
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))

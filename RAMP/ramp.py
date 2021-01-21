@@ -87,6 +87,7 @@ def unpack(bundle):
 @click.option('--homepage', '-h', default=None, help='module homepage')
 @click.option('--license', '-l', default=None, help='license')
 @click.option('--cmdargs', '-c', 'command_line_args', default=None, help='module command line arguments')
+@click.option('--runcmdargs', 'run_command_line_args', default=None, help='if set, use those args when running the redis server')
 @click.option('--redis-min-version', '-r', 'min_redis_version', default=None, help='redis minimum version')
 @click.option('--redis-pack-min-version', '-R', 'min_redis_pack_version', default=None, help='redis pack minimum version')
 @click.option('--config-command', '-cc', default=None, help='command used to configure module args at runtime')
