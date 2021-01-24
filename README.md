@@ -111,6 +111,7 @@ hash_policy | module is able to operate in a database with a user defined HASH P
 flash | module is able to operate in a database with Flash memory is enabled or changed over time|
 crdb | module is able to operate in a database with crdt for the default redis data types|    
 clustering | module is able to operate in a database that is sharded and shards can be migrated|
+intershard_tls | module supports two-way encrypted communication between shards|
 
 ## Output
 
