@@ -1,5 +1,5 @@
 [![license](https://img.shields.io/github/license/RedisLabs/RAMP.svg)](https://github.com/RedisLabs/RAMP)
-[![CircleCI](https://circleci.com/gh/RedisLabs/RAMP/tree/master.svg?style=svg)](https://circleci.com/gh/RedisLabs/RAMP/tree/master)
+[![CircleCI](https://circleci.com/gh/RedisLabsModules/RAMP/tree/master.svg?style=svg)](https://circleci.com/gh/RedisLabsModules/RAMP/tree/master)
 [![GitHub issues](https://img.shields.io/github/release/RedisLabs/RAMP.svg)](https://github.com/RedisLabs/RAMP/releases/latest)
 [![Codecov](https://codecov.io/gh/RedisLabs/RAMP/branch/master/graph/badge.svg)](https://codecov.io/gh/RedisLabs/RAMP)
 
