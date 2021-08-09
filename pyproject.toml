@@ -29,7 +29,7 @@ ramp = "RAMP.ramp:ramp"
 
 
 [tool.poetry.dependencies]
-python = "^2.7,<2.8 || >= 3.7.0"
+python = "^2.7,<2.8 || >= 3.6.0"
 redis = "^3.5.3"
 PyYAML = "^5.4.1"
 click = "^6.7.0"
