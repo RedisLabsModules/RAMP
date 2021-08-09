@@ -1,4 +1,5 @@
-MAJOR_VERSION = 2
-MINOR_VERSION = 1
-PATCH_VERSION = 0
-VERSION = '{}.{}.{}'.format(MAJOR_VERSION, MINOR_VERSION, PATCH_VERSION)
+import pkg_resources
+try:
+    VERSION = pkg_resources.get_distribution("ramp-packer").version
+except:
+    VERSION = "99.99.99"
