@@ -174,6 +174,7 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["config_command"] == CONFIG_COMMAND
+    assert metadata["crdb"] == {"supported_featureset_versions": [1, 3]}
     
     git_sha = get_git_sha()
     if git_sha is not None:
