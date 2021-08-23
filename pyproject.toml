@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ramp-packer"
-version = "2.1.0"
+version = "2.2.0"
 description = "Packs for Redis modules into a distributable format"
 authors = ["RedisLabs"]
 license = "BSD-2-Clause"
