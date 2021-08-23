@@ -30,6 +30,7 @@ RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
 OVERIDE_COMMAND = []  # type: List[Dict[str, str]]
 ADD_COMMAND = []  # type: List[Dict[str, str]]
+CRDB_ARGS = {}  # type: List[Dict[str, str]]
 
 FIELDS = [
     "architecture",
@@ -59,6 +60,7 @@ FIELDS = [
     "semantic_version",
     "sha256",
     "version",
+    "crdb"
 ]  # type: List[str]
 
 
@@ -101,5 +103,6 @@ def create_default_metadata(module_path):
         "config_command": CONFIG_COMMAND,
         "exclude_commands": EXCLUDE_COMMANDS,
         "overide_command": OVERIDE_COMMAND,
-        "add_command": ADD_COMMAND
+        "add_command": ADD_COMMAND,
+        "crdb": CRDB_ARGS,
     }
