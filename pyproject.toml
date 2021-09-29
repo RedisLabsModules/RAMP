@@ -2,7 +2,7 @@
 name = "ramp-packer"
 version = "2.2.0"
 description = "Packs for Redis modules into a distributable format"
-authors = ["RedisLabs"]
+authors = ["Redis"]
 license = "BSD-2-Clause"
 readme = "README.md"
 

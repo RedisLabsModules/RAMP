@@ -105,7 +105,7 @@ def test_bundle_from_cmd():
     """
 
     author = "redislabs"
-    email = "roi@redislabs.com"
+    email = "roi@.com"
     description = "desc some module"
     homepage = "http://github.com/redismodules/module"
     _license = "AGPL"
