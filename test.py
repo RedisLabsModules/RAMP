@@ -104,7 +104,7 @@ def test_bundle_from_cmd():
     Test metadata generated from command line arguments is as expected.
     """
 
-    author = "redislabs"
+    author = "redis"
     email = "roi@redis.com"
     description = "desc some module"
     homepage = "http://github.com/redismodules/module"
