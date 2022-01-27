@@ -13,4 +13,5 @@ MODULE_CAPABILITIES = [
     {'name': 'crdb', 'desc': 'module is able to operate in a database with crdt for the default redis data types'},    
     {'name': 'clustering', 'desc': 'module is able to operate in a database that is sharded and shards can be migrated'},
     {'name': 'intershard_tls', 'desc': 'module supports two-way encrypted communication between shards'}
+    {'name': 'intershard_tls_pass', 'desc': 'module supports `intershard_tls` which requires password'}
 ]
