@@ -92,7 +92,7 @@ def test_defaults():
     assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
-    
+
     git_sha = get_git_sha()
     if git_sha is not None:
         assert metadata["git_sha"] == git_sha
@@ -104,8 +104,8 @@ def test_bundle_from_cmd():
     Test metadata generated from command line arguments is as expected.
     """
 
-    author = "redislabs"
-    email = "roi@redislabs.com"
+    author = "redis"
+    email = "roi@redis.com"
     description = "desc some module"
     homepage = "http://github.com/redismodules/module"
     _license = "AGPL"
@@ -127,7 +127,7 @@ def test_bundle_from_cmd():
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
-    
+
     assert result.exit_code == 0
     metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
 
@@ -148,7 +148,7 @@ def test_bundle_from_cmd():
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
-    
+
     git_sha = get_git_sha()
     if git_sha is not None:
         assert metadata["git_sha"] == git_sha
@@ -175,7 +175,7 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["crdb"] == {"supported_featureset_versions": [1, 3]}
-    
+
     git_sha = get_git_sha()
     if git_sha is not None:
         assert metadata["git_sha"] == git_sha
