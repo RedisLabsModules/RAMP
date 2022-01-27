@@ -112,6 +112,7 @@ flash | module is able to operate in a database with Flash memory is enabled or 
 crdb | module is able to operate in a database with crdt for the default redis data types|    
 clustering | module is able to operate in a database that is sharded and shards can be migrated|
 intershard_tls | module supports two-way encrypted communication between shards|
+intershard_tls_pass | module supports `intershard_tls` which requires password
 
 ## Output
 
