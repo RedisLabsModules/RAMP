@@ -1,6 +1,5 @@
 [![license](https://img.shields.io/github/license/RedisLabsModules/RAMP.svg)](https://github.com/RedisLabsModules/RAMP)
 [![CI](https://github.com/redislabsmodules/ramp/workflows/CI/badge.svg?branch=master)](https://github.com/redislabsmodules/ramp/actions?query=workflow%3ACI+branch%3Amaster)
-
 [![GitHub issues](https://img.shields.io/github/release/RedisLabsModules/RAMP.svg)](https://github.com/RedisLabsModules/RAMP/releases/latest)
 [![Codecov](https://codecov.io/gh/RedisLabsModules/RAMP/branch/master/graph/badge.svg)](https://codecov.io/gh/RedisLabsModules/RAMP)
 
