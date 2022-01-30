@@ -1,5 +1,0 @@
-redis
-click >=6.7
-semantic_version
-PyYAML
-typing
