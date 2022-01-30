@@ -45,8 +45,8 @@ jobs:
 
        - name: install redis
          run: |
-           apt-get update
-           apt-get install -y redis
+           sudo apt-get update
+           sudo apt-get install -y redis
        - name: run tests
          run: |
            pip install -r dev_requirements.txt
