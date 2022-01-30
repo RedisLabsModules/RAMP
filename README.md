@@ -1,5 +1,6 @@
 [![license](https://img.shields.io/github/license/RedisLabsModules/RAMP.svg)](https://github.com/RedisLabsModules/RAMP)
-[![CircleCI](https://circleci.com/gh/RedisLabsModules/RAMP/tree/master.svg?style=svg)](https://circleci.com/gh/RedisLabsModules/RAMP/tree/master)
+[![CI][(https://github.com/redislabsmodules/ramp/workflows/CI/badge.svg?branch=master)](https://github.com/redislabsmodules/ramp/actions?query=workflow%3ACI+branch%3Amaster)
+
 [![GitHub issues](https://img.shields.io/github/release/RedisLabsModules/RAMP.svg)](https://github.com/RedisLabsModules/RAMP/releases/latest)
 [![Codecov](https://codecov.io/gh/RedisLabsModules/RAMP/branch/master/graph/badge.svg)](https://codecov.io/gh/RedisLabsModules/RAMP)
 
@@ -15,7 +16,7 @@ module's name, command list, version and additional metadata.
 
 ## Prerequisites
 
-Make sure redis-server is on your PATH
+Make sure redis-server is on your PATH. GitHub actions install this automatically.
 
 ```sh
 export PATH=$PATH:<PATH_TO_REDIS>
@@ -109,7 +110,7 @@ persistence_aof | module is able to operate in a database when database chooses 
 persistence_rdb | module is able to operate in a database when database chooses SNAPSHOT persistence option|
 hash_policy | module is able to operate in a database with a user defined HASH POLICY|
 flash | module is able to operate in a database with Flash memory is enabled or changed over time|
-crdb | module is able to operate in a database with crdt for the default redis data types|    
+crdb | module is able to operate in a database with crdt for the default redis data types|
 clustering | module is able to operate in a database that is sharded and shards can be migrated|
 intershard_tls | module supports two-way encrypted communication between shards|
 intershard_tls_pass | module supports `intershard_tls` which requires password
