@@ -35,7 +35,7 @@ def _get_modules_list(redis_client):
     """
     Finds out which modules are loaded into Redis.
     """
-    modules_list = redis_client.execute_command("MODULE LIST")
+    modules_list = redis_client.module_list()
     # MODULE LIST response contains an array of module name and version.
     #    1) 1) "name"
     #       2) "graph"
@@ -43,10 +43,7 @@ def _get_modules_list(redis_client):
     #       4) (integer) 1
 
     loaded_modules = []
-    for module in modules_list:
-        module_name = module[1]
-        module_version = float(module[3])
-        loaded_modules.append((module_name, module_version))
+    loaded_modules = [(m['name'], float(m['ver'])) for m in modules_list]
 
     return loaded_modules
 
@@ -73,7 +70,7 @@ def _get_redis_commands(redis_client):
     """
     Retrieves a set of commands from Redis
     """
-    commands = redis_client.execute_command("COMMAND")
+    commands = redis_client.command()
     redis_commands = set()
     for command in commands:
         redis_commands.add(command[0])
@@ -92,7 +89,7 @@ def _get_redis_command_info(redis_client, command_name):
     #    5) (integer) 1
     #    6) (integer) 1
 
-    if len(command_info) is not 1:
+    if len(command_info) != 1:
         return None
 
     command_info = command_info[0]
