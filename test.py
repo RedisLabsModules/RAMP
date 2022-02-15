@@ -181,7 +181,7 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
         assert metadata["git_sha"] == git_sha
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
-        manifest = yaml.load(f)
+        manifest = yaml.load(f, Loader=yaml.FullLoader)
         for key in manifest:
             if key == 'dependencies' or key == 'optional-dependencies':
                 assert metadata[key] == unpacker.normalize_dependencies(manifest[key])

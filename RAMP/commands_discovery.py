@@ -71,10 +71,7 @@ def _get_redis_commands(redis_client):
     Retrieves a set of commands from Redis
     """
     commands = redis_client.command()
-    redis_commands = set()
-    for command in commands:
-        redis_commands.add(command[0])
-    return redis_commands
+    return commands
 
 def _get_redis_command_info(redis_client, command_name):
     """
@@ -116,7 +113,8 @@ def discover_modules_commands(path_to_module, module_args):
             raise Exception("Failed to load module {} {}".format(path_to_module, module_args))
 
         extended_redis_commands = _get_redis_commands(redis_client)
-        module_commands = extended_redis_commands - core_redis_commands
+        module_commands = (set(extended_redis_commands.keys()).symmetric_difference(set(core_redis_commands.keys())))
+        # module_commands = extended_redis_commands - core_redis_commands
 
         for module_command in module_commands:
             command = _get_redis_command_info(redis_client, module_command)
