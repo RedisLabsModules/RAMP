@@ -2,15 +2,15 @@ name: CI
 
 on:
   push:
-    paths-ignore:
-      - 'docs/**'
-      - '**/*.rst'
-      - '**/*.md'
     branches:
       - master
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.rst'
+      - '**/*.md'
 
 jobs:
 
@@ -20,7 +20,7 @@ jobs:
      strategy:
        max-parallel: 15
        matrix:
-         python-version: ['2.7', '3.6', '3.7', '3.8', '3.9', '3.10']
+         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
      env:
        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
      name: Python ${{ matrix.python-version }} test
@@ -39,17 +39,17 @@ jobs:
          id: cache
          with:
            path: ~/.virtualenvs
-           key: poetry-${{ hashFiles('**/poetry.lock') }}
+           key: poetry-${{ hashFiles('**/poetry.lock') }}-${{matrix.python-version}}
            restore-keys: |
-             poetry-${{ hashFiles('**/poetry.lock') }}
+             poetry-${{ hashFiles('**/poetry.lock') }}-${{matrix.python-version}}
 
        - name: install redis
          run: |
-           sudo apt-get update
-           sudo apt-get install -y redis
+           sudo apt-get update -q
+           sudo apt-get install -qy redis
        - name: run tests
          run: |
-           pip install -r dev_requirements.txt
+           pip install -q -r dev_requirements.txt
            tox -e python${{ matrix.python-version }}
        - name: build and install the package in this python version
          run: |

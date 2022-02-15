@@ -156,7 +156,7 @@ def test_bundle_from_cmd():
     commands = metadata["commands"]
     validate_module_commands(commands)
 
-def _test_bundle_from_menifest(manifest_file, manifest_file_path):
+def _test_bundle_from_manifest(manifest_file, manifest_file_path):
     """
     Test metadata generated from menifest file is as expected.
     """
@@ -181,7 +181,7 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
         assert metadata["git_sha"] == git_sha
 
     with open(MENIFEST_FILE_PATH, 'r') as f:
-        manifest = yaml.load(f)
+        manifest = yaml.load(f, Loader=yaml.FullLoader)
         for key in manifest:
             if key == 'dependencies' or key == 'optional-dependencies':
                 assert metadata[key] == unpacker.normalize_dependencies(manifest[key])
@@ -191,14 +191,14 @@ def _test_bundle_from_menifest(manifest_file, manifest_file_path):
     commands = metadata["commands"]
     validate_module_commands(commands)
 
-def test_bundle_from_menifest():
-    _test_bundle_from_menifest(MENIFEST_FILE, MENIFEST_FILE_PATH)
+def test_bundle_from_manifest():
+    _test_bundle_from_manifest(MENIFEST_FILE, MENIFEST_FILE_PATH)
 
 def test_bundle_from_menifest2():
     _test_bundle_from_menifest(MENIFEST2_FILE, MENIFEST2_FILE_PATH)
 
 if __name__ == '__main__':
     test_defaults()
-    test_bundle_from_menifest()
+    test_bundle_from_manifest()
     test_bundle_from_cmd()
     print("PASS")
