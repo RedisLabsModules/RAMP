@@ -39,7 +39,7 @@ def init_from_manifest(metadata, manifest):
     Creates module metadata from user provided menifest file
     """
     try:
-        data = yaml.load(manifest)
+        data = yaml.load(manifest, Loader=yaml.FullLoader)
         for key, val in data.items():
             if key in metadata:
                 metadata[key] = val

@@ -39,17 +39,17 @@ jobs:
          id: cache
          with:
            path: ~/.virtualenvs
-           key: poetry-${{ hashFiles('**/poetry.lock') }}
+           key: poetry-${{ hashFiles('**/poetry.lock') }}-${{matrix.python-version}}
            restore-keys: |
-             poetry-${{ hashFiles('**/poetry.lock') }}
+             poetry-${{ hashFiles('**/poetry.lock') }}-${{matrix.python-version}}
 
        - name: install redis
          run: |
-           sudo apt-get update
-           sudo apt-get install -y redis
+           sudo apt-get update -q
+           sudo apt-get install -qy redis
        - name: run tests
          run: |
-           pip install -r dev_requirements.txt
+           pip install -q -r dev_requirements.txt
            tox -e python${{ matrix.python-version }}
        - name: build and install the package in this python version
          run: |
