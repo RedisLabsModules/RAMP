@@ -70,7 +70,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
 def package(module, **args):
     module_path = module
 
-    nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'packname_file', 'output'], 1)
+    nonkeys = dict.fromkeys(['manifest', 'verbose', 'print_filename_only', 'packname_file', 'output', 'redis_args'], 1)
     manifest = args['manifest']
     print_filename_only = args['print_filename_only']
     packname_file = args['packname_file']
@@ -94,7 +94,8 @@ def package(module, **args):
 
     # Load module into redis and discover its commands
     cmd_line_args = metadata.pop('run_command_line_args', None)
-    module = discover_modules_commands(module_path, cmd_line_args if cmd_line_args else metadata["command_line_args"])
+    redis_args = metadata.pop('redis_args')
+    module = discover_modules_commands(module_path, cmd_line_args if cmd_line_args else metadata["command_line_args"], redis_args)
     metadata["module_name"] = module.name
     metadata["version"] = module.version
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))

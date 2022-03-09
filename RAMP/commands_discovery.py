@@ -27,8 +27,8 @@ class ModuleCommand(object):
     def to_dict(self):
         return self.__dict__
 
-def redis():
-    redis_client = DisposableRedis(verbose=config.debug)
+def redis(extra_args=None):
+    redis_client = DisposableRedis(verbose=config.debug, **extra_args)
     return redis_client
 
 def _get_modules_list(redis_client):
@@ -100,13 +100,15 @@ def _get_redis_command_info(redis_client, command_name):
 
     return ModuleCommand(command_name, command_arity, flags, first_key, last_key, step)
 
-def discover_modules_commands(path_to_module, module_args):
+def discover_modules_commands(path_to_module, module_args, redis_extra_args=None):
     """
         Retrieves module command(s) info.
         :param path_to_module: where does the module file is located
+        :param module_args: command line arguments for the module
+        :param redis_extra_args: command line arguments for redis
         Returns Module object populated with command(s) info.
     """
-    with redis() as redis_client:
+    with redis(redis_extra_args) as redis_client:
         core_redis_commands = _get_redis_commands(redis_client)
         module = _load_module(redis_client, path_to_module, module_args)
         if module is None:

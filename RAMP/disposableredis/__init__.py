@@ -63,8 +63,8 @@ class DisposableRedis(object):
             #cwd=os.getcwd(),
             stdin=subprocess.PIPE,
             stdout=out,
-            stderr=err
-#             env=os.environ.copy()
+            stderr=err,
+            env=os.environ.copy(),
         )
 
         while True:
