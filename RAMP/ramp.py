@@ -32,6 +32,13 @@ def jsons_str_tuple_to_jsons_tuple(ctx, param, value):
         return [json.loads(a) for a in value]
 
 
+def json_str_to_json(ctx, param, value):
+    """
+    Converts json str into python map
+    """
+    return json.loads(value) if value else None
+
+
 @click.group()
 @click.version_option(version=VERSION)
 def ramp():
@@ -103,6 +110,7 @@ def unpack(bundle):
 @click.option('--packname-file', default=None, help="Write package name to the file")
 @click.option('--verbose', '-v', is_flag=True, default=False, help='verbose mode: print the resulting metadata')
 @click.option('--debug', is_flag=True, default=False, help='Print interaction with Redis. Implies --verbose.')
+@click.option('--redis-args', 'redis_args', callback=json_str_to_json, help='redis command line arguments')
 def pack(module, *args, **kwargs):
     config.set(kwargs)
     return package(module, **kwargs)

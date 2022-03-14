@@ -31,6 +31,7 @@ CONFIG_COMMAND = ""
 OVERIDE_COMMAND = []  # type: List[Dict[str, str]]
 ADD_COMMAND = []  # type: List[Dict[str, str]]
 CRDB_ARGS = {}  # type: List[Dict[str, str]]
+REDIS_ARGS = {}  # type: List[Dict[str, str]]
 
 FIELDS = [
     "architecture",
@@ -60,7 +61,8 @@ FIELDS = [
     "semantic_version",
     "sha256",
     "version",
-    "crdb"
+    "crdb",
+    "redis_args"
 ]  # type: List[str]
 
 
@@ -105,4 +107,5 @@ def create_default_metadata(module_path):
         "overide_command": OVERIDE_COMMAND,
         "add_command": ADD_COMMAND,
         "crdb": CRDB_ARGS,
+        "redis_args": REDIS_ARGS,
     }

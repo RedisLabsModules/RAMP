@@ -92,6 +92,7 @@ def test_defaults():
     assert metadata["capabilities"] == module_metadata.MODULE_CAPABILITIES
     assert metadata["ramp_format_version"] == module_metadata.RAMP_FORMAT_VERSION
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
+    assert 'redis_args' not in metadata
 
     git_sha = get_git_sha()
     if git_sha is not None:
@@ -123,7 +124,8 @@ def test_bundle_from_cmd():
             '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
             '-E', 'graph.BULK',
             '--overide-command', '{"command_name": "graph.EXPLAIN"}',
-            '--add-command', '{"command_name": "test"}']
+            '--add-command', '{"command_name": "test"}',
+            '--redis-args', '{"loglevel": "debug"}']
 
     runner = CliRunner()
     result = runner.invoke(ramp.pack, argv)
@@ -148,6 +150,7 @@ def test_bundle_from_cmd():
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
+    assert 'redis_args' not in metadata
 
     git_sha = get_git_sha()
     if git_sha is not None:
@@ -185,6 +188,8 @@ def _test_bundle_from_manifest(manifest_file, manifest_file_path):
         for key in manifest:
             if key == 'dependencies' or key == 'optional-dependencies':
                 assert metadata[key] == unpacker.normalize_dependencies(manifest[key])
+            elif key == 'redis_args':
+                assert 'redis_args' not in metadata
             else:
                 assert metadata[key] == manifest[key]
 
