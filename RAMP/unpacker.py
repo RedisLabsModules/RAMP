@@ -26,22 +26,24 @@ class UnpackerPackageError(Exception):
 
 
 def unpack(bundle, max_bundle_size_mb=None):
-    # type: (IO[bytes], Optional[int]) -> Tuple[Dict[str, Any], IO[bytes], Dict[str, Any]]
+    # type: (IO[bytes], Optional[int]) -> Tuple[Dict[str, Any], IO[bytes], Dict[str, IO[bytes]]]
     """
     Unpacks a bundled module, performs sanity validation on bundle.
     both the module metadata and the actual module are returned
+    the module metadata, the actual module and bundle deps are returned
     :rtype: tuple
     """
     deps_files = dict()
     try:
         with ZipFile(bundle) as zf:
-            for filename in zf.namelist():
-                if filename.startswith("deps"):
-                    deps_files[filename] = zf.open(filename)
             _validate_zip_file(zf, max_bundle_size_mb)
             metadata = json.load(zf.open('module.json'))
             module = zf.open(metadata["module_file"])
             _validate_metadata(metadata)
+            for filename in zf.namelist():
+                if filename in ['module.json', metadata["module_file"], "deps/"]:
+                    continue
+                deps_files[filename] = zf.open(filename)
 
     except BadZipfile:
         raise UnpackerPackageError(message="Failed to extract bundle")
