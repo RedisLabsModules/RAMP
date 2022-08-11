@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import os
 import json
 import click
 
@@ -66,7 +65,7 @@ def validate(bundle):
 @ramp.command()
 @click.argument('bundle')
 def unpack(bundle):
-    metadata, module = unpack_bundle(bundle)
+    metadata, module, dep_files = unpack_bundle(bundle)
     module_metadata_file_name = os.path.join(os.getcwd(), metadata['module_name'] + '.json')
     module_file_name = os.path.join(os.getcwd(), metadata['module_file'])
 

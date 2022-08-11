@@ -1,14 +1,12 @@
 import os
 import hashlib
-import click
-from click.testing import CliRunner
 
-from module_capabilities import MODULE_CAPABILITIES
-from RAMP import ramp, packer, unpacker, module_metadata, commands_discovery
+from RAMP import packer, unpacker, module_metadata
 
 MODULE_FILE = "redisgraph.so"
 MODULE_FILE_PATH = os.path.join(os.getcwd() + "/test_module", MODULE_FILE)
 BUNDLE_ZIP_FILE = "module.zip"
+
 
 def sha256_checksum(filename, block_size=65536):
     """Computes sha256 for given file"""
@@ -18,11 +16,13 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
+
 def test_bad_bundle():
     """
     test malformed bundle is detected
     """
     pass
+
 
 def test_valid_bundle():
     """
@@ -34,9 +34,11 @@ def test_valid_bundle():
     metadata['module_name'] = 'module_name'
 
     packer.archive(module_path, metadata)
-    metadata, binary = unpacker.unpack(path_to_bundle)
+    metadata, binary, files = unpacker.unpack(path_to_bundle)
     assert metadata is not None
     assert binary is not None
+    assert files is None
+
 
 if __name__ == '__main__':
     test_bad_bundle()
