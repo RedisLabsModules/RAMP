@@ -122,6 +122,7 @@ Which contains:
 
     1. RedisModule.so - original module
     2. Module.json - module's metadata
+    3. deps/ - a dir with bundle dependencies (optional) 
 
 ## Test
 Make sure redis-server is on your PATH

@@ -2,6 +2,7 @@ import json
 import re
 from zipfile import ZipFile, BadZipfile
 from typing import Dict, Any, IO, Tuple, Optional  # noqa: F401
+from .common import *
 
 
 INVALID_METADATA = "module metadata invalid"
@@ -29,7 +30,6 @@ def unpack(bundle, max_bundle_size_mb=None):
     # type: (IO[bytes], Optional[int]) -> Tuple[Dict[str, Any], IO[bytes], Dict[str, IO[bytes]]]
     """
     Unpacks a bundled module, performs sanity validation on bundle.
-    both the module metadata and the actual module are returned
     the module metadata, the actual module and bundle deps are returned
     :rtype: tuple
     """
