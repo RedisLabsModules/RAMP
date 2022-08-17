@@ -40,6 +40,15 @@ def test_valid_bundle():
     assert files is None
 
 
+def test_valid_bundle_with_deps():
+    tests_common_dir_path = os.path.dirname(os.path.realpath(__file__))
+    path_to_bundle = os.path.join(tests_common_dir_path, "test_assets", "redisgears_python.Linux-ubuntu18.04-x86_64.1.2.5.zip")
+    metadata, binary, files = unpacker.unpack(path_to_bundle)
+    assert metadata is not None
+    assert binary is not None
+    assert files is not None
+
+
 if __name__ == '__main__':
     test_bad_bundle()
     test_valid_bundle()

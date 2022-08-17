@@ -92,5 +92,4 @@ ENV/
 .mypy_cache/
 
 # binaries that should never be committed
-*.zip
 test_module

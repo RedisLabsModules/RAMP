@@ -65,17 +65,13 @@ def _validate_zip_file(zip_file, max_bundle_size_mb):
     """
     infolist = zip_file.infolist()
     # We're expecting to have .so file, module.json and deps dir.
-    files_counter = 0
+    all_files_len = len([file for file in infolist])
+    so_files_len = len([file for file in infolist if file.filename.endswith(".so")])
+    expected_files_len = so_files_len + len([file for file in infolist if (file.filename == "module.json" or file.filename.startswith("deps/"))])
 
-    for file in infolist:
-        if file.filename.endswith(".so") or file.filename == "module.json":
-            files_counter += 1
-        elif not file.filename.startswith("/deps"):
-            files_counter -= 1
-
-    if files_counter != 2:
+    if all_files_len > expected_files_len or so_files_len > 1:
         raise UnpackerPackageError(message="module zip file content invalid",
-                                   reason="module zip file should contains exactly two file",
+                                   reason="module zip file should contains exactly two files and deps folder",
                                    error_code="invalid_number_of_files")
 
     file_size_limit_bytes = max_bundle_size_mb * 1024 * 1024 if max_bundle_size_mb else DEFAULT_MAX_MODULE_FILE_SIZE
@@ -83,7 +79,7 @@ def _validate_zip_file(zip_file, max_bundle_size_mb):
     # Check zip content size.
     for zip_info in infolist:
         # Size of the compressed/uncompressed data.
-        if not file.filename.startswith("/deps") and zip_info.file_size > file_size_limit_bytes:
+        if not zip_info.filename.startswith("deps/") and zip_info.file_size > file_size_limit_bytes:
             raise UnpackerPackageError(message="module zip file did not pass sanity validation",
                                        reason="module file content is too big",
                                        error_code="module_size_too_big",
