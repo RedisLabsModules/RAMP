@@ -32,7 +32,7 @@ jobs:
            python-version: ${{ matrix.python-version }}
 
        - name: Install Poetry
-         uses: dschep/install-poetry-action@v1.3
+         uses: snok/install-poetry@v1
 
        - name: cache
          uses: actions/cache@v1
