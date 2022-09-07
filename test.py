@@ -73,7 +73,7 @@ def test_defaults():
                                        '--add-command', '{"command_name": "test"}'])
     assert result.exit_code == 0
 
-    metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
+    metadata = unpacker.unpack(BUNDLE_ZIP_FILE)[0]
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == 'x86_64'
@@ -131,7 +131,7 @@ def test_bundle_from_cmd():
     result = runner.invoke(ramp.pack, argv)
 
     assert result.exit_code == 0
-    metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
+    metadata = unpacker.unpack(BUNDLE_ZIP_FILE)[0]
 
     assert metadata["module_name"] == module_name
     assert metadata["module_file"] == MODULE_FILE
@@ -168,7 +168,7 @@ def _test_bundle_from_manifest(manifest_file, manifest_file_path):
     result = runner.invoke(ramp.pack, [MODULE_FILE_PATH, '-m', manifest_file_path, '-o', BUNDLE_ZIP_FILE])
 
     assert result.exit_code == 0
-    metadata, _ = unpacker.unpack(BUNDLE_ZIP_FILE)
+    metadata = unpacker.unpack(BUNDLE_ZIP_FILE)[0]
 
     assert metadata["module_name"] == "graph"
     assert metadata["module_file"] == MODULE_FILE
