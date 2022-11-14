@@ -10,6 +10,8 @@ def eprint(*args, **kwargs):
 def normalize_dependencies(deps):
     if isinstance(deps, dict):
         for dep_name, dep in deps.items():
+            if "local_path" in dep.keys():
+                continue
             for key in ["url", "sha256"]:
                 if key not in dep:
                     raise Exception("error: dependency {} missing {}".format(dep_name, key))
