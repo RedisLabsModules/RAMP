@@ -61,7 +61,7 @@ def archive(module_path, metadata, archive_name='module.zip'):
         if 'local_path' in dep.keys():
             local_path = eval('f"%s"' % (dep['local_path']), globals())
             name = os.path.basename(local_path)
-            path = os.path.join('/tmp/', '%s_%s.tgz' % (dep_name, str(uuid.uuid4())))
+            _, path = tempfile.mkstemp()
             with tarfile.open(path, "w:gz") as tar:
                 tar.add(local_path, arcname=name)
                 dependencies_files[dep_name] = path
