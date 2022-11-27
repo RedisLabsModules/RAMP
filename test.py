@@ -110,7 +110,7 @@ def test_bundle_from_cmd():
     description = "desc some module"
     homepage = "http://github.com/redismodules/module"
     _license = "AGPL"
-    command_line_args = "\"-output f --level debug\""
+    command_line_args = "\\\"-output f --level debug\\\""
     min_redis_version = "4.6"
     min_redis_pack_version = "5.0"
     display_name = "test_module"
