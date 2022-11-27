@@ -31,9 +31,6 @@ jobs:
         with:
           python-version: 3.7
 
-      - name: Install Poetry
-         uses: abatilo/actions-poetry@v2
-
       - name: Cache Poetry virtualenv
         uses: actions/cache@v1
         id: cache
@@ -45,6 +42,7 @@ jobs:
 
       - name: Set Poetry config
         run: |
+          pip install poetry
           poetry config virtualenvs.in-project false
           poetry config virtualenvs.path ~/.virtualenvs
 
