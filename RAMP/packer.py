@@ -4,7 +4,10 @@ import zipfile
 import yaml
 import semantic_version
 import tempfile
+import tarfile
+import uuid
 from subprocess import Popen, PIPE
+import hashlib
 
 from RAMP import config
 import RAMP.module_metadata as module_metadata
@@ -53,6 +56,25 @@ def archive(module_path, metadata, archive_name='module.zip'):
     """
     Archives both module and module metadata.
     """
+    dependencies_files = {}
+    for dep_name, dep in metadata['dependencies'].items():
+        if 'local_path' in dep.keys():
+            local_path = eval('f"%s"' % (dep['local_path']), globals())
+            name = os.path.basename(local_path)
+            _, path = tempfile.mkstemp()
+            with tarfile.open(path, "w:gz") as tar:
+                tar.add(local_path, arcname=name)
+                dependencies_files[dep_name] = path
+            
+    
+    # pop out dependencies that are embeded inside the package
+    for name, path in dependencies_files.items():
+        with open(path, 'rb') as f:
+            data = f.read()
+            readable_hash = hashlib.sha256(data).hexdigest();
+            metadata['dependencies'][name].pop('local_path')
+            metadata['dependencies'][name]['sha256'] = readable_hash
+
     with tempfile.NamedTemporaryFile(mode='w', prefix='ramp.json', delete=False) as outfile:
         jfile = outfile.name
         archive_name = archive_name.format(**metadata)
@@ -62,6 +84,8 @@ def archive(module_path, metadata, archive_name='module.zip'):
         with zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED) as archive_file:
             archive_file.write(module_path, metadata["module_file"])
             archive_file.write(jfile, arcname='module.json')
+            for name, path in dependencies_files.items():
+                archive_file.write(path, arcname='deps/%s.tgz' % name)
             print(archive_name)
     finally:
         os.remove(jfile)
@@ -95,7 +119,7 @@ def package(module, **args):
     # Load module into redis and discover its commands
     cmd_line_args = metadata.pop('run_command_line_args', None)
     redis_args = metadata.pop('redis_args')
-    module = discover_modules_commands(module_path, cmd_line_args if cmd_line_args else metadata["command_line_args"], redis_args)
+    module = discover_modules_commands(module_path, eval('f"%s"' % (cmd_line_args if cmd_line_args else metadata["command_line_args"]), globals()), redis_args)
     metadata["module_name"] = module.name
     metadata["version"] = module.version
     metadata["semantic_version"] = str(version_to_semantic_version(module.version))
