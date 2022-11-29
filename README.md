@@ -113,6 +113,7 @@ crdb | module is able to operate in a database with crdt for the default redis d
 clustering | module is able to operate in a database that is sharded and shards can be migrated|
 intershard_tls | module supports two-way encrypted communication between shards|
 intershard_tls_pass | module supports `intershard_tls` which requires password
+ipv6 | module supports ipv6 communication between shards
 
 ## Output
 
