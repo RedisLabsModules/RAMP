@@ -41,6 +41,22 @@ class DisposableRedis(object):
                ))
         self.path = os.getenv(REDIS_PATH_ENVVAR, path)
 
+    def _getRedisVersion(self):
+        options = {
+            'stderr': subprocess.PIPE,
+            'stdin': subprocess.PIPE,
+            'stdout': subprocess.PIPE,
+        }
+        p = subprocess.Popen(args=[self.path, '--version'], **options)
+        while p.poll() is None:
+            time.sleep(0.1)
+        exit_code = p.poll()
+        if exit_code != 0:
+            raise Exception('Could not extract Redis version')
+        out, err = p.communicate()
+        out = out.decode('utf-8')
+        v = out[out.find("v=") + 2:out.find("sha=") - 1].split('.')
+        return int(v[0]) * 10000 + int(v[1]) * 100 + int(v[2])
 
     def __enter__(self):
         if self._port is None:
@@ -51,6 +67,9 @@ class DisposableRedis(object):
                 '--port', str(self.port),
                 '--dir', tempfile.gettempdir(),
                 '--save', ''] + self.extra_args
+
+        if self._getRedisVersion() >= 70000:
+            args += ['--enable-module-command', 'yes']
 
         if self.verbose:
             out = sys.stdout

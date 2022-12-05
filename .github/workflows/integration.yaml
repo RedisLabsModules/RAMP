@@ -20,19 +20,16 @@ jobs:
      strategy:
        max-parallel: 15
        matrix:
-         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10']
+         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
      env:
        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
      name: Python ${{ matrix.python-version }} test
      steps:
        - uses: actions/checkout@v2
        - name: install python
-         uses: actions/setup-python@v2
+         uses: actions/setup-python@v4
          with:
            python-version: ${{ matrix.python-version }}
-
-       - name: Install Poetry
-         uses: snok/install-poetry@v1
 
        - name: cache
          uses: actions/cache@v1
@@ -49,8 +46,9 @@ jobs:
            sudo apt-get install -qy redis
        - name: run tests
          run: |
+           pip install poetry
            pip install -q -r dev_requirements.txt
-           tox -e python${{ matrix.python-version }}
+           tox
        - name: build and install the package in this python version
          run: |
            poetry build
