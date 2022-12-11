@@ -30,8 +30,8 @@ setup(
         "redis ~= 3.5.3",
         "PyYAML ~= 5.3.1",
         "click ~= 8.0.0",
-        "semantic-version = ~2.8.5",
-        "typing ~= 3.0.0"
+        "semantic-version ~= 2.8.5",
+        "typing ~= 3.5.0"
     ],
     classifiers=[
         'Topic :: Database',
