@@ -35,7 +35,7 @@ def _get_modules_list(redis_client):
     """
     Finds out which modules are loaded into Redis.
     """
-    modules_list = redis_client.module_list()
+    modules_list = redis_client.execute_command("MODULE LIST")
     # MODULE LIST response contains an array of module name and version.
     #    1) 1) "name"
     #       2) "graph"
@@ -43,7 +43,10 @@ def _get_modules_list(redis_client):
     #       4) (integer) 1
 
     loaded_modules = []
-    loaded_modules = [(m['name'], float(m['ver'])) for m in modules_list]
+    for module in modules_list:
+        module_name = module[1]
+        module_version = float(module[3])
+        loaded_modules.append((module_name, module_version))
 
     return loaded_modules
 
@@ -70,8 +73,11 @@ def _get_redis_commands(redis_client):
     """
     Retrieves a set of commands from Redis
     """
-    commands = redis_client.command()
-    return commands
+    commands = redis_client.execute_command("COMMAND")
+    redis_commands = set()
+    for command in commands:
+        redis_commands.add(command[0])
+    return redis_commands
 
 def _get_redis_command_info(redis_client, command_name):
     """
@@ -115,8 +121,7 @@ def discover_modules_commands(path_to_module, module_args, redis_extra_args=None
             raise Exception("Failed to load module {} {}".format(path_to_module, module_args))
 
         extended_redis_commands = _get_redis_commands(redis_client)
-        module_commands = (set(extended_redis_commands.keys()).symmetric_difference(set(core_redis_commands.keys())))
-        # module_commands = extended_redis_commands - core_redis_commands
+        module_commands = extended_redis_commands - core_redis_commands
 
         for module_command in module_commands:
             command = _get_redis_command_info(redis_client, module_command)
