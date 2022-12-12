@@ -12,7 +12,8 @@ setup(
     version="2.4.0-dev1+redispy35",
     packages=find_packages(
         include=[
-            "RAMP"
+            "RAMP",
+            "RAMP.disposableredis"
         ]
     ),
     url="https://github.com/RedisLabsModules/RLTest",
