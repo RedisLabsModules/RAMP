@@ -36,6 +36,7 @@ semantic-version = "^2.8.5"
 typing = "^3.0.0"
 redis = "^4.1.0"
 PyYAML = "^6.0"
+distro = "^1.8"
 
 [tool.poetry.dev-dependencies]
 coverage = "^5.4"
