@@ -92,6 +92,7 @@ def get_curr_os():
     curr_os = '%s%s' % (distro.id(), distro.version())
     rlec_os = RLEC_OS_MAP.get(curr_os, None)
     if rlec_os is None:
+        # only use major version
         rlec_os = RLEC_OS_MAP.get('%s%s' % (distro.id(), distro.version_parts()[0]), curr_os)
     return rlec_os
 
