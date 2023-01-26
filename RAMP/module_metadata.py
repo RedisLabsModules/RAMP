@@ -77,16 +77,23 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
-OS_MAP = {
+RLEC_OS_MAP = {
+    "rhel7": "rhel7",
+    "rhel8": "rhel8",
     "centos7": "rhel7",
     "centos8": "rhel8",
     "rocky8": "rhel8",
+    "almalinux8": "rhel8",
+    "oracle8": "rhel8",
 }
 
 def get_curr_os():
-    global OS_MAP
+    global RLEC_OS_MAP
     curr_os = '%s%s' % (distro.id(), distro.version())
-    return OS_MAP.get(curr_os, curr_os)
+    rlec_os = RLEC_OS_MAP.get(curr_os, None)
+    if rlec_os is None:
+        rlec_os = RLEC_OS_MAP.get('%s%s' % (distro.id(), distro.version_parts()[0]), curr_os)
+    return rlec_os
 
 def create_default_metadata(module_path):
     # type: (str) -> Dict[str, Any]
