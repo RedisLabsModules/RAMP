@@ -64,7 +64,7 @@ FIELDS = [
     "version",
     "crdb",
     "redis_args",
-    "os_list"
+    "operating_systems"
 ]  # type: List[str]
 
 
@@ -89,11 +89,8 @@ RLEC_OS_MAP = {
 
 def get_curr_os():
     global RLEC_OS_MAP
-    curr_os = '%s%s' % (distro.id(), distro.version())
-    rlec_os = RLEC_OS_MAP.get(curr_os, None)
-    if rlec_os is None:
-        # only use major version
-        rlec_os = RLEC_OS_MAP.get('%s%s' % (distro.id(), distro.version_parts()[0]), curr_os)
+    curr_os = '%s%s' % (distro.id(), distro.version_parts()[0])
+    rlec_os = RLEC_OS_MAP.get(curr_os, curr_os)
     return rlec_os
 
 def create_default_metadata(module_path):
@@ -128,5 +125,5 @@ def create_default_metadata(module_path):
         "add_command": ADD_COMMAND,
         "crdb": CRDB_ARGS,
         "redis_args": REDIS_ARGS,
-        "os_list": [get_curr_os()],
+        "operating_systems": [get_curr_os()],
     }
