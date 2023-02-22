@@ -123,11 +123,12 @@ def _validate_metadata(metadata):
                                    reason="Module version should be an integer",
                                    error_code="module_version_not_integer")
 
-    if "os_list" in metadata:
-        try:
-            metadata["os_list"] = [_os_version_parser(os) for os in metadata["os_list"]]
-        except UnpackerPackageError:
-            raise
+    for os_key_name in ["os_list", "operating_systems"]:
+        if os_key_name in metadata:
+            try:
+                metadata[os_key_name] = [_os_version_parser(os) for os in metadata[os_key_name]]
+            except UnpackerPackageError:
+                raise
 
     # wrong signature
     # TODO: this check should be deferred to a later stage
