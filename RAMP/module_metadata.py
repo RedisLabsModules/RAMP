@@ -3,6 +3,7 @@ import hashlib
 import platform
 from typing import List, Dict, Any  # noqa: F401
 from .common import *
+import distro
 
 
 # Defaults
@@ -62,7 +63,8 @@ FIELDS = [
     "sha256",
     "version",
     "crdb",
-    "redis_args"
+    "redis_args",
+    "operating_systems"
 ]  # type: List[str]
 
 
@@ -75,6 +77,21 @@ def sha256_checksum(filename, block_size=65536):
             sha256.update(block)
     return sha256.hexdigest()
 
+RLEC_OS_MAP = {
+    "rhel7": "rhel7",
+    "rhel8": "rhel8",
+    "centos7": "rhel7",
+    "centos8": "rhel8",
+    "rocky8": "rhel8",
+    "almalinux8": "rhel8",
+    "oracle8": "rhel8",
+}
+
+def get_curr_os():
+    global RLEC_OS_MAP
+    curr_os = '%s%s' % (distro.id(), distro.version_parts()[0])
+    rlec_os = RLEC_OS_MAP.get(curr_os, curr_os)
+    return rlec_os
 
 def create_default_metadata(module_path):
     # type: (str) -> Dict[str, Any]
@@ -108,4 +125,5 @@ def create_default_metadata(module_path):
         "add_command": ADD_COMMAND,
         "crdb": CRDB_ARGS,
         "redis_args": REDIS_ARGS,
+        "operating_systems": [get_curr_os()],
     }
