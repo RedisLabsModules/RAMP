@@ -10,6 +10,7 @@ import distro
 ARCHITECTURE = platform.machine()
 OS = platform.system()
 DISPLAY_NAME = ""
+CAPABILITY_NAME = ""
 AUTHOR = ""
 EMAIL = ""
 DESCRIPTION = ""
@@ -46,6 +47,7 @@ FIELDS = [
     "optional-dependencies",
     "description",
     "display_name",
+    "capability_name",
     "email",
     "exclude_commands",
     "git_sha",
@@ -104,6 +106,7 @@ def create_default_metadata(module_path):
         "version": MODULE_VERSION,
         "semantic_version": MODULE_SEMANTIC_VERSION,
         "display_name": DISPLAY_NAME,
+        "capability_name": CAPABILITY_NAME,
         "author": AUTHOR,
         "email": EMAIL,
         "description": DESCRIPTION,

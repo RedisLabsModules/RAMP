@@ -80,6 +80,7 @@ def test_defaults():
     assert metadata["version"] == MODULE_VERSION
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["display_name"] == module_metadata.DISPLAY_NAME
+    assert metadata["capability_name"] == module_metadata.CAPABILITY_NAME
     assert metadata["author"] == module_metadata.AUTHOR
     assert metadata["email"] == module_metadata.EMAIL
     assert metadata["description"] == module_metadata.DESCRIPTION
@@ -114,10 +115,11 @@ def test_bundle_from_cmd():
     min_redis_version = "4.6"
     min_redis_pack_version = "5.0"
     display_name = "test_module"
+    capability_name = "Test & Module"
     module_name = "module_test"
 
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description,
-            '-d', display_name, '-n', module_name,
+            '-d', display_name, '-b', capability_name, '-n', module_name,
             '-h', homepage, '-l', _license, '-c', command_line_args,
             '-r', min_redis_version, '-R', min_redis_pack_version,
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
@@ -137,6 +139,7 @@ def test_bundle_from_cmd():
     assert metadata["module_file"] == MODULE_FILE
     assert metadata["architecture"] == "x86_64"
     assert metadata["display_name"] == display_name
+    assert metadata["capability_name"] == capability_name
     assert metadata["version"] == MODULE_VERSION
     assert metadata["semantic_version"] == MODULE_SEMANTIC_VERSION
     assert metadata["author"] == author
