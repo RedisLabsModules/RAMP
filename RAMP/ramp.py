@@ -13,7 +13,7 @@ from .common import *
 
 def comma_seperated_to_list(ctx, param, value):
     """
-    Converts a comma seperated string into a list.
+    Converts a comma separated string into a list.
     """
     if value is None:
         return []
@@ -86,6 +86,7 @@ def unpack(bundle):
 @click.argument('module')
 @click.option('--manifest', '-m', type=click.File('rb'), help='generate package from manifest')
 @click.option('--display-name', '-d', default=None, help='name for display purposes')
+@click.option('--capability-name', '-b', default=None, help='name of capability')
 @click.option('--module-name', '-n', default=None, help='module name')
 @click.option('--author', '-a', default=None, help='module author')
 @click.option('--email', '-e', default=None, help='author\'s email')
@@ -99,9 +100,9 @@ def unpack(bundle):
 @click.option('--redis-pack-min-version', '-R', 'min_redis_pack_version', default=None, help='redis pack minimum version')
 @click.option('--config-command', '-cc', default=None, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=None, help='build target OS (Darwin/Linux)')
-@click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma seperated list of module capabilities')
-@click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma seperated list of exclude commands')
-@click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and overide it on the module json file')
+@click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma separated list of module capabilities')
+@click.option('--exclude-commands', '-E', callback=comma_seperated_to_list, help='comma separated list of exclude commands')
+@click.option('--overide-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and override it on the module json file')
 @click.option('--add-command', multiple=True, callback=jsons_str_tuple_to_jsons_tuple, help='gets a command json representation and add it on the module json file')
 @click.option('--dependencies', callback=jsons_str_tuple_to_jsons_tuple, help='list of module dependencies: <name, uri, sha256, local_path(optional)>')
 @click.option('--optional-dependencies', callback=jsons_str_tuple_to_jsons_tuple, help='list of module optional dependencies: <name, uri, sha256, local_path(optional)>')
