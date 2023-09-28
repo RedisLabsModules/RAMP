@@ -87,6 +87,7 @@ RLEC_OS_MAP = {
     "rocky8": "rhel8",
     "almalinux8": "rhel8",
     "oracle8": "rhel8",
+    "rocky9": "rhel9"
 }
 
 def get_curr_os():
