@@ -105,7 +105,7 @@ def _validate_metadata(metadata):
                                    reason="Empty module file name",
                                    error_code="module_file_missing")
 
-    if metadata["architecture"] not in {"x86_64", "arm64v8"}:
+    if metadata["architecture"] not in {"x86_64", "aarch64"}:
         raise UnpackerPackageError(message=INVALID_METADATA,
                                    reason="Architecture must be 64 bits",
                                    error_code="module_architecture_not_supported")
