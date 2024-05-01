@@ -56,7 +56,7 @@ FIELDS = [
     "license",
     "min_redis_pack_version",
     "min_redis_version",
-    "compatible_redis_version"
+    "compatible_redis_version",
     "module_file",
     "module_name",
     "os",
