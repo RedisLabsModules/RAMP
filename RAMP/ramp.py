@@ -98,6 +98,7 @@ def unpack(bundle):
 @click.option('--runcmdargs', 'run_command_line_args', default=None, help='if set, use those args when running the redis server')
 @click.option('--redis-min-version', '-r', 'min_redis_version', default=None, help='redis minimum version')
 @click.option('--redis-pack-min-version', '-R', 'min_redis_pack_version', default=None, help='redis pack minimum version')
+@click.option('--compatible_redis_version', '-R', 'compatible_redis_version', default=None, help='redis compatible version')
 @click.option('--config-command', '-cc', default=None, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=None, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma separated list of module capabilities')
