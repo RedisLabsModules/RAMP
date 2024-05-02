@@ -114,6 +114,7 @@ def test_bundle_from_cmd():
     command_line_args = "\\\"-output f --level debug\\\""
     min_redis_version = "4.6"
     min_redis_pack_version = "5.0"
+    compatible_redis_version = "7.2"
     display_name = "test_module"
     capability_name = "Test & Module"
     module_name = "module_test"
@@ -121,7 +122,7 @@ def test_bundle_from_cmd():
     argv = [MODULE_FILE_PATH, '-a', author, '-e', email, '-D', description,
             '-d', display_name, '-b', capability_name, '-n', module_name,
             '-h', homepage, '-l', _license, '-c', command_line_args,
-            '-r', min_redis_version, '-R', min_redis_pack_version,
+            '-r', min_redis_version, '-R', min_redis_pack_version, '-cr', compatible_redis_version,
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
             '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
             '-E', 'graph.BULK',
@@ -150,6 +151,7 @@ def test_bundle_from_cmd():
     assert metadata["command_line_args"] == command_line_args
     assert metadata["min_redis_version"] == min_redis_version
     assert metadata["min_redis_pack_version"] == min_redis_pack_version
+    assert metadata["compatible_redis_version"] == compatible_redis_version
     assert metadata["config_command"] == CONFIG_COMMAND
     assert metadata["sha256"] == sha256_checksum(MODULE_FILE_PATH)
     assert len(metadata["capabilities"]) == len(MODULE_CAPABILITIES)
