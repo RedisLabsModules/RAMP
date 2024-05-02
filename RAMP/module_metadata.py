@@ -28,6 +28,7 @@ COMMAND_LINE_ARGS = ""
 RUN_COMMAND_LINE_ARGS = None
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.2"
+COMPATIBLE_REDIS_VERSION = "7.4"
 RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
 OVERIDE_COMMAND = []  # type: List[Dict[str, str]]
@@ -55,6 +56,7 @@ FIELDS = [
     "license",
     "min_redis_pack_version",
     "min_redis_version",
+    "compatible_redis_version",
     "module_file",
     "module_name",
     "os",
@@ -120,6 +122,7 @@ def create_default_metadata(module_path):
         "optional-dependencies": MODULE_OPTIONAL_DEPENDENCIES,
         "min_redis_version": MIN_REDIS_VERSION,
         "min_redis_pack_version": MIN_REDIS_PACK_VERSION,
+        "compatible_redis_version": COMPATIBLE_REDIS_VERSION,
         "sha256": sha256_checksum(module_path),
         "commands": MODULE_COMMANDS,
         "ramp_format_version": RAMP_FORMAT_VERSION,
