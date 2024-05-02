@@ -112,6 +112,7 @@ def unpack(bundle):
 @click.option('--verbose', '-v', is_flag=True, default=False, help='verbose mode: print the resulting metadata')
 @click.option('--debug', is_flag=True, default=False, help='Print interaction with Redis. Implies --verbose.')
 @click.option('--redis-args', 'redis_args', callback=json_str_to_json, help='redis command line arguments')
+
 def pack(module, *args, **kwargs):
     config.set(kwargs)
     return package(module, **kwargs)
