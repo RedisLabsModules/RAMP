@@ -99,6 +99,7 @@ def unpack(bundle):
 @click.option('--redis-min-version', '-r', 'min_redis_version', default=None, help='redis minimum version')
 @click.option('--redis-pack-min-version', '-R', 'min_redis_pack_version', default=None, help='redis pack minimum version')
 @click.option('--redis-compatible-version', '-cr', 'compatible_redis_version', default=None, help='redis compatible version')
+@click.option('--rofv2-support', 'rofv2_support', default=False, help='This module supports RofV2')
 @click.option('--config-command', '-cc', default=None, help='command used to configure module args at runtime')
 @click.option('--os', '-O', default=None, help='build target OS (Darwin/Linux)')
 @click.option('--capabilities', '-C', callback=comma_seperated_to_list, help='comma separated list of module capabilities')
