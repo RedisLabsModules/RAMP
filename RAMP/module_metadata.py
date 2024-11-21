@@ -29,7 +29,7 @@ RUN_COMMAND_LINE_ARGS = None
 MIN_REDIS_VERSION = "4.0"
 MIN_REDIS_PACK_VERSION = "5.2"
 COMPATIBLE_REDIS_VERSION = "7.4"
-ROFV2_SUPPORT = False
+BIGSTORE_VERSION_2_SUPPORT = False
 RAMP_FORMAT_VERSION = 1
 CONFIG_COMMAND = ""
 OVERIDE_COMMAND = []  # type: List[Dict[str, str]]
@@ -58,7 +58,7 @@ FIELDS = [
     "min_redis_pack_version",
     "min_redis_version",
     "compatible_redis_version",
-    "rofv2_support",
+    "bigstore_version_2_support",
     "module_file",
     "module_name",
     "os",
@@ -125,7 +125,7 @@ def create_default_metadata(module_path):
         "min_redis_version": MIN_REDIS_VERSION,
         "min_redis_pack_version": MIN_REDIS_PACK_VERSION,
         "compatible_redis_version": COMPATIBLE_REDIS_VERSION,
-        "rofv2_support": ROFV2_SUPPORT,
+        "bigstore_version_2_support": BIGSTORE_VERSION_2_SUPPORT,
         "sha256": sha256_checksum(module_path),
         "commands": MODULE_COMMANDS,
         "ramp_format_version": RAMP_FORMAT_VERSION,
