@@ -124,7 +124,7 @@ def test_bundle_from_cmd():
             '-d', display_name, '-b', capability_name, '-n', module_name,
             '-h', homepage, '-l', _license, '-c', command_line_args,
             '-r', min_redis_version, '-R', min_redis_pack_version, '-cr', compatible_redis_version,
-            '--bigstore-version-2-support', bigstore_version_2_support,
+            '--bigstore-version-2-support',
             '-C', ','.join([cap['name'] for cap in MODULE_CAPABILITIES]),
             '-o', BUNDLE_ZIP_FILE, '-cc', CONFIG_COMMAND, '-E', 'graph.bulk',
             '-E', 'graph.BULK',
