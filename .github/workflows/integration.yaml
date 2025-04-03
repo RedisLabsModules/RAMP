@@ -20,14 +20,14 @@ jobs:
      strategy:
        max-parallel: 15
        matrix:
-         python-version: ['3.7.9', '3.8', '3.9', '3.10', '3.11']
+         python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
      env:
        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
      name: Python ${{ matrix.python-version }} test
      steps:
        - uses: actions/checkout@v2
        - name: install python
-         uses: actions/setup-python@v4
+         uses: actions/setup-python@v5
          with:
            python-version: ${{ matrix.python-version }}
 
