@@ -54,17 +54,19 @@ def _load_module(redis_client, path_to_module, module_args):
     :param path_to_module: where does the module file is located.
     Assuming only a single module is loaded.
     """
+    previously_loaded_modules = _get_modules_list(redis_client)
     resp = redis_client.execute_command("MODULE LOAD {} {}".format(
         os.path.abspath(path_to_module), module_args))
     if resp != OK:
         return None
 
     loaded_modules = _get_modules_list(redis_client)
-    if len(loaded_modules) != 1:
+    relevant_module_list = [x for x in loaded_modules if x not in previously_loaded_modules]
+    if len(relevant_module_list) != 1:
         return None
 
-    loaded_modules = loaded_modules[0]
-    return Module(loaded_modules[0], loaded_modules[1])
+    module_name, module_version = relevant_module_list[0]
+    return Module(module_name, module_version)
 
 def _get_redis_commands(redis_client):
     """
