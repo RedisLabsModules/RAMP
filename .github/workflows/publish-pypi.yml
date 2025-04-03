@@ -24,7 +24,7 @@ jobs:
           python-version: 3.7
 
       - name: Cache Poetry virtualenv
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         id: cache
         with:
           path: ~/.virtualenvs
