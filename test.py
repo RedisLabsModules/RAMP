@@ -49,20 +49,22 @@ def validate_module_commands(commands):
     expected_command.append({"command_arity": -1,
                    "command_name": "graph.QUERY",
                    "first_key": 1,
-                   "flags": ["write","denyoom","noscript"],
+                   "flags": ["write", "denyoom", "module", "noscript"],
                    "last_key": 1,
                    "step": 1})
 
     expected_command.append({"command_arity": -1,
                     "command_name": "graph.DELETE",
                     "first_key": 1,
-                    "flags": ["write","noscript"],
+                    "flags": ["write","module","noscript"],
                     "last_key": 1,
                     "step": 1})
 
     expected_command.append({"command_name": "test"})
 
-    assert sorted(expected_command, key=lambda c: c['command_name']) == sorted(commands, key=lambda c: c['command_name'])
+    expected_set = sorted(expected_command, key=lambda c: c['command_name'])
+    actual_set = sorted(commands, key=lambda c: c['command_name'])
+    assert expected_set == actual_set
 
 def test_defaults():
     """Test auto generated metadata from module is as expected."""

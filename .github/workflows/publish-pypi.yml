@@ -18,13 +18,13 @@ jobs:
           TAG: ${{ github.event.release.tag_name }}
         run: echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
 
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.7
+          python-version: 3.14
 
       - name: Cache Poetry virtualenv
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         id: cache
         with:
           path: ~/.virtualenvs

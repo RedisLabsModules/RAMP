@@ -1,5 +1,5 @@
-import pkg_resources
 try:
-    VERSION = pkg_resources.get_distribution("ramp-packer").version
+    from importlib.metadata import version
+    VERSION = version("ramp-packer")
 except:
     VERSION = "99.99.99"
