@@ -86,12 +86,16 @@ def sha256_checksum(filename, block_size=65536):
 RLEC_OS_MAP = {
     "rhel7": "rhel7",
     "rhel8": "rhel8",
+    "rhel9": "rhel9",
     "centos7": "rhel7",
     "centos8": "rhel8",
     "rocky8": "rhel8",
     "almalinux8": "rhel8",
     "oracle8": "rhel8",
-    "rocky9": "rhel9"
+    "rocky9": "rhel9",
+    "centos9": "rhel9",
+    "almalinux9": "rhel9",
+    "oracle9": "rhel9",
 }
 
 def get_curr_os():
