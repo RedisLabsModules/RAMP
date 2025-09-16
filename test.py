@@ -212,8 +212,54 @@ def test_bundle_from_manifest():
 def test_bundle_from_menifest2():
     _test_bundle_from_manifest(MENIFEST2_FILE, MENIFEST2_FILE_PATH)
 
+def test_cli_unpack():
+    """Test CLI unpack command correctly extracts binary files."""
+    import tempfile
+    
+    # Use existing test bundle if available, otherwise skip
+    bundle_path = os.path.join(os.getcwd(), "test_assets", 
+                              "redisgears_python.Linux-ubuntu18.04-x86_64.1.2.5.zip")
+    
+    if not os.path.exists(bundle_path):
+        print("⚠️  CLI unpack test skipped: test bundle not found")
+        return
+    
+    # Create temporary directory for extraction
+    with tempfile.TemporaryDirectory() as temp_dir:
+        original_cwd = os.getcwd()
+        
+        try:
+            # Change to temp directory for extraction
+            os.chdir(temp_dir)
+            
+            # Test CLI unpack command
+            runner = CliRunner()
+            result = runner.invoke(ramp.unpack, [bundle_path])
+            
+            # Verify command succeeded
+            assert result.exit_code == 0, (
+                f"CLI unpack failed with exit code {result.exit_code}\n"
+                f"Output: {result.output}\n"
+                f"Exception: {result.exception}"
+            )
+            
+            # Check that binary file was extracted correctly
+            extracted_files = os.listdir('.')
+            so_files = [f for f in extracted_files if f.endswith('.so')]
+            assert len(so_files) > 0, f"No .so binary file extracted. Files: {extracted_files}"
+            
+            # Verify binary file is valid ELF
+            so_file = so_files[0]
+            with open(so_file, 'rb') as f:
+                header = f.read(4)
+                assert header == b'\x7fELF', f"Binary file corrupted: expected ELF header, got {header.hex()}"
+            
+        finally:
+            os.chdir(original_cwd)
+
 if __name__ == '__main__':
     test_defaults()
     test_bundle_from_manifest()
     test_bundle_from_cmd()
+    test_cli_unpack()
     print("PASS")
