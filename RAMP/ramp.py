@@ -74,7 +74,7 @@ def unpack(bundle):
         json.dump(metadata, outfile)
         print(module_metadata_file_name)
 
-    with open(module_file_name, 'w') as outfile:
+    with open(module_file_name, 'wb') as outfile:
         for line in module.readlines():
             outfile.write(line)
         print(module_file_name)
