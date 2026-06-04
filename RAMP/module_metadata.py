@@ -112,13 +112,18 @@ def _read_key_value_file(path):
     return values
 
 
+DEVCONTAINER_OS_MAP = {
+    "focal": "ubuntu20",
+    "jammy": "ubuntu22",
+    "noble": "ubuntu24",
+}
+
+
 def get_curr_os():
     global RLEC_OS_MAP
     if os.path.exists(DEVCONTAINER_PATH):
-        devcontainer_os = _read_key_value_file(DEVCONTAINER_PATH).get("DISTRO")
-        if devcontainer_os:
-            return devcontainer_os
-
+        devcontainer_os = _read_key_value_file(DEVCONTAINER_PATH)["DISTRO"]
+        return DEVCONTAINER_OS_MAP.get(devcontainer_os, devcontainer_os)
     curr_os = '%s%s' % (distro.id(), distro.version_parts()[0])
     rlec_os = RLEC_OS_MAP.get(curr_os, curr_os)
     return rlec_os
