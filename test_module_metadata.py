@@ -30,7 +30,7 @@ class GetCurrOsTest(unittest.TestCase):
 
     def test_maps_ubuntu_codenames_to_versions(self):
         with tempfile.TemporaryDirectory() as temp_dir:
-            for distro_value, expected in (("focal", "ubuntu20"), ("jammy", "ubuntu22")):
+            for distro_value, expected in (("focal", "ubuntu20"), ("jammy", "ubuntu22"), ("noble", "ubuntu24")):
                 devcontainer_path = os.path.join(temp_dir, "devcontainer")
                 with open(devcontainer_path, "w") as f:
                     f.write("DISTRO=%s\n" % distro_value)
