@@ -56,5 +56,22 @@ class GetCurrOsTest(unittest.TestCase):
                     self.assertEqual(module_metadata.get_curr_os(), "ubuntu22")
 
 
+    def test_maps_rhel_compatible_distros_to_rhel(self):
+        devcontainer_path = os.path.join(tempfile.gettempdir(), "missing-devcontainer")
+        cases = (
+            ("rocky", "9", "rhel9"),
+            ("rhel", "10", "rhel10"),
+            ("rocky", "10", "rhel10"),
+            ("centos", "10", "rhel10"),
+            ("almalinux", "10", "rhel10"),
+            ("oracle", "10", "rhel10"),
+        )
+        with mock.patch.object(module_metadata, "DEVCONTAINER_PATH", devcontainer_path):
+            for distro_id, major, expected in cases:
+                with self.subTest(distro=distro_id + major):
+                    with mock.patch.object(module_metadata.distro, "id", return_value=distro_id):
+                        with mock.patch.object(module_metadata.distro, "version_parts", return_value=(major,)):
+                            self.assertEqual(module_metadata.get_curr_os(), expected)
+
 if __name__ == "__main__":
     unittest.main()

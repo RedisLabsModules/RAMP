@@ -97,6 +97,10 @@ RLEC_OS_MAP = {
     "centos9": "rhel9",
     "almalinux9": "rhel9",
     "oracle9": "rhel9",
+    "rocky10": "rhel10",
+    "centos10": "rhel10",
+    "almalinux10": "rhel10",
+    "oracle10": "rhel10",
 }
 
 DEVCONTAINER_PATH = "/etc/devcontainer"
